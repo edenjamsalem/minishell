@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/09/02 16:26:33 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/09/03 11:35:51 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ int	main(void)
 
 	while (1)
 	{
-		input = readline("minishell > ");
+		input = readline("minishell >  ");
 		// lex input
 		// parse input
 		// ... 
-		// if ctrl-D signal => exit loop, to cleanup mem before exiting process
+		// if ctrl-D => exit loop to cleanup mem before terminating process
 	}
 
 	free(input);

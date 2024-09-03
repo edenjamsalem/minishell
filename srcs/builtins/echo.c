@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/02 10:40:21 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/09/02 14:44:16 by eamsalem         ###   ########.fr       */
+/*   Created: 2024/09/03 10:07:28 by eamsalem          #+#    #+#             */
+/*   Updated: 2024/09/03 12:26:56 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../../minishell.h"
 
-int	ft_pwd(void)
+int	ft_echo(char *text, bool n_flag)
 {
-	char	buf[100];
-
-	if (getcwd(buf, 100))
-	{
-		printf("%s\n", buf);
-		return (1);
-	}
-	return (0);
+	if (!text)
+		return (0);
+	printf("%s", text);
+	if (!n_flag)
+		printf("\n");
+	return (1);
 }

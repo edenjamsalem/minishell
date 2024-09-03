@@ -6,35 +6,44 @@
 #    By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 14:01:35 by eamsalem          #+#    #+#              #
-#    Updated: 2024/09/02 16:53:34 by eamsalem         ###   ########.fr        #
+#    Updated: 2024/09/03 12:31:39 by eamsalem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
+MINIDIR = $(HOME)/bin
 
 CFLAGS = -Wall -Werror -Wextra
 
 OBJDIR = ./build
-OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)
+OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
 LIBFTDIR = ../libft
 LIBFT = $(LIBFTDIR)/libft.a
 LIBS = $(LIBFT) -lreadline
 
 SRCDIR = srcs
-SRCS =	minishell.c \
-		pwd.c
+BUILTINDIR = $(SRCDIR)/builtins
 
-all: $(NAME) $(OBJDIR) $(LIBFT)
+SRCS =	$(SRCDIR)/minishell.c \
+		$(BUILTINDIR)/pwd.c \
+		$(BUILTINDIR)/echo.c
+
+all: $(NAME) $(OBJDIR) $(LIBFT) $(MINIDIR)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
+	@mkdir -p $(@D)
 	cc $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJDIR) $(OBJS) $(LIBFT)
 	cc $(CFLAGS) $(OBJS) $(LIBS) -o $@
+	mv $(NAME) $(MINIDIR)
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
+
+$(MINIDIR):
+	mkdir -p $(MINIDIR)
 
 $(LIBFT):
 	make -C $(LIBFTDIR) all
@@ -45,7 +54,7 @@ clean:
 
 fclean: clean
 	make -C $(LIBFTDIR) fclean
-	rm -fr $(NAME)
+	rm -f $(MINIDIR)/$(NAME)
 
 re: fclean all
 

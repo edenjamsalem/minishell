@@ -1,23 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/09/03 10:45:50 by eamsalem         ###   ########.fr       */
+/*   Created: 2024/09/02 10:40:21 by eamsalem          #+#    #+#             */
+/*   Updated: 2024/09/03 12:27:01 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include "../libft/libft.h"
+#include "../../minishell.h"
 
-typedef struct s_env_var
+int	ft_pwd(void)
 {
-	char	*name;
-	t_list	*values;
-}				t_env_var;
+	char	buf[100];
+
+	if (getcwd(buf, 100))
+	{
+		printf("%s\n", buf);
+		return (1);
+	}
+	return (0);
+}
