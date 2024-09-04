@@ -6,14 +6,14 @@
 #    By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 14:01:35 by eamsalem          #+#    #+#              #
-#    Updated: 2024/09/03 12:31:39 by eamsalem         ###   ########.fr        #
+#    Updated: 2024/09/04 13:58:18 by eamsalem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 MINIDIR = $(HOME)/bin
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra -g3
 
 OBJDIR = ./build
 OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
@@ -26,13 +26,15 @@ SRCDIR = srcs
 BUILTINDIR = $(SRCDIR)/builtins
 
 SRCS =	$(SRCDIR)/minishell.c \
+		$(SRCDIR)/split_envp.c \
+		$(BUILTINDIR)/env.c \
 		$(BUILTINDIR)/pwd.c \
 		$(BUILTINDIR)/echo.c
 
 all: $(NAME) $(OBJDIR) $(LIBFT) $(MINIDIR)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
-	@mkdir -p $(@D)
+	mkdir -p $(@D)
 	cc $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJDIR) $(OBJS) $(LIBFT)
