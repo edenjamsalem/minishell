@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 15:34:00 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/09/05 14:57:41 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/09/05 15:41:14 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void	ft_export(t_var *new_var, t_list *envp_vars)
 		key = ((t_var *)(tmp)->content)->key;
 		if (ft_strncmp(new_var->key, key, ft_strlen(key) + 1) == 0)
 		{
-			free_var((t_var *)tmp->content);
-			tmp->content = new_var;
+			free_var(tmp->content);
+			tmp->content = (void *)new_var;
 			return ;
 		}
 		tmp = tmp->next;

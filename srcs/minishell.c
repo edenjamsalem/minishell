@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/09/05 15:00:28 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/09/05 15:46:44 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ int	main(int argc, char **argv, char **envp)
 	char	*input;
 	char	**line;
 	t_list	*envp_vars;
+	t_var	*test;
 
 	(void)argc;
 	(void)argv;
