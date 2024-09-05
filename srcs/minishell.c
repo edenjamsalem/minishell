@@ -6,13 +6,13 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/09/05 15:46:44 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/09/05 17:00:53 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	init_envp_vars(char **envp, t_list **envp_vars)
+void	init_envp_vars(char **envp, t_list_2 **envp_vars)
 {
 	int		i;
 	t_var	*var;
@@ -21,7 +21,7 @@ void	init_envp_vars(char **envp, t_list **envp_vars)
 	while (envp[i])
 	{
 		var = parse_envp(envp[i]);
-		ft_lstadd_back(envp_vars, ft_lstnew((void *)var));
+		ft_lst_2add_back(envp_vars, ft_lst_2new((void *)var));
 		i++;
 	}
 }
@@ -33,9 +33,9 @@ void	free_var(t_var *var)
 	free(var);
 }
 
-void	free_envp_vars(t_list *envp_vars)
+void	free_envp_vars(t_list_2 *envp_vars)
 {
-	t_list	*tmp;
+	t_list_2	*tmp;
 
 	while (envp_vars)
 	{
@@ -50,8 +50,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	char	*input;
 	char	**line;
-	t_list	*envp_vars;
-	t_var	*test;
+	t_list_2	*envp_vars;
 
 	(void)argc;
 	(void)argv;
@@ -68,6 +67,13 @@ int	main(int argc, char **argv, char **envp)
 			ft_pwd();
 		else if (ft_strncmp(line[0], "export", 7) == 0)
 			ft_export(parse_envp(line[1]), envp_vars);
+		else if (ft_strncmp(line[0], "exit", 4) == 0)
+		{
+			free_2darr((void *)line, ft_2darr_len((void *)line));
+			free(input);
+			break ;
+		}
+		free_2darr((void *)line, ft_2darr_len((void *)line));
 		free(input);
 	}
 	free_envp_vars(envp_vars);

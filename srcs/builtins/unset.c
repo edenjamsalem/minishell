@@ -1,33 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/04 15:34:00 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/09/05 16:42:48 by eamsalem         ###   ########.fr       */
+/*   Created: 2024/09/05 15:58:59 by eamsalem          #+#    #+#             */
+/*   Updated: 2024/09/05 16:49:40 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	ft_export(t_var *new_var, t_list_2 *envp_vars)
+void	ft_unset(t_var *var, t_list_2 *envp_vars)
 {
-	char	*key;
+	char		*key;
 	t_list_2	*tmp;
 
 	tmp = envp_vars;
 	while (tmp)
 	{
 		key = ((t_var *)(tmp)->content)->key;
-		if (ft_strncmp(new_var->key, key, ft_strlen(key) + 1) == 0)
+		if (ft_strncmp(var->key, key, ft_strlen(key) + 1) == 0)
 		{
 			free_var(tmp->content);
-			tmp->content = (void *)new_var;
+			tmp->content = (void *)var;
 			return ;
 		}
 		tmp = tmp->next;
 	}
-	ft_lst_2add_back(&envp_vars, ft_lst_2new((void *)new_var));
+	// NEED 2 WAY LINKED LISTS TO DELETE NODE MIDWAY THROUGH LIST
 }

@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/09/05 15:40:56 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/09/05 16:45:01 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,14 @@ typedef struct s_var
 
 t_var	*parse_envp(char const *envp_line);
 
-int		ft_env(t_list *env_vars);
+int		ft_env(t_list_2 *env_vars);
 
 int		ft_pwd(void);
 
-void	ft_export(t_var *new_var, t_list *envp_vars);
+void	ft_export(t_var *new_var, t_list_2 *envp_vars);
 
 void	free_var(t_var *var);
 
-void	free_envp_vars(t_list *envp_vars);
+void	free_envp_vars(t_list_2 *envp_vars);
 
 #endif
