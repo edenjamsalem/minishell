@@ -6,21 +6,21 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 12:45:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/09/04 15:43:06 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/09/05 13:20:30 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int	ft_env(t_var **env_vars)
+int	ft_env(t_list *env_vars)
 {
-	int	i;
+	t_var	*var;
 
-	i = 0;
-	while (env_vars[i])
+	while (env_vars)
 	{
-		printf("%s=%s\n", env_vars[i]->type, env_vars[i]->value);
-		i++;
+		var = env_vars->content;
+		printf("%s=%s\n", var->key, var->value);
+		env_vars = env_vars->next;
 	}
 	return (1);
 }

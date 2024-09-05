@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/09/04 15:43:46 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/09/05 14:10:17 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,20 @@
 
 typedef struct s_var
 {
-	char	*type;
+	char	*key;
 	char	*value;
 }				t_var;
 
-int		ft_env(t_var **env_vars);
+t_var	*parse_envp(char const *envp_line);
+
+int		ft_env(t_list *env_vars);
 
 int		ft_pwd(void);
 
-char	**split_envp(char const *str);
+void	ft_export(t_var *new_var, t_list *envp_vars);
+
+void	free_var(t_var *var);
+
+void	free_envp_vars(t_list *envp_vars);
 
 #endif

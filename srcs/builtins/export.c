@@ -6,53 +6,28 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 15:34:00 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/09/04 16:22:26 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/09/05 14:57:41 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-static void	add_new_var_to_envp(char *var, t_var **envp_vars)
+void	ft_export(t_var *new_var, t_list *envp_vars)
 {
-	
-}
-static bool	var_is_local(char *var, t_var **local_vars)
-{
-	int	i;
+	char	*key;
+	t_list	*tmp;
 
-	i = -1;
-	while (local_vars[i])
+	tmp = envp_vars;
+	while (tmp)
 	{
-		if (ft_strncmp(var, local_vars[i]->type, ft_strlen(var)) == -1 \
-				&& ft_strlen(var) == ft_strlen(local_vars[i]->type))
-			return (true);
-		i++;
+		key = ((t_var *)(tmp)->content)->key;
+		if (ft_strncmp(new_var->key, key, ft_strlen(key) + 1) == 0)
+		{
+			free_var((t_var *)tmp->content);
+			tmp->content = new_var;
+			return ;
+		}
+		tmp = tmp->next;
 	}
-	return (false);
-}
-
-static bool	var_is_envp(char *var, t_var **envp_vars)
-{
-	int	i;
-
-	i = -1;
-	while (envp_vars[i])
-	{
-		if (ft_strncmp(var, envp_vars[i]->type, ft_strlen(var)) == -1 \
-				&& ft_strlen(var) == ft_strlen(envp_vars[i]->type))
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
-int	ft_export(char *var, char *value, t_var **envp_vars, t_var **local_vars)
-{
-	if (var_is_envp(var, envp_vars))
-		update_value();
-	else if (var_is_local(var, local_vars))
-		add_local_var_to_envp();
-	else
-		add_new_var_to_envp();
-	
+	ft_lstadd_back(&envp_vars, ft_lstnew((void *)new_var));
 }

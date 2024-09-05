@@ -6,70 +6,68 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/09/04 16:33:02 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/09/05 15:00:28 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_var	**parse_envp(char **envp)
+void	init_envp_vars(char **envp, t_list **envp_vars)
 {
 	int		i;
-	char	**line;
-	t_var	**envp_vars;
+	t_var	*var;
 
-	envp_vars = malloc(sizeof(t_var *) * (ft_2darr_len((void *)envp) + 1));
 	i = 0;
 	while (envp[i])
 	{
-		line = split_envp(envp[i]);
-		envp_vars[i] = malloc(sizeof(t_var));
-		envp_vars[i]->type = line[0];
-		envp_vars[i]->value = line[1];
-		free(line);
+		var = parse_envp(envp[i]);
+		ft_lstadd_back(envp_vars, ft_lstnew((void *)var));
 		i++;
 	}
-	envp_vars[i] = NULL;
-	return (envp_vars);
 }
 
-void	free_envp_vars(t_var **envp_vars)
+void	free_var(t_var *var)
 {
-	int	i;
+	free(var->key);
+	free(var->value);
+	free(var);
+}
 
-	i = 0;
-	while (envp_vars[i])
+void	free_envp_vars(t_list *envp_vars)
+{
+	t_list	*tmp;
+
+	while (envp_vars)
 	{
-		free(envp_vars[i]->type);
-		free(envp_vars[i]->value);
-		free(envp_vars[i]);
-		i++;
+		tmp = envp_vars->next;
+		free_var(envp_vars->content);
+		free(envp_vars);
+		envp_vars = tmp;
 	}
-	free(envp_vars);
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	char	*input;
-	t_var	**envp_vars;
-//	t_var	**local_vars;
-	int		i;
+	char	**line;
+	t_list	*envp_vars;
 
-	//init_signal_handler 
 	(void)argc;
 	(void)argv;
-//	init_local_vars(local_vars);
-	envp_vars = parse_envp(envp);
-	i = 0;
-	while (i < 1)
+	//init_signal_handler 
+	envp_vars = NULL;
+	init_envp_vars(envp, &envp_vars);
+	while (1)
 	{
 		input = readline("minishell >  ");
-		if (ft_strncmp(input, "env", 4) == 0)
+		line = ft_split(input, ' ');
+		if (ft_strncmp(line[0], "env", 4) == 0)
 			ft_env(envp_vars);
-		else if (ft_strncmp(input, "pwd", 4) == 0)
+		else if (ft_strncmp(line[0], "pwd", 4) == 0)
 			ft_pwd();
+		else if (ft_strncmp(line[0], "export", 7) == 0)
+			ft_export(parse_envp(line[1]), envp_vars);
 		free(input);
-		i++;
 	}
 	free_envp_vars(envp_vars);
 }
