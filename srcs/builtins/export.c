@@ -6,24 +6,24 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 15:34:00 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/09/05 16:42:48 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/09/06 14:14:52 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	ft_export(t_var *new_var, t_list_2 *envp_vars)
+void	ft_export(t_dict *new_var, t_list_2 *envp_vars)
 {
-	char	*key;
+	char		*key;
 	t_list_2	*tmp;
 
 	tmp = envp_vars;
 	while (tmp)
 	{
-		key = ((t_var *)(tmp)->content)->key;
+		key = ((t_dict *)(tmp)->content)->key;
 		if (ft_strncmp(new_var->key, key, ft_strlen(key) + 1) == 0)
 		{
-			free_var(tmp->content);
+			free_dict(tmp->content);
 			tmp->content = (void *)new_var;
 			return ;
 		}

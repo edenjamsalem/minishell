@@ -6,7 +6,7 @@
 #    By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 14:01:35 by eamsalem          #+#    #+#              #
-#    Updated: 2024/09/05 13:17:33 by eamsalem         ###   ########.fr        #
+#    Updated: 2024/09/06 13:56:49 by eamsalem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,10 +26,10 @@ SRCDIR = srcs
 BUILTINDIR = $(SRCDIR)/builtins
 
 SRCS =	$(SRCDIR)/minishell.c \
-		$(SRCDIR)/parse_envp.c \
 		$(BUILTINDIR)/env.c \
 		$(BUILTINDIR)/pwd.c \
 		$(BUILTINDIR)/export.c \
+		$(BUILTINDIR)/unset.c \
 		$(BUILTINDIR)/echo.c
 
 all: $(NAME) $(OBJDIR) $(LIBFT) $(MINIDIR)
