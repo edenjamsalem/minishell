@@ -6,11 +6,11 @@
 #    By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 14:01:35 by eamsalem          #+#    #+#              #
-#    Updated: 2024/09/06 13:56:49 by eamsalem         ###   ########.fr        #
+#    Updated: 2024/09/09 14:00:24 by eamsalem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = minishell
+NAME = $(MINIDIR)/minishell
 MINIDIR = $(HOME)/bin
 
 CFLAGS = -Wall -Werror -Wextra -g3
@@ -28,11 +28,12 @@ BUILTINDIR = $(SRCDIR)/builtins
 SRCS =	$(SRCDIR)/minishell.c \
 		$(BUILTINDIR)/env.c \
 		$(BUILTINDIR)/pwd.c \
+		$(BUILTINDIR)/cd.c \
 		$(BUILTINDIR)/export.c \
 		$(BUILTINDIR)/unset.c \
 		$(BUILTINDIR)/echo.c
 
-all: $(NAME) $(OBJDIR) $(LIBFT) $(MINIDIR)
+all: $(NAME) $(OBJS) $(LIBFT) $(MINIDIR)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	mkdir -p $(@D)
@@ -40,7 +41,6 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 
 $(NAME): $(OBJDIR) $(OBJS) $(LIBFT)
 	cc $(CFLAGS) $(OBJS) $(LIBS) -o $@
-	mv $(NAME) $(MINIDIR)
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
@@ -57,7 +57,7 @@ clean:
 
 fclean: clean
 	make -C $(LIBFTDIR) fclean
-	rm -f $(MINIDIR)/$(NAME)
+	rm -f $(NAME)
 
 re: fclean all
 

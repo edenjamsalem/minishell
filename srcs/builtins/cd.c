@@ -1,21 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/03 10:07:28 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/09/06 15:55:47 by eamsalem         ###   ########.fr       */
+/*   Created: 2024/09/09 13:19:18 by eamsalem          #+#    #+#             */
+/*   Updated: 2024/09/09 14:09:50 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	ft_echo(char *text, bool n_flag)
+void	ft_cd(char *file_path)
 {
-	if (text)
-		printf("%s", text);
-	if (!n_flag || !text)
-		write(1, "\n", 1);
+	if (!file_path || !(*file_path))
+		return ;
+	if (chdir(file_path) == -1)
+	{
+		ft_putstr_fd("bash: cd: ", 2);
+		ft_putstr_fd(file_path, 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+	}
 }
