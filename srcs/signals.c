@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 19:00:09 by mganchev          #+#    #+#             */
-/*   Updated: 2024/11/11 20:25:29 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/11/11 20:27:22 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void handle_signal(int signum, siginfo_t *info, void *context)
 		// end process inside shell and display prompt
 	}
 	else if (signum == EOF) // handles ctrl+D
-		exit(EXIT_FAILURE);
+		exit(EXIT_FAILURE); // need to implement case where cat is used
 	else if (signum == SIGQUIT) // bash ignores SIGQUIT or ctrl+backslash 
 		return ;
 }

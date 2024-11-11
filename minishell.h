@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/11 19:44:09 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/11/11 22:53:46 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,12 @@
 # include <stdio.h>
 # include <unistd.h>
 
-extern volatile sig_atomic_t	g_flag;
+extern volatile sig_atomic_t	g_flag; // setting up global var to be used by all files w header file included
 
 enum							e_token
 {
 	TEXT,
+	NUMBER,
 	CMD,
 	VAR,
 	KEYWORD,
@@ -37,6 +38,8 @@ enum							e_token
 	CONTROL_OP, //  ||, &&, &, ;, ;;, ;&, ;;&, |, |&, (, or )
 	REDIRECT,
 	COMMENT,
+	GLOB, // wildcard *
+	NLINE,
 };
 
 typedef struct s_word

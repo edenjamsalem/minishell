@@ -6,13 +6,13 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/11 20:23:41 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/11/11 20:58:48 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-volatile sig_atomic_t	g_flag = 0;
+volatile sig_atomic_t	g_flag = 0; // signal receiving flag
 
 t_list_2	*init_envp_dict(char **envp)
 {
