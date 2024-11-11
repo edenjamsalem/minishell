@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/11 14:46:11 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/11 20:23:41 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+volatile sig_atomic_t	g_flag = 0;
 
 t_list_2	*init_envp_dict(char **envp)
 {
@@ -51,9 +53,22 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	envp_dict = init_envp_dict(envp);
+	setup_sig_handlers(); // initialise signal handlers first;
 	while (1)
 	{
+		if (g_flag) // means a message is being received
+			{	
+				g_flag = 0; // reset flag
+				free(input);
+				input = readline("minishell > "); // reset prompt
+				continue ;
+			}
 		input = readline("minishell >  ");
+		if (!input) // handling EOF / ctrl + D
+		{
+			ft_printf("exit\n");
+			break;
+		}
 		if (*input)
 			add_history(input);
 		args = ft_split(input, ' ');
