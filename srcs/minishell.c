@@ -6,11 +6,14 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/11 15:58:50 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/12 14:03:07 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+
+volatile sig_atomic_t	g_flag = 0; // signal receiving flag
 
 t_list_2	*init_envp_dict(char **envp)
 {
@@ -51,9 +54,22 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	envp_dict = init_envp_dict(envp);
+	setup_sig_handlers(); // initialise signal handlers first;
 	while (1)
 	{
+		if (g_flag) // means a message is being received
+			{	
+				g_flag = 0; // reset flag
+				free(input);
+				input = readline("minishell > "); // reset prompt
+				continue ;
+			}
 		input = readline("minishell >  ");
+		if (!input) // handling EOF / ctrl + D
+		{
+			ft_printf("exit\n");
+			break;
+		}
 		if (*input)
 			add_history(input);
 		
