@@ -12,88 +12,59 @@
 
 #include "../../minishell.h"
 
-// NOT WORKING PROPERLY
-
-static void	skip_spaces(char *text, int *i)
+static void	skip_spaces(char **text)
 {
-	while(text[*i] && chrsetcmp(text[*i], SPACES))
-		(*i)++;
+	while(**text && chrsetcmp(**text, SPACES))
+		(*text)++;
 }
 
-static int	skip_text(char *text, int i, char *delimeter)
+static char	*copy_word(char *letter, char *end)
 {
-	while(text[i] && !chrsetcmp(text[i], delimeter))
-		i++;
-	return (i);
+	char 	*text;
+	char 	*start;
+	t_word	*word;
+
+	text = malloc(sizeof(char) * (end - letter + 1));
+		//malloc error
+	start = text;
+	while (letter < end)
+		*text++ = *letter++;
+	*text = '\0';
+	return (start);
 }
 
-static char	*get_word(char *str, char *delimeter, int *i)
+static char	*get_word(char **current)
 {
-	int 	j;
-	int		word_len;
-	char	*word;
+	char	*start;
 
-	word_len = skip_text(str, *i, delimeter) - *i;
-	word = malloc(sizeof(char) * (word_len + 1));
-	if (!word)
-		return (NULL);
-	j = 0;
-	while (str[*i] && !chrsetcmp(str[*i], delimeter))
-		word[j++] = str[(*i)++];
-	word[j] = '\0';
-	return (word);
-}
-
-/*
-static char	*get_word(char *start)
-{
-	char	*end;
-
-	end = start;
-	while (*end && chrsetcmp(*end, SPACES))
+	start = *current;
+	while (**current && !chrsetcmp(**current, SPACES))
 	{
-		if (*end == "\"")
-		{
-			end = strchr(start, "\"") + 1;
-			continue ;
-		}
-		else if (*end == "\'")
-		{
-			end = strchr(start, "\'") + 1;
-			continue ;
-		}
-		end++;
+		if (**current == '\"')
+			*current = (char *)ft_strchr(*current + 1, '\"') + 1;
+		else if (**current == '\'')
+			*current = (char *)ft_strchr(*current + 1, '\'') + 1;
+		else
+			(*current)++;
 	}
-
+	return (copy_word(start, *current));
 }
-*/
+
 
 t_list_2	*parse_exc_quotes(char *input)
 {
-	int 		i;
 	t_list_2	*list;
 	t_word		*word;
 	
 	list = NULL;
-	i = 0;
-	skip_spaces(input, &i);
-	while (input[i])
+	skip_spaces(&input);
+	while (*input)
 	{
 		word = malloc(sizeof(t_word));
-			//handle malloc error
-		if (chrsetcmp(input[i], QUOTES))
-		{
-			if (input[i++] == '\"')
-				word->token = D_QUOTES;
-			else
-				word->token = S_QUOTES;
-			word->text = get_word(input, QUOTES, &i);
-			i++;
-		}
-		else
-			word->text = get_word(input, SPACES, &i);
+			//malloc error
+		word->text = get_word(&input);
 		ft_lst_2add_back(&list, ft_lst_2new(word));
-		skip_spaces(input, &i);
+		skip_spaces(&input);
 	}
 	return (list);
 }
@@ -107,5 +78,4 @@ int main(void)
 		printf("%s\n", ((t_word *)list->content)->text);
 		list = list->next;
 	}
-	
 }
