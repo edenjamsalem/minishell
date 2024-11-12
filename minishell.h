@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/11 14:49:37 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/11 15:47:17 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	ft_unset(t_dict *var, t_list_2 **envp_vars);
 void	ft_cd(char *file_path);
 
 
+void	parse(char *input);
 
 void	free_envp_dict(t_list_2 *envp_vars);
 

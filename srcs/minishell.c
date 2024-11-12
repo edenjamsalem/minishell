@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/11 14:46:11 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/11 15:58:50 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,9 @@ int	main(int argc, char **argv, char **envp)
 		input = readline("minishell >  ");
 		if (*input)
 			add_history(input);
+		
+	//	parse(input);
+		
 		args = ft_split(input, ' ');
 		if (ft_strncmp(args[0], "env", 4) == 0)
 			ft_env(envp_dict);
