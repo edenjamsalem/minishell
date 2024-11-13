@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/12 15:00:09 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/13 16:15:42 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <unistd.h>
 
 extern volatile sig_atomic_t	g_flag; // setting up global var to be used by all files w header file included
+
+#define SPACES " \t\n"
 
 enum	e_token
 {
@@ -67,5 +69,13 @@ void	ft_unset(t_dict *var, t_list_2 **envp_vars);
 void	ft_cd(char *file_path);
 
 void	free_envp_dict(t_list_2 *envp_vars);
+
+// PARSE FNS
+
+void	skip_spaces(char **text);
+
+void	skip_quotes(char **text, char quote);
+
+char	*cut_word(char *start, char *end);
 
 #endif

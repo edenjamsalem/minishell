@@ -12,39 +12,6 @@
 
 #include "../../minishell.h"
 
-static void	skip_spaces(char **text)
-{
-	while(**text && chrsetcmp(**text, SPACES))
-		(*text)++;
-}
-
-static void skip_quotes(char **text, char quote)
-{
-	char	*closing_quote;
-
-	closing_quote = (char *)ft_strchr(*text + 1, quote);
-	if (closing_quote)
-		(*text) = closing_quote + 1;
-	else {
-		(*text)++;
-	}
-}
-
-static char	*cut_word(char *start, char *end)
-{
-	char 	*text;
-	char 	*start;
-	t_word	*word;
-
-	text = malloc(sizeof(char) * (end - start + 1));
-		//malloc error
-	start = text;
-	while (start < end)
-		*text++ = *start++;
-	*text = '\0';
-	return (start);
-}
-
 static char	*get_word(char **input)
 {
 	char	*start;
@@ -80,15 +47,25 @@ t_list_2	*parse_exc_quotes(char *input)
 	}
 	return (list);
 }
+
+void	free_word(t_word *word)
+{
+	free(word->text);
+	free(word);
+}
 /*
 int main(void)
 {
 	t_list_2 *list = parse_exc_quotes("This is my\"text what\" \"\' shouldI do?");
+	t_list_2 *tmp;
 
-	while (list)
+	tmp = list;
+	while (tmp)
 	{
-		printf("%s\n", ((t_word *)list->content)->text);
-		list = list->next;
+		printf("%s\n", ((t_word *)tmp->content)->text);
+		tmp = tmp->next;
 	}
+	ft_lst_2clear(&list, (void *)free_word);
+	free(list);
 }
 */
