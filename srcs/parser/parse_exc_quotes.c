@@ -18,36 +18,48 @@ static void	skip_spaces(char **text)
 		(*text)++;
 }
 
-static char	*copy_word(char *letter, char *end)
+static void skip_quotes(char **text, char quote)
+{
+	char	*closing_quote;
+
+	closing_quote = (char *)ft_strchr(*text + 1, quote);
+	if (closing_quote)
+		(*text) = closing_quote + 1;
+	else {
+		(*text)++;
+	}
+}
+
+static char	*cut_word(char *start, char *end)
 {
 	char 	*text;
 	char 	*start;
 	t_word	*word;
 
-	text = malloc(sizeof(char) * (end - letter + 1));
+	text = malloc(sizeof(char) * (end - start + 1));
 		//malloc error
 	start = text;
-	while (letter < end)
-		*text++ = *letter++;
+	while (start < end)
+		*text++ = *start++;
 	*text = '\0';
 	return (start);
 }
 
-static char	*get_word(char **current)
+static char	*get_word(char **input)
 {
 	char	*start;
 
-	start = *current;
-	while (**current && !chrsetcmp(**current, SPACES))
+	start = *input;
+	while (**input && !chrsetcmp(**input, SPACES))
 	{
-		if (**current == '\"')
-			*current = (char *)ft_strchr(*current + 1, '\"') + 1;
-		else if (**current == '\'')
-			*current = (char *)ft_strchr(*current + 1, '\'') + 1;
+		if (**input == '\"')
+			skip_quotes(input, '\"');
+		else if (**input == '\'')
+			skip_quotes(input, '\'');
 		else
-			(*current)++;
+			(*input)++;
 	}
-	return (copy_word(start, *current));
+	return (cut_word(start, *input));
 }
 
 
@@ -68,10 +80,10 @@ t_list_2	*parse_exc_quotes(char *input)
 	}
 	return (list);
 }
-
+/*
 int main(void)
 {
-	t_list_2 *list = parse_exc_quotes("This is my \"text what should\"I do?");
+	t_list_2 *list = parse_exc_quotes("This is my\"text what\" \"\' shouldI do?");
 
 	while (list)
 	{
@@ -79,3 +91,4 @@ int main(void)
 		list = list->next;
 	}
 }
+*/
