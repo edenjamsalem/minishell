@@ -26,11 +26,11 @@ static char	*get_word(char **input)
 		else
 			(*input)++;
 	}
-	return (cut_word(start, *input));
+	return (ft_strcut(start, *input));
 }
 
 
-t_list_2	*parse_exc_quotes(char *input)
+t_list_2	*word_split(char *input)
 {
 	t_list_2	*list;
 	t_word		*word;
@@ -56,7 +56,7 @@ void	free_word(t_word *word)
 /*
 int main(void)
 {
-	t_list_2 *list = parse_exc_quotes("This is my\"text what\" \"\' shouldI do?");
+	t_list_2 *list = word_split("This is my\"text what\" \"\' shouldI do?");
 	t_list_2 *tmp;
 
 	tmp = list;

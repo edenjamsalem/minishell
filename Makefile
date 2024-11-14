@@ -6,7 +6,7 @@
 #    By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 14:01:35 by eamsalem          #+#    #+#              #
-#    Updated: 2024/11/12 14:10:11 by eamsalem         ###   ########.fr        #
+#    Updated: 2024/11/13 17:17:10 by eamsalem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ BUILTINDIR = $(SRCDIR)/builtins
 
 SRCS =	$(SRCDIR)/minishell.c \
 		$(SRCDIR)/signals.c \
+		$(SRCDIR)/envp_utils.c \
 		$(BUILTINDIR)/env.c \
 		$(BUILTINDIR)/pwd.c \
 		$(BUILTINDIR)/cd.c \

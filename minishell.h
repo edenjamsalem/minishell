@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/13 16:15:42 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/14 13:34:48 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,32 +50,40 @@ typedef struct s_word
 	enum e_token	token;
 }	t_word;
 
+
 // SIGNALS
 
-void	handle_signal(int signum, siginfo_t *info, void *context);
+void		handle_signal(int signum, siginfo_t *info, void *context);
 
-void	setup_sig_handlers(void);
+void		setup_sig_handlers(void);
+
 
 // BUILTINS
 
-int		ft_env(t_list_2 *env_vars);
+int			ft_env(t_dict *envp_vars);
 
-int		ft_pwd(void);
+int			ft_pwd(void);
 
-void	ft_export(t_dict *new_var, t_list_2 *envp_vars);
+void		ft_export(t_dict *new_var, t_dict **envp_vars);
 
-void	ft_unset(t_dict *var, t_list_2 **envp_vars);
+void		ft_unset(t_dict *var, t_dict **envp_vars);
 
-void	ft_cd(char *file_path);
-
-void	free_envp_dict(t_list_2 *envp_vars);
+void		ft_cd(char *file_path);
 
 // PARSE FNS
 
-void	skip_spaces(char **text);
+void		skip_spaces(char **text);
 
-void	skip_quotes(char **text, char quote);
+int			skip_quotes(char **text, char quote);
 
-char	*cut_word(char *start, char *end);
+char		*skip_word(char **text);
+
+
+// ENVP FNS
+
+t_dict		*init_envp_dict(char **envp);
+
+void		free_envp_dict(t_list_2 *envp_dict);
+
 
 #endif

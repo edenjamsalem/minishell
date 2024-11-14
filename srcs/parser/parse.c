@@ -17,7 +17,7 @@ void	parse(char *input)
 {
 	t_list **parsed_input;
 	
-	parsed_input = parse_exc_quotes(input);
+	parsed_input = word_split(input);
 	expand_vars_inside_quotes();
 	tokenize();
 }
