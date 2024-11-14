@@ -55,7 +55,7 @@ void	free_word(t_word *word)
 /*
 int main(void)
 {
-	t_list_2 *list = word_split("This is my\"text what\" \"\' shouldI do?");
+	t_list_2 *list = word_split("This	is my\"text what\" \"\' shouldI do?");
 	t_list_2 *tmp;
 
 	tmp = list;

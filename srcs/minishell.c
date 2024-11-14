@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/14 13:36:35 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:16:51 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	main(int argc, char **argv, char **envp)
 				input = readline("minishell > "); // reset prompt
 				continue ;
 			}
-		input = readline("minishell >  ");
+		input = readline("minishell > ");
 		if (!input) // handling EOF / ctrl + D
 		{
 			ft_printf("exit\n");

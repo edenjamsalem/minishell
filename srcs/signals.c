@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 19:00:09 by mganchev          #+#    #+#             */
-/*   Updated: 2024/11/11 20:27:22 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:19:49 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,8 @@ void handle_signal(int signum, siginfo_t *info, void *context)
 	}
 	else if (signum == EOF) // handles ctrl+D
 		exit(EXIT_FAILURE); // need to implement case where cat is used
-	else if (signum == SIGQUIT) // bash ignores SIGQUIT or ctrl+backslash 
-		return ;
 }
+// come back and check for sigquit
 
 void	setup_sig_handlers(void)
 {

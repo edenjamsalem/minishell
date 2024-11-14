@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 18:43:34 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/14 17:49:15 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:21:54 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,7 @@ void	copy_quoted_text(char **input, char **expanded)
 
 	closing_quote = (char *)ft_strchr(*input + 1, **input);
 	if (closing_quote)
-	{
-		ft_printf("%d\n", (closing_quote - *input + 2));
 		ft_strlcpy(*expanded, *input, (closing_quote - *input + 2));
-	}
 	else
 		**expanded = **input;
 	skip_quotes(input);
@@ -93,17 +90,15 @@ char	*expand_vars_outside_quotes(char *input, t_dict *envp_dict)
 			copy_quoted_text(&input, &expanded);
 		else if (*input == '$' && *(input - 1) != '\\')
 			copy_expanded_var(&input, &expanded, envp_dict);
-		else
-			*expanded++ = *input++;
+		*expanded++ = *input++;
 	}
 	*expanded = '\0';
 	return (ptr);
 }
-/*
+
 int main(int argc, char **argv, char **envp)
 {
 	t_dict *envp_dict = init_envp_dict(envp);	
 
-	printf("%s\n", expand_vars_outside_quotes("$SHELL \"$ab\"  hello ", envp_dict));
+	printf("%s\n", expand_vars_outside_quotes("$SHELL $ab  hello ", envp_dict));
 }
-*/
