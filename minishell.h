@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/14 13:34:48 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/14 16:37:08 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 extern volatile sig_atomic_t	g_flag; // setting up global var to be used by all files w header file included
 
 #define SPACES " \t\n"
+#define QUOTES "\'\""
 
 enum	e_token
 {
@@ -74,7 +75,9 @@ void		ft_cd(char *file_path);
 
 void		skip_spaces(char **text);
 
-int			skip_quotes(char **text, char quote);
+int			skip_quotes(char **text);
+
+char		*skip_alnum(char **text);
 
 char		*skip_word(char **text);
 

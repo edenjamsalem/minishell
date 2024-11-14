@@ -6,71 +6,104 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 18:43:34 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/14 12:05:03 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/14 17:49:15 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-
-// changed dict struct to include list so I dont need 2 data types, 
-
-// 				update all files accordingly !!
-
-
-
-
-static void	swap_key_for_value(char **tmp_split, t_list_2 *envp_dict)
+// This function calculates the diff in len between a $var and its expansion
+static int	calc_diff(char *key, t_dict *envp_dict)
 {
-	char	*value;
+	char *value;
 
-	value = get_dict_value(tmp_split[1], envp_dict);
-	free(tmp_split[1]);
-	tmp_split[1] = value;
+	value = get_dict_value(key, envp_dict);
+	if (value)
+		return (ft_strlen(value) - (ft_strlen(key) + 1)); // +1 for $ sign
+	return (-(ft_strlen(key) + 1));
 }
 
-static char	**split_var_from_input(char *input, char *var)
+// This function calculates the expanded len of the input
+int	get_len(char *input, t_dict *envp_dict)
 {
-	char	**tmp_split;
-
-	tmp_split = malloc(sizeof(char *) * 4);
-	tmp_split[0] = ft_strcut(input, var);
-	tmp_split[1] = ft_strcut(var + 1, skip_word(&var));
-	tmp_split[2] = ft_strdup(skip_word(&var));
-	tmp_split[3] = 0;
-	return (tmp_split);
-}
-
-char	*expand_vars_outside_quotes(char *input, t_list_2 *envp_dict)
-{
-	char	*current;
-	char	**tmp_split;
-
-	current = input;
-	while (*current)
+	int		input_len;
+	int		diff;
+	char	*var;
+	
+	diff = 0;
+	input_len = ft_strlen(input);
+	while (*input)
 	{
-		if (*current == '$' && *(current - 1) != '\\')
+		if (chrsetcmp(*input, QUOTES))
+			skip_quotes(&input);
+		else if (*input == '$' && *(input - 1) != '\\')
 		{
-			tmp_split = split_var_from_input(input, current);
-			swap_key_for_value(tmp_split, envp_dict);
-			current = ft_strunion(tmp_split);
+			input++;
+			var = ft_strcut(input, skip_alnum(&input));
+			diff += calc_diff(var, envp_dict);
+			free(var);
 		}
-		current++;
+		input++;
 	}
-	
+	return (input_len + diff);
 }
 
-int main(void) {
-/*	char	*str = "hello $my";
-	char	*chr = str + 6;
-	char	**tmp_split = split_var_from_input(str, chr);
-	int		i = 0;
+void	copy_quoted_text(char **input, char **expanded)
+{
+	char	*closing_quote;
 
-	while (tmp_split[i])
+	closing_quote = (char *)ft_strchr(*input + 1, **input);
+	if (closing_quote)
 	{
-		printf("%s\n", tmp_split[i]);
-		i++;
-	}*/
-
-	
+		ft_printf("%d\n", (closing_quote - *input + 2));
+		ft_strlcpy(*expanded, *input, (closing_quote - *input + 2));
+	}
+	else
+		**expanded = **input;
+	skip_quotes(input);
+	skip_quotes(expanded);
 }
+
+void	copy_expanded_var(char **input, char **expanded, t_dict *envp_dict)
+{
+	char	*key;
+	char	*value;
+	
+	(*input)++;	
+	key = ft_strcut(*input, skip_alnum(input));
+	value = get_dict_value(key, envp_dict);
+	ft_strlcpy(*expanded, value, ft_strlen(value) + 1);	
+	skip_alnum(input);
+	skip_word(expanded);
+	free(key);
+}
+
+char	*expand_vars_outside_quotes(char *input, t_dict *envp_dict)
+{
+	char	*expanded;
+	char	*ptr;
+	
+	expanded = malloc(sizeof(char) * (get_len(input, envp_dict) + 1));
+	if (!expanded)
+		return (NULL);
+	ptr = expanded;
+	while (*input)
+	{
+		if (chrsetcmp(*input, QUOTES))
+			copy_quoted_text(&input, &expanded);
+		else if (*input == '$' && *(input - 1) != '\\')
+			copy_expanded_var(&input, &expanded, envp_dict);
+		else
+			*expanded++ = *input++;
+	}
+	*expanded = '\0';
+	return (ptr);
+}
+/*
+int main(int argc, char **argv, char **envp)
+{
+	t_dict *envp_dict = init_envp_dict(envp);	
+
+	printf("%s\n", expand_vars_outside_quotes("$SHELL \"$ab\"  hello ", envp_dict));
+}
+*/

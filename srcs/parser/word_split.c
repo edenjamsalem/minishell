@@ -19,10 +19,8 @@ static char	*get_word(char **input)
 	start = *input;
 	while (**input && !chrsetcmp(**input, SPACES))
 	{
-		if (**input == '\"')
-			skip_quotes(input, '\"');
-		else if (**input == '\'')
-			skip_quotes(input, '\'');
+		if (chrsetcmp(**input, QUOTES))
+			skip_quotes(input);
 		else
 			(*input)++;
 	}
@@ -40,7 +38,8 @@ t_list_2	*word_split(char *input)
 	while (*input)
 	{
 		word = malloc(sizeof(t_word));
-			//malloc error
+		if (!word)
+			return (NULL);
 		word->text = get_word(&input);
 		ft_lst_2add_back(&list, ft_lst_2new(word));
 		skip_spaces(&input);
