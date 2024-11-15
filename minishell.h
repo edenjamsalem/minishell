@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/15 00:21:52 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/11/15 00:30:27 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ extern volatile sig_atomic_t	g_flag;
 
 # define SPACES " \t\n"
 # define QUOTES "\'\""
-# define BRACES "\{\}"
 
 enum							e_token
 {

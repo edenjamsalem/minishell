@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 19:00:09 by mganchev          #+#    #+#             */
-/*   Updated: 2024/11/14 21:13:12 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/11/15 00:32:54 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,10 @@ void handle_signal(int signum, siginfo_t *info, void *context)
 	{
 		g_flag = 1;
 		write(STDOUT_FILENO, "minishell > ", 13);
-		// end process inside shell and display write(STDOUT_FILENO, "\nminishell > ", 13);prompt
 	}
 	else if (signum == EOF) // handles ctrl+D
-		exit(EXIT_FAILURE); // need to implement case where cat is used
+		exit(EXIT_FAILURE); // execve handles cat special case
 }
-// come back and check for sigquit
 
 void	setup_sig_handlers(void)
 {
