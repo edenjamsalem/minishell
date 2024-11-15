@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 18:43:34 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/14 18:21:54 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/15 11:23:54 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static int	calc_diff(char *key, t_dict *envp_dict)
 	value = get_dict_value(key, envp_dict);
 	if (value)
 		return (ft_strlen(value) - (ft_strlen(key) + 1)); // +1 for $ sign
-	return (-(ft_strlen(key) + 1));
+	return (-(ft_strlen(key) + 1)); 
 }
 
 // This function calculates the expanded len of the input
@@ -69,9 +69,14 @@ void	copy_expanded_var(char **input, char **expanded, t_dict *envp_dict)
 	(*input)++;	
 	key = ft_strcut(*input, skip_alnum(input));
 	value = get_dict_value(key, envp_dict);
-	ft_strlcpy(*expanded, value, ft_strlen(value) + 1);	
-	skip_alnum(input);
-	skip_word(expanded);
+	if (value)
+	{
+		ft_strlcpy(*expanded, value, ft_strlen(value) + 1);	
+		skip_alnum(input);
+		skip_word(expanded);
+	}
+	else
+		skip_alnum(input);
 	free(key);
 }
 
@@ -88,17 +93,19 @@ char	*expand_vars_outside_quotes(char *input, t_dict *envp_dict)
 	{
 		if (chrsetcmp(*input, QUOTES))
 			copy_quoted_text(&input, &expanded);
-		else if (*input == '$' && *(input - 1) != '\\')
+		else if (*input == '$')
 			copy_expanded_var(&input, &expanded, envp_dict);
-		*expanded++ = *input++;
+		else
+			*expanded++ = *input++;
 	}
 	*expanded = '\0';
 	return (ptr);
 }
-
+/*
 int main(int argc, char **argv, char **envp)
 {
 	t_dict *envp_dict = init_envp_dict(envp);	
 
-	printf("%s\n", expand_vars_outside_quotes("$SHELL $ab  hello ", envp_dict));
+	printf("%s\n", expand_vars_outside_quotes("$SHELL. m$am   hello ", envp_dict));
 }
+*/
