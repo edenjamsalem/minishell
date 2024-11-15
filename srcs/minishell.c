@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/14 18:16:51 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/14 21:11:21 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	main(int argc, char **argv, char **envp)
 		if (g_flag) // means a message is being received
 			{	
 				g_flag = 0; // reset flag
-				free(input);
+				//free(input);
 				input = readline("minishell > "); // reset prompt
 				continue ;
 			}
@@ -42,7 +42,11 @@ int	main(int argc, char **argv, char **envp)
 		}
 		if (*input)
 			add_history(input);
-		
+		else
+		{
+			free(input); // handles ENTER key press
+			continue ;
+		}
 	//	parse(input);
 		
 		args = ft_split(input, ' ');
@@ -56,6 +60,10 @@ int	main(int argc, char **argv, char **envp)
 			ft_export(str_to_dict(args[1]), &envp_dict);
 		else if (ft_strncmp(args[0], "unset", 6) == 0)
 			ft_unset(str_to_dict(args[1]), &envp_dict);
+		else if (ft_strncmp(args[0], "echo", 5) == 0)
+			ft_echo(input, NULL);
+		else if (ft_strncmp(args[0], "cat", 4) == 0) // handle cat (it handles ctrl+D special case on its own)
+			execve("/bin/cat", args, __environ);
 		else if (ft_strncmp(args[0], "exit", 4) == 0)
 		{
 			free_2darr((void *)args, ft_2darr_len((void *)args));

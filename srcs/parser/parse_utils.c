@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:47:02 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/14 17:18:28 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/14 23:27:57 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,3 +46,4 @@ int	skip_quotes(char **text)
 		(*text)++;
 	return (*text - start);
 }
+
