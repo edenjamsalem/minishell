@@ -17,7 +17,7 @@ static char	*get_word(char **input)
 	char	*start;
 
 	start = *input;
-	while (**input && !chrsetcmp(**input, SPACES))
+	while (**input && !chrsetcmp(**input, IFS))
 	{
 		if (chrsetcmp(**input, QUOTES))
 			skip_quotes(input);
@@ -27,6 +27,11 @@ static char	*get_word(char **input)
 	return (ft_strcut(start, *input));
 }
 
+void	free_word(t_word *word)
+{
+	free(word->text);
+	free(word);
+}
 
 t_list_2	*word_split(char *input)
 {
@@ -45,12 +50,6 @@ t_list_2	*word_split(char *input)
 		skip_spaces(&input);
 	}
 	return (list);
-}
-
-void	free_word(t_word *word)
-{
-	free(word->text);
-	free(word);
 }
 /*
 int main(void)

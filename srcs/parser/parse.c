@@ -13,11 +13,35 @@
 
 	// expand variables INSIDE double quotes but NOT single quotes
 
-void	parse(char *input)
+t_list_2	*parse(char *input, t_dict *envp_dict)
 {
-	t_list **parsed_input;
+	t_list_2	*parsed_input;
+	char		*expanded_input;
 	
-	parsed_input = word_split(input);
-	expand_vars_inside_quotes();
-	tokenize();
+	expanded_input = expand_vars(input, envp_dict, IGNORE_QUOTES);
+	parsed_input = word_split(expanded_input);
+	expand_vars_inside_quotes(parsed_input, envp_dict);
+	//quote_removal();
+	//tokenize();
+	free(expanded_input);
+	return (parsed_input);
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	char		*input = "HELLOO 383    	\"$SHELL\"	 \'$LANGUGAGE\'";
+	t_list_2	*parsed_input;
+	t_list_2	*tmp;
+	t_dict		*envp_dict;
+
+	envp_dict = init_envp_dict(envp);
+	parsed_input = parse(input, envp_dict);
+	tmp = parsed_input;
+	while (tmp)
+	{
+		printf("%s ", ((t_word *)tmp->content)->text);
+		tmp = tmp->next;
+	}
+	dict_clear(&envp_dict);
+	ft_lst_2clear(&parsed_input, (void *)free_word);
 }

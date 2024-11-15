@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   var_expansions.c                                   :+:      :+:    :+:   */
+/*   expansions.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 18:43:34 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/15 11:23:54 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/15 14:55:24by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	calc_diff(char *key, t_dict *envp_dict)
 }
 
 // This function calculates the expanded len of the input
-int	get_len(char *input, t_dict *envp_dict)
+static int	get_len(char *input, t_dict *envp_dict)
 {
 	int		input_len;
 	int		diff;
@@ -35,8 +35,8 @@ int	get_len(char *input, t_dict *envp_dict)
 	while (*input)
 	{
 		if (chrsetcmp(*input, QUOTES))
-			skip_quotes(&input);
-		else if (*input == '$' && *(input - 1) != '\\')
+			skip_quotes(&input); // handles unclosed quotes
+		else if (*input == '$')
 		{
 			input++;
 			var = ft_strcut(input, skip_alnum(&input));
@@ -48,39 +48,7 @@ int	get_len(char *input, t_dict *envp_dict)
 	return (input_len + diff);
 }
 
-void	copy_quoted_text(char **input, char **expanded)
-{
-	char	*closing_quote;
-
-	closing_quote = (char *)ft_strchr(*input + 1, **input);
-	if (closing_quote)
-		ft_strlcpy(*expanded, *input, (closing_quote - *input + 2));
-	else
-		**expanded = **input;
-	skip_quotes(input);
-	skip_quotes(expanded);
-}
-
-void	copy_expanded_var(char **input, char **expanded, t_dict *envp_dict)
-{
-	char	*key;
-	char	*value;
-	
-	(*input)++;	
-	key = ft_strcut(*input, skip_alnum(input));
-	value = get_dict_value(key, envp_dict);
-	if (value)
-	{
-		ft_strlcpy(*expanded, value, ft_strlen(value) + 1);	
-		skip_alnum(input);
-		skip_word(expanded);
-	}
-	else
-		skip_alnum(input);
-	free(key);
-}
-
-char	*expand_vars_outside_quotes(char *input, t_dict *envp_dict)
+char	*expand_vars(char *input, t_dict *envp_dict, bool ignore_quotes)
 {
 	char	*expanded;
 	char	*ptr;
@@ -91,7 +59,7 @@ char	*expand_vars_outside_quotes(char *input, t_dict *envp_dict)
 	ptr = expanded;
 	while (*input)
 	{
-		if (chrsetcmp(*input, QUOTES))
+		if (chrsetcmp(*input, QUOTES) && ignore_quotes)
 			copy_quoted_text(&input, &expanded);
 		else if (*input == '$')
 			copy_expanded_var(&input, &expanded, envp_dict);
@@ -101,6 +69,26 @@ char	*expand_vars_outside_quotes(char *input, t_dict *envp_dict)
 	*expanded = '\0';
 	return (ptr);
 }
+
+void	expand_vars_inside_quotes(t_list_2 *input, t_dict *envp_dict)
+{
+	t_word	*word;
+	char	*expanded;
+
+	while (input)
+	{
+		word = (t_word *)(input->content);
+		if (ft_strchr(word->text, '$') && !ft_strchr(word->text, '\''))
+		{
+			expanded = expand_vars(word->text, envp_dict, INC_QUOTES);
+			free(word->text);
+			word->text = expanded;
+		}
+		input = input->next;
+	}
+}
+
+
 /*
 int main(int argc, char **argv, char **envp)
 {

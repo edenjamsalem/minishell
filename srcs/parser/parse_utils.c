@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:47:02 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/14 23:27:57 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/11/15 15:38:19 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ char	*skip_alnum(char **text)
 
 void	skip_spaces(char **text)
 {
-	while(**text && chrsetcmp(**text, SPACES))
+	while(chrsetcmp(**text, IFS))
 		(*text)++;
 }
 
 char	*skip_word(char **text)
 {
-	while(**text && !chrsetcmp(**text, SPACES))
+	while(**text && !chrsetcmp(**text, IFS))
 		(*text)++;
 	return (*text);
 }
@@ -38,6 +38,8 @@ int	skip_quotes(char **text)
 	char	*closing_quote;
 	char	*start;
 
+	if (!text || !*text || **text == '\0')
+		return (0);
 	start = *text;
 	closing_quote = (char *)ft_strchr(*text + 1, **text);
 	if (closing_quote)
