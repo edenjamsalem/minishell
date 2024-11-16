@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 09:09:19 by mganchev          #+#    #+#             */
-/*   Updated: 2024/11/16 13:18:51 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/11/16 14:01:37 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ bool	is_misc(char *word, enum e_token *token)
 }
 
 // basic tokeniser, will have to be expanded 
-void	tokenise(t_list_2 *parsed_input)
+t_list_2	*tokenise(t_list_2 *parsed_input)
 {
 	t_word		*word;
 	t_list_2	*temp;
@@ -112,4 +112,5 @@ void	tokenise(t_list_2 *parsed_input)
 			word->token = TEXT;
 		temp = temp->next;
 	}
+	return (parsed_input);
 }

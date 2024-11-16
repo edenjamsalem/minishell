@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 09:09:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/11/16 13:03:40 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/11/16 20:01:39 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ bool	is_number(char *word)
 // checks if a word is a variable and if that variable exists in env
 bool	is_var(char *word)
 {
-	char	*start;
+	char	*start = NULL;
 	char	var_name[word - start + 1];
 
 	if (word[0] != '$' || word[1] == '\0')
@@ -96,8 +96,7 @@ bool	is_redirect(char *word)
 	i = 0;
 	while (redirections[i] != NULL)
 	{
-		if (ft_strncmp(word, redirections[i], ft_strlen(redirections[i])
-				+ 1) == 0)
+		if (ft_strncmp(word, redirections[i], ft_strlen(redirections[i])) == 0)
 			return (true);
 		i++;
 	}

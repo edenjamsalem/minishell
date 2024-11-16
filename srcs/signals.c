@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 19:00:09 by mganchev          #+#    #+#             */
-/*   Updated: 2024/11/15 00:32:54 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/11/16 20:12:12 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void handle_signal(int signum, siginfo_t *info, void *context)
 	if (signum == SIGINT) // handles ctrl+C
 	{
 		g_flag = 1;
-		write(STDOUT_FILENO, "minishell > ", 13);
+		write(STDOUT_FILENO, "\nminishell > ", 13);
 	}
 	else if (signum == EOF) // handles ctrl+D
 		exit(EXIT_FAILURE); // execve handles cat special case

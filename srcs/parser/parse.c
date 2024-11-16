@@ -20,9 +20,9 @@ t_list_2	*parse(char *input, t_dict *envp_dict)
 	
 	expanded_input = expand_vars(input, envp_dict, IGNORE_QUOTES);
 	parsed_input = word_split(expanded_input);
-	expand_vars_inside_quotes(parsed_input, envp_dict);
+	//expand_vars_inside_quotes(parsed_input, envp_dict);
 	//quote_removal();
-	//tokenize();
+	tokenise(parsed_input);
 	free(expanded_input);
 	return (parsed_input);
 }

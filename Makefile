@@ -6,7 +6,7 @@
 #    By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 14:01:35 by eamsalem          #+#    #+#              #
-#    Updated: 2024/11/14 23:24:55 by mganchev         ###   ########.fr        #
+#    Updated: 2024/11/16 13:40:37 by mganchev         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,15 @@ BUILTINDIR = $(SRCDIR)/builtins
 SRCS =	$(SRCDIR)/minishell.c \
 		$(SRCDIR)/signals.c \
 		$(SRCDIR)/envp_utils.c \
+		$(SRCDIR)/parser/expansions.c \
+		$(SRCDIR)/parser/expansions_utils.c \
+		$(SRCDIR)/parser/param_expansion.c \
+		$(SRCDIR)/parser/parse.c \
+		$(SRCDIR)/parser/parse_utils.c \
+		$(SRCDIR)/parser/tokenisation.c \
+		$(SRCDIR)/parser/token_utils.c \
+		$(SRCDIR)/parser/wildcard.c \
+		$(SRCDIR)/parser/word_split.c \
 		$(BUILTINDIR)/env.c \
 		$(BUILTINDIR)/pwd.c \
 		$(BUILTINDIR)/cd.c \
@@ -38,6 +47,10 @@ SRCS =	$(SRCDIR)/minishell.c \
 all: $(NAME) $(OBJS) $(LIBFT) $(MINIDIR)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
+	mkdir -p $(@D)
+	cc $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/parser/%.o: $(SRCDIR)/parser/%.c
 	mkdir -p $(@D)
 	cc $(CFLAGS) -c $< -o $@
 

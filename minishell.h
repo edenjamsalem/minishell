@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/16 11:44:37 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/11/16 20:53:17 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void							ft_cd(char *file_path);
 
 // TOKENISATION
 
-void							tokenise(t_list_2 *parsed_input);
+t_list_2						*tokenise(t_list_2 *parsed_input);
 
 bool							is_keyword(char *word);
 
@@ -113,7 +113,7 @@ char							*expand_params(char *input, t_dict *envp_dict);
 char							*expand_vars(char *input, t_dict *envp_dict,
 									bool ignore_quotes);
 
-static int						get_len(char *input, t_dict *envp_dict);
+// static int						get_len(char *input, t_dict *envp_dict);
 
 void							copy_quoted_text(char **input, char **expanded);
 
