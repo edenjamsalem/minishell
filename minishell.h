@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/18 13:59:55 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/18 15:55:30 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
+# include <stdbool.h>
 # include <stdio.h>
 # include <unistd.h>
 
@@ -30,9 +31,6 @@ extern volatile sig_atomic_t	g_flag;
 
 # define IFS " \t\n"
 # define QUOTES "\'\""
-# define IGNORE_QUOTED_VARS 1
-# define INC_QUOTED_VARS 0
-
 
 typedef enum	e_token
 {
@@ -40,13 +38,12 @@ typedef enum	e_token
 	NUMBER,
 	CMD,
 	VAR,
-	KEYWORD,
+	KEYWORD, // if, then, else etc.
 	S_QUOTES,
 	D_QUOTES,
 	PATH,
 	ENV,
-	CONTROL_OP, //  ||, &&, |, >, >>, <, <<
-	HERE_DOC, 
+	CONTROL_OP, //  ||, &&, &, ;, ;;, ;&, ;;&, |, |&, (, or )
 	REDIRECT,
 	COMMENT,
 	GLOB, // wildcard *
@@ -81,8 +78,13 @@ void	ft_unset(t_dict *var, t_dict **envp_vars);
 
 void	ft_cd(char *file_path);
 
+void							ft_cd(char *file_path);
 
 // PARSE FNS
+
+t_list_2						*word_split(char *input);
+
+t_list_2						*parse(char *input, t_dict *envp_dict);
 
 void	skip_spaces(char **text);
 
@@ -95,8 +97,7 @@ char	*skip_word(char **text);
 t_list_2	*word_split(char *input);
 
 
-// VAR EXPANSIONS
-
+// PARAM EXPANSION
 
 char	*expand_vars(char *input, t_dict *envp_dict, bool ignore_quotes);
 
@@ -108,6 +109,16 @@ void	copy_expanded_var(char **input, char **expanded, t_dict *envp_dict);
 
 void	copy_quoted_text(char **input, char **expanded);
 
+char							*expand_vars(char *input, t_dict *envp_dict,
+									bool ignore_quotes);
+
+// static int						get_len(char *input, t_dict *envp_dict);
+
+void							copy_quoted_text(char **input, char **expanded);
+
+void							copy_expanded_var(char **input, char **expanded,
+									t_dict *envp_dict);
+
 // ENVP FNS
 
 t_dict	*init_envp_dict(char **envp);
@@ -115,7 +126,6 @@ t_dict	*init_envp_dict(char **envp);
 
 
 
-void	free_word(t_word *word);
-
+void							free_envp_dict(t_list_2 *envp_dict);
 
 #endif

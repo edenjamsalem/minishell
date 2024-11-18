@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 00:43:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/11/15 12:47:40 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/16 20:56:11 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,14 @@ int	match_pattern(const char *pattern, const char *str)
 
 	wildcard = NULL;
 	index = NULL;
+	if (str[0] == '.')
+		return (0);
 	if (!check_pattern(&pattern, str, &wildcard, &index))
 		return (0);
     while (*pattern == '*')
-        *pattern++;
+	{
+        pattern++;
+	}
 	return (*pattern == '\0');
 }
 
@@ -76,14 +80,14 @@ t_list	*expand_wildcards(const char *pattern)
 	return (matches);
 }
 
-/*
+
 int	main(void)
 {
 	t_list	*matches;
 	t_list	*temp;
 
 	printf("Testing expand_wildcards with pattern '*.c':\n");
-	matches = expand_wildcards("*.c");
+	matches = expand_wildcards("*****");
 	temp = matches;
 	while (temp)
 	{
@@ -91,4 +95,4 @@ int	main(void)
 		temp = temp->next;
 	}
 	ft_lstclear(&matches, free);
-} */
+} 

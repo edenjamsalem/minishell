@@ -6,20 +6,41 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/14 21:11:21 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/11/16 20:15:47 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-
 volatile sig_atomic_t	g_flag = 0; // signal receiving flag
+
+const char *token_type_to_string(enum e_token token)
+{
+    switch (token)
+    {
+        case TEXT: return "TEXT";
+        case NUMBER: return "NUMBER";
+        case CMD: return "CMD";
+        case VAR: return "VAR";
+        case KEYWORD: return "KEYWORD";
+        case S_QUOTES: return "S_QUOTES";
+        case D_QUOTES: return "D_QUOTES";
+        case PATH: return "PATH";
+        case CONTROL_OP: return "CONTROL_OP";
+        case REDIRECT: return "REDIRECT";
+        case COMMENT: return "COMMENT";
+        case GLOB: return "GLOB";
+        case NLINE: return "NLINE";
+        default: return "UNKNOWN";
+    }
+}
 
 int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
 	char		**args;
 	t_dict		*envp_dict;
+	t_list_2	*parsed;
 
 	(void)argc;
 	(void)argv;
@@ -28,12 +49,11 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		if (g_flag) // means a message is being received
-			{	
-				g_flag = 0; // reset flag
-				//free(input);
-				input = readline("minishell > "); // reset prompt
-				continue ;
-			}
+		{	
+			g_flag = 0; // reset flag
+			input = readline("minishell > "); // reset prompt
+			continue ;
+		}
 		input = readline("minishell > ");
 		if (!input) // handling EOF / ctrl + D
 		{
@@ -47,8 +67,14 @@ int	main(int argc, char **argv, char **envp)
 			free(input); // handles ENTER key press
 			continue ;
 		}
-	//	parse(input);
-		
+		parsed = parse(input, envp_dict);
+		t_word	*word;
+		while (parsed)
+    	{
+        	word = (t_word *)parsed->content;
+        	printf("Word: %s, Token Type: %s\n", word->text, token_type_to_string(word->token));
+        	parsed = parsed->next;
+    	}
 		args = ft_split(input, ' ');
 		if (ft_strncmp(args[0], "env", 4) == 0)
 			ft_env(envp_dict);

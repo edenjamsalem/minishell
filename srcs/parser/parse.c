@@ -20,13 +20,14 @@ t_list_2	*parse(char *input, t_dict *envp_dict)
 	
 	expanded_input = expand_vars(input, envp_dict, IGNORE_QUOTED_VARS);
 	parsed_input = word_split(expanded_input);
-	expand_vars_inside_quotes(parsed_input, envp_dict);
+	//expand_vars_inside_quotes(parsed_input, envp_dict);
 	//quote_removal();
-	//tokenize();
+	tokenise(parsed_input);
 	free(expanded_input);
 	return (parsed_input);
 }
 
+/*
 int	main(int argc, char **argv, char **envp)
 {
 	char		*input = "\'$LANGUAGE\' \'\"$PATH\"\'";
@@ -44,4 +45,4 @@ int	main(int argc, char **argv, char **envp)
 	}
 	dict_clear(&envp_dict);
 	ft_lst_2clear(&parsed_input, (void *)free_word);
-}
+} */
