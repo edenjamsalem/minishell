@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/18 15:55:30 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/18 16:00:00 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ extern volatile sig_atomic_t	g_flag;
 
 # define IFS " \t\n"
 # define QUOTES "\'\""
+#define IGNORE_QUOTED_VARS 1
+#define INC_QUOTED_VARS 0
 
 typedef enum	e_token
 {
@@ -78,13 +80,13 @@ void	ft_unset(t_dict *var, t_dict **envp_vars);
 
 void	ft_cd(char *file_path);
 
-void							ft_cd(char *file_path);
+void	ft_cd(char *file_path);
 
 // PARSE FNS
 
-t_list_2						*word_split(char *input);
+t_list_2	*word_split(char *input);
 
-t_list_2						*parse(char *input, t_dict *envp_dict);
+t_list_2	*parse(char *input, t_dict *envp_dict);
 
 void	skip_spaces(char **text);
 
@@ -109,21 +111,20 @@ void	copy_expanded_var(char **input, char **expanded, t_dict *envp_dict);
 
 void	copy_quoted_text(char **input, char **expanded);
 
-char							*expand_vars(char *input, t_dict *envp_dict,
-									bool ignore_quotes);
+char	*expand_vars(char *input, t_dict *envp_dict, bool ignore_quotes);
 
 // static int						get_len(char *input, t_dict *envp_dict);
 
-void							copy_quoted_text(char **input, char **expanded);
+void	copy_quoted_text(char **input, char **expanded);
 
-void							copy_expanded_var(char **input, char **expanded,
-									t_dict *envp_dict);
+void	copy_expanded_var(char **input, char **expanded, t_dict *envp_dict);
 
 // ENVP FNS
 
 t_dict	*init_envp_dict(char **envp);
 
 
+void	free_word(t_word *word);
 
 
 void							free_envp_dict(t_list_2 *envp_dict);
