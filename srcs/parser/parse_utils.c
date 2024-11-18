@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:47:02 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/15 15:38:19 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/15 16:34:20 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	skip_quotes(char **text)
 	char	*closing_quote;
 	char	*start;
 
-	if (!text || !*text || **text == '\0')
+	if (!*text || !(*text + 1) || **text == '\0')
 		return (0);
 	start = *text;
 	closing_quote = (char *)ft_strchr(*text + 1, **text);

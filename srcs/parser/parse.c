@@ -18,7 +18,7 @@ t_list_2	*parse(char *input, t_dict *envp_dict)
 	t_list_2	*parsed_input;
 	char		*expanded_input;
 	
-	expanded_input = expand_vars(input, envp_dict, IGNORE_QUOTES);
+	expanded_input = expand_vars(input, envp_dict, IGNORE_QUOTED_VARS);
 	parsed_input = word_split(expanded_input);
 	expand_vars_inside_quotes(parsed_input, envp_dict);
 	//quote_removal();
@@ -29,7 +29,7 @@ t_list_2	*parse(char *input, t_dict *envp_dict)
 
 int	main(int argc, char **argv, char **envp)
 {
-	char		*input = "HELLOO 383    	\"$SHELL\"	 \'$LANGUGAGE\'";
+	char		*input = "\'$LANGUAGE\' \'\"$PATH\"\'";
 	t_list_2	*parsed_input;
 	t_list_2	*tmp;
 	t_dict		*envp_dict;
