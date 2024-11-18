@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/18 16:00:00 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/18 16:56:40 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,9 @@ char	*skip_alnum(char **text);
 char	*skip_word(char **text);
 
 t_list_2	*word_split(char *input);
+
+void	quote_removal(t_list_2 *input);
+
 
 
 // PARAM EXPANSION

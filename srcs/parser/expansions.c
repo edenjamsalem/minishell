@@ -54,7 +54,7 @@ char	*expand_vars(char *input, t_dict *envp_dict, bool ignore_quoted_vars)
 	char	*expanded;
 	char	*ptr;
 
-	expanded = malloc(sizeof(char) * (get_len(input, envp_dict, ignore_quoted_vars) + 1));
+	expanded = malloc((get_len(input, envp_dict, ignore_quoted_vars) + 1));
 	if (!expanded)
 		return (NULL);
 	ptr = expanded;
