@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenisation.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 09:09:19 by mganchev          #+#    #+#             */
-/*   Updated: 2024/11/16 14:01:37 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:27:16 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,8 @@ t_list_2	*tokenise(t_list_2 *parsed_input)
 			word->token = NUMBER;
 		else if (is_var(word->text))
 			word->token = VAR;
-		else if (is_redirect(word->text))
-			word->token = REDIRECT;
+//		else if (is_redirect(word->text))
+//			word->token = REDIRECT;
 		else
 			word->token = TEXT;
 		temp = temp->next;

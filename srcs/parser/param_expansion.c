@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 21:45:18 by mganchev          #+#    #+#             */
-/*   Updated: 2024/11/15 10:52:12 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:10:34 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*extract_param(char **input, char **output, t_dict *envp_dict)
 
 	(*input)++;
 	end = *input;
-	param = ft_strcut(*input, skip_alnum(&end));
+	param = ft_strcut(*input, skip(&end, ft_isalnum));
 	temp = get_dict_value(param, envp_dict);
 	if (temp)
 	{

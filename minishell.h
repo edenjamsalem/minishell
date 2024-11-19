@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/19 16:39:23 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:27:59 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,15 @@ typedef enum	e_token
 	NUMBER,
 	CMD,
 	VAR,
-	REDIR_OP,
-	REDIR_FILE,
+	KEYWORD,
+	S_QUOTES,
+	D_QUOTES,
+	PATH,
+	CONTROL_OP,
+	COMMENT,
+	NLINE,
+	REDIRECT_OP,
+	REDIRECT_FILE,
 	PIPE,
 	GLOB, // wildcard *
 } e_token;
@@ -92,9 +99,9 @@ void	skip_spaces(char **text);
 
 int		skip_quotes(char **text);
 
-char	*skip_alnum(char **text);
-
 char	*skip_word(char **text);
+
+char	*skip(char **text, int (*condition)(char));
 
 t_list_2	*word_split(char *input);
 

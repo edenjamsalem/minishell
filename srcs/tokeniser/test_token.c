@@ -21,7 +21,7 @@ const char *token_type_to_string(enum e_token token)
         case D_QUOTES: return "D_QUOTES";
         case PATH: return "PATH";
         case CONTROL_OP: return "CONTROL_OP";
-        case REDIRECT: return "REDIRECT";
+//        case REDIRECT: return "REDIRECT";
         case COMMENT: return "COMMENT";
         case GLOB: return "GLOB";
         case NLINE: return "NLINE";

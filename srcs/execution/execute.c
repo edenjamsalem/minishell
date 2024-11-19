@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:13:34 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/19 16:55:59 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:27:59 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,9 +112,9 @@ void	handle_redirections(t_list_2 *input, int **pipe_fd)
 	while (input)
 	{
 		word = (t_word *)(input->content);
-		if (word->token == REDIR_OP)
+		if (word->token == REDIRECT_OP)
 			redirect_fd(word->text, input->next);
-		else if (word->token == REDIR_FILE)
+		else if (word->token == REDIRECT_FILE)
 			redirect_file(word->text);
 		else if (word->token == PIPE)
 			pipe_count++;		

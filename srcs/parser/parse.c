@@ -14,7 +14,6 @@ t_list_2	*parse(char *input, t_dict *envp_dict)
 	return (split_input);
 }
 
-
 int	main(int argc, char **argv, char **envp)
 {
 	char		*input = "\'\"\"$LANGUAGE\"\"\' hello\"$PATH\"";

@@ -3,14 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/16 20:15:47 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:26:12 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+t_dict	*init_envp_dict(char **envp)
+{
+	int			i;
+	t_dict		*node;
+	t_dict		*envp_dict;
+
+	i = -1;
+	envp_dict = NULL;
+	while (envp[i])
+	{
+		node = str_to_dict(envp[i]);
+		dict_addback(&envp_dict, node);
+		i++;
+	}
+	return (envp_dict);
+}
 
 volatile sig_atomic_t	g_flag = 0; // signal receiving flag
 
@@ -27,7 +44,7 @@ const char *token_type_to_string(enum e_token token)
         case D_QUOTES: return "D_QUOTES";
         case PATH: return "PATH";
         case CONTROL_OP: return "CONTROL_OP";
-        case REDIRECT: return "REDIRECT";
+       // case REDIRECT: return "REDIRECT";
         case COMMENT: return "COMMENT";
         case GLOB: return "GLOB";
         case NLINE: return "NLINE";

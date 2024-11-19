@@ -6,18 +6,11 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:47:02 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/19 17:02:30 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:17:56eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-char	*skip_alnum(char **text)
-{
-	while(ft_isalnum(**text))
-		(*text)++;
-	return (*text);
-}
 
 void	skip_spaces(char **text)
 {
@@ -32,9 +25,9 @@ char	*skip_word(char **text)
 	return (*text);
 }
 
-char	*skip(char **text, int (*condition)(char c))
+char	*skip(char **text, int (*condition)(char))
 {
-	while (condition)
+	while (condition(**text))
 		(*text)++;
 	return (*text);
 }
@@ -45,8 +38,6 @@ int	skip_quotes(char **text)
 	char	*closing_quote;
 	char	*start;
 
-	if (!*text || !(*text + 1) || **text == '\0')
-		return (0);
 	start = *text;
 	closing_quote = (char *)ft_strchr(*text + 1, **text);
 	if (closing_quote)

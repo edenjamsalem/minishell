@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 11:56:09 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/18 16:59:06 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:10:57 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,14 @@ void	copy_expanded_var(char **input, char **expanded, t_dict *envp_dict)
 	if (!(*input) || !(*expanded) || !(envp_dict))
 		return ;	
 	(*input)++;	
-	key = ft_strcut(*input, skip_alnum(input));
+	key = ft_strcut(*input, skip(input, ft_isalnum));
 	value = get_dict_value(key, envp_dict);
 	if (value)
 	{
 		ft_strlcpy(*expanded, value, ft_strlen(value) + 1);	
 		skip_word(expanded);
 	}
-	skip_alnum(input);
+	skip(input, ft_isalnum);
 	free(key);
 }
 
