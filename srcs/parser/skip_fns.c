@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_utils.c                                      :+:      :+:    :+:   */
+/*   skip_fns.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:47:02 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/15 16:34:20 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:02:30 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,13 @@ void	skip_spaces(char **text)
 char	*skip_word(char **text)
 {
 	while(**text && !chrsetcmp(**text, IFS))
+		(*text)++;
+	return (*text);
+}
+
+char	*skip(char **text, int (*condition)(char c))
+{
+	while (condition)
 		(*text)++;
 	return (*text);
 }

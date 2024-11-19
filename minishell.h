@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/18 16:56:40 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/19 16:39:23 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,10 @@ typedef enum	e_token
 	NUMBER,
 	CMD,
 	VAR,
-	KEYWORD, // if, then, else etc.
-	S_QUOTES,
-	D_QUOTES,
-	PATH,
-	ENV,
-	CONTROL_OP, //  ||, &&, &, ;, ;;, ;&, ;;&, |, |&, (, or )
-	REDIRECT,
-	COMMENT,
+	REDIR_OP,
+	REDIR_FILE,
+	PIPE,
 	GLOB, // wildcard *
-	NLINE,
 } e_token;
 
 typedef struct s_word
@@ -58,6 +52,12 @@ typedef struct s_word
 	e_token		token;
 }				t_word;
 
+typedef struct s_shell
+{
+	t_list_2	*tokenised_input; // output of parsing 
+	int			**pipe_fd;	// dynamically allocated list of fd's for each pipe
+	char		**cmds;		// list of cmds to be executed in each redirected pipe (see pipex)
+}	t_shell;
 
 // SIGNALS
 
@@ -116,11 +116,10 @@ void	copy_quoted_text(char **input, char **expanded);
 
 char	*expand_vars(char *input, t_dict *envp_dict, bool ignore_quotes);
 
-// static int						get_len(char *input, t_dict *envp_dict);
-
 void	copy_quoted_text(char **input, char **expanded);
 
 void	copy_expanded_var(char **input, char **expanded, t_dict *envp_dict);
+
 
 // ENVP FNS
 
@@ -130,6 +129,6 @@ t_dict	*init_envp_dict(char **envp);
 void	free_word(t_word *word);
 
 
-void							free_envp_dict(t_list_2 *envp_dict);
+void	free_envp_dict(t_list_2 *envp_dict);
 
 #endif

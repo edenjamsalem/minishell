@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+         #
+#    By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 14:01:35 by eamsalem          #+#    #+#              #
-#    Updated: 2024/11/16 13:40:37 by mganchev         ###   ########.fr        #
+#    Updated: 2024/11/19 14:12:15 by eamsalem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,20 +23,22 @@ LIBFT = $(LIBFTDIR)/libft.a
 LIBS = $(LIBFT) -lreadline
 
 SRCDIR = srcs
+PARSEDIR = $(SRCDIR)/parser
+EXECDIR	= $(SRCDIR)/execution
 BUILTINDIR = $(SRCDIR)/builtins
 
 SRCS =	$(SRCDIR)/minishell.c \
 		$(SRCDIR)/signals.c \
 		$(SRCDIR)/envp_utils.c \
-		$(SRCDIR)/parser/expansions.c \
-		$(SRCDIR)/parser/expansions_utils.c \
-		$(SRCDIR)/parser/param_expansion.c \
-		$(SRCDIR)/parser/parse.c \
-		$(SRCDIR)/parser/parse_utils.c \
-		$(SRCDIR)/parser/tokenisation.c \
-		$(SRCDIR)/parser/token_utils.c \
-		$(SRCDIR)/parser/wildcard.c \
-		$(SRCDIR)/parser/word_split.c \
+		$(PARSEDIR)/expansions.c \
+		$(PARSEDIR)/parse.c \
+		$(PARSEDIR)/parse_utils.c \
+		$(PARSEDIR)/param_expansion.c \
+		$(PARSEDIR)/skip_fns.c \
+		$(PARSEDIR)/tokenisation.c \
+		$(PARSEDIR)/token_utils.c \
+		$(PARSEDIR)/wildcard.c \
+		$(PARSEDIR)/word_split.c \
 		$(BUILTINDIR)/env.c \
 		$(BUILTINDIR)/pwd.c \
 		$(BUILTINDIR)/cd.c \
