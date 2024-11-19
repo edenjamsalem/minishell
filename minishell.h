@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/19 17:27:59 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:40:28 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ typedef struct s_word
 typedef struct s_shell
 {
 	t_list_2	*tokenised_input; // output of parsing 
-	int			**pipe_fd;	// dynamically allocated list of fd's for each pipe
+	int			**pipe_fd;	// dynamically allocated list of fd's for each pipe 
 	char		**cmds;		// list of cmds to be executed in each redirected pipe (see pipex)
 }	t_shell;
 

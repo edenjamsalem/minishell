@@ -6,11 +6,13 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/19 17:26:12 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:40:06 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+volatile sig_atomic_t	g_flag = 0; // signal receiving flag
 
 t_dict	*init_envp_dict(char **envp)
 {
@@ -28,8 +30,6 @@ t_dict	*init_envp_dict(char **envp)
 	}
 	return (envp_dict);
 }
-
-volatile sig_atomic_t	g_flag = 0; // signal receiving flag
 
 const char *token_type_to_string(enum e_token token)
 {
