@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/19 17:40:28 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/20 14:22:24 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <stdbool.h>
 # include <stdio.h>
 # include <unistd.h>
+# include <sys/wait.h> 
 
 extern volatile sig_atomic_t	g_flag;
 // setting up global var to be used by all files w header file included
@@ -95,13 +96,13 @@ t_list_2	*word_split(char *input);
 
 t_list_2	*parse(char *input, t_dict *envp_dict);
 
-void	skip_spaces(char **text);
-
 int		skip_quotes(char **text);
 
 char	*skip_word(char **text);
 
-char	*skip(char **text, int (*condition)(char));
+char	*skip_while(char **text, int (*condition)(char));
+
+char	*skip_set(char **text, char *set);
 
 t_list_2	*word_split(char *input);
 
@@ -132,10 +133,14 @@ void	copy_expanded_var(char **input, char **expanded, t_dict *envp_dict);
 
 t_dict	*init_envp_dict(char **envp);
 
-
 void	free_word(t_word *word);
 
-
 void	free_envp_dict(t_list_2 *envp_dict);
+
+// EXECUTION
+
+void	handle_redirections(t_list_2 *input, int **pipe_fd);
+
+pid_t	pipe_fork(int pipe_fd[2]);
 
 #endif

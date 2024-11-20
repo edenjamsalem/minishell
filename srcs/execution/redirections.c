@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:31:16 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/19 17:52:04 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/20 14:15:41 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,8 +97,8 @@ void	redirect_file(char *word)
 	char	*operator;
 	char	*arg;
 	
-	operator = ft_strcut(word, skip_op(word));
-	arg = ft_strcut(word, skip_word(word));
+	operator = ft_strcut(word, skip_set(&word, "<>"));
+	arg = ft_strcut(word, skip_word(&word));
 	redirect_fd(operator, arg);
 	free(operator);
 	free(arg);
@@ -110,12 +110,13 @@ void	handle_redirections(t_list_2 *input, int **pipe_fd)
 	t_word	*arg;
 	int		pipe_count;
 	
+	pipe_count = 0;
 	while (input)
 	{
 		word = (t_word *)(input->content);
 		arg = (t_word *)(input->next);
 		if (word->token == REDIRECT_OP)
-			redirect_fd(word->text, arg);
+			redirect_fd(word->text, arg->text);
 		else if (word->token == REDIRECT_FILE)
 			redirect_file(word->text);
 		else if (word->token == PIPE)

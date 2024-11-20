@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 00:43:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/11/16 20:56:11 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/11/20 14:20:19 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ t_list	*expand_wildcards(const char *pattern)
 	return (matches);
 }
 
-
+/*
 int	main(void)
 {
 	t_list	*matches;
@@ -96,3 +96,4 @@ int	main(void)
 	}
 	ft_lstclear(&matches, free);
 } 
+*/

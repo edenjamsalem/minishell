@@ -6,7 +6,7 @@
 #    By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 14:01:35 by eamsalem          #+#    #+#              #
-#    Updated: 2024/11/19 17:33:07 by eamsalem         ###   ########.fr        #
+#    Updated: 2024/11/20 14:18:45 by eamsalem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ CFLAGS = -Wall -Werror -Wextra -g3
 OBJDIR = ./build
 OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
-LIBFTDIR = ./libft
+LIBFTDIR = ../libft
 LIBFT = $(LIBFTDIR)/libft.a
 LIBS = $(LIBFT) -lreadline
 
@@ -30,7 +30,6 @@ BUILTINDIR = $(SRCDIR)/builtins
 
 SRCS =	$(SRCDIR)/minishell.c \
 		$(SRCDIR)/signals.c \
-		$(SRCDIR)/envp_utils.c \
 \
 		$(PARSEDIR)/expansions.c \
 		$(PARSEDIR)/parse.c \
@@ -40,11 +39,9 @@ SRCS =	$(SRCDIR)/minishell.c \
 		$(PARSEDIR)/wildcard.c \
 		$(PARSEDIR)/word_split.c \
 \
-		$(TOKENDIR)/tokenisation.c \
-		$(TOKENDIR)/token_utils.c \
-\
 		$(EXECDIR)/execute.c \
 		$(EXECDIR)/redirections.c \
+		$(EXECDIR)/pipe_fns.c \
 \
 		$(BUILTINDIR)/env.c \
 		$(BUILTINDIR)/pwd.c \

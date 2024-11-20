@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/19 17:40:06 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/20 14:37:02 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ t_dict	*init_envp_dict(char **envp)
 	t_dict		*node;
 	t_dict		*envp_dict;
 
-	i = -1;
+	i = 0;
 	envp_dict = NULL;
 	while (envp[i])
 	{
@@ -51,7 +51,7 @@ const char *token_type_to_string(enum e_token token)
         default: return "UNKNOWN";
     }
 }
-
+/*
 int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
@@ -119,3 +119,4 @@ int	main(int argc, char **argv, char **envp)
 	rl_clear_history();
 	dict_clear(&envp_dict);
 }
+*/

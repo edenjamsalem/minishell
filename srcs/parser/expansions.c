@@ -39,7 +39,7 @@ static int	get_len(char *input, t_dict *envp_dict, bool ignore_quoted_vars)
 		else if (*input == '$')
 		{
 			input++;
-			var = ft_strcut(input, skip(&input, ft_isalnum));
+			var = ft_strcut(input, skip_while(&input, ft_isalnum));
 			diff += calc_diff(var, envp_dict);
 			free(var);
 		}

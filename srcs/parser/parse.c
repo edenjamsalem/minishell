@@ -16,11 +16,13 @@ t_list_2	*parse(char *input, t_dict *envp_dict)
 
 int	main(int argc, char **argv, char **envp)
 {
-	char		*input = "\'\"\"$LANGUAGE\"\"\' hello\"$PATH\"";
+	char		*input = "\"\"$LANG\"\"  $SHELL";
 	t_list_2	*parsed_input;
 	t_list_2	*tmp;
 	t_dict		*envp_dict;
 
+	(void)argc;
+	(void)argv;
 	envp_dict = init_envp_dict(envp);
 	parsed_input = parse(input, envp_dict);
 	tmp = parsed_input;

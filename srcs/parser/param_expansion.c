@@ -6,11 +6,11 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 21:45:18 by mganchev          #+#    #+#             */
-/*   Updated: 2024/11/19 17:10:34 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/20 14:22:24 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../libft/libft.h"
+#include "../../../libft/libft.h"
 #include "../../minishell.h"
 #include <stdio.h>
 
@@ -23,7 +23,7 @@ char	*extract_param(char **input, char **output, t_dict *envp_dict)
 
 	(*input)++;
 	end = *input;
-	param = ft_strcut(*input, skip(&end, ft_isalnum));
+	param = ft_strcut(*input, skip_while(&end, ft_isalnum));
 	temp = get_dict_value(param, envp_dict);
 	if (temp)
 	{

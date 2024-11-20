@@ -39,7 +39,7 @@ t_list_2	*word_split(char *input)
 	t_word		*word;
 	
 	list = NULL;
-	skip_spaces(&input);
+	skip_set(&input, IFS);
 	while (*input)
 	{
 		word = malloc(sizeof(t_word));
@@ -47,7 +47,8 @@ t_list_2	*word_split(char *input)
 			return (NULL);
 		word->text = get_word(&input);
 		ft_lst_2add_back(&list, ft_lst_2new(word));
-		skip_spaces(&input);
+		skip_set(&input, IFS);
+	//	write(1, "1", 1);
 	}
 	return (list);
 }
