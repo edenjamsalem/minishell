@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 10:07:28 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/15 00:31:56 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/11/21 13:42:56 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
 void	ft_echo(char *text, bool n_flag)
-{	
+{
 	if (text)
 	{
 		text += 5; // hardcoded skipping echo + -n for now, it should be tokenised before execution

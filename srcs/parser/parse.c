@@ -1,5 +1,7 @@
 #include "../../minishell.h"
 
+// handle expansion case when $ is alone, needs to be treated as text
+
 t_list_2	*parse(char *input, t_dict *envp_dict)
 {
 	t_list_2	*split_input;
@@ -16,7 +18,7 @@ t_list_2	*parse(char *input, t_dict *envp_dict)
 
 int	main(int argc, char **argv, char **envp)
 {
-	char		*input = "\"\"$LANG\"\"  $SHELL";
+	char		*input = "$";
 	t_list_2	*parsed_input;
 	t_list_2	*tmp;
 	t_dict		*envp_dict;

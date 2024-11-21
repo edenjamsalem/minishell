@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/20 14:22:24 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/21 14:21:04 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,12 @@ extern volatile sig_atomic_t	g_flag;
 typedef enum	e_token
 {
 	TEXT,
-	NUMBER,
+	QUOTED,
 	CMD,
-	VAR,
-	KEYWORD,
-	S_QUOTES,
-	D_QUOTES,
-	PATH,
 	CONTROL_OP,
-	COMMENT,
-	NLINE,
 	REDIRECT_OP,
 	REDIRECT_FILE,
 	PIPE,
-	GLOB, // wildcard *
 } e_token;
 
 typedef struct s_word
@@ -62,10 +54,25 @@ typedef struct s_word
 
 typedef struct s_shell
 {
-	t_list_2	*tokenised_input; // output of parsing 
+	t_list_2	*input; // tokenised output of parsing 
 	int			**pipe_fd;	// dynamically allocated list of fd's for each pipe 
-	char		**cmds;		// list of cmds to be executed in each redirected pipe (see pipex)
+	t_list_2	*cmds;		// list of cmds to be executed in each redirected pipe (see pipex)
+	int			exit_status;
 }	t_shell;
+
+typedef enum	e_ctrl_op
+{
+	AND,
+	OR,
+} e_ctrl_op;
+
+typedef struct s_cmd
+{
+	char		*cmd; // ptr to input->content->text (No duplication)
+	t_list_2	*args; // arguments for command, also copy ptrs from input->content->text
+	e_ctrl_op	condition;
+}	t_cmd;
+
 
 // SIGNALS
 
