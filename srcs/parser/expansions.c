@@ -36,7 +36,7 @@ static int	get_len(char *input, t_dict *envp_dict, bool ignore_quoted_vars)
 			skip_quotes(&input);// handles unclosed quotes
 		else if (*input == '\"' && ignore_quoted_vars)
 			skip_quotes(&input);
-		else if (*input == '$')
+		else if (*input == '$' && !chrsetcmp(*(input + 1), IFS))
 		{
 			input++;
 			var = ft_strcut(input, skip_while(&input, ft_isalnum));
@@ -64,7 +64,7 @@ char	*expand_vars(char *input, t_dict *envp_dict, bool ignore_quoted_vars)
 			copy_quoted_text(&input, &expanded);
 		else if (*input == '\"' && ignore_quoted_vars)
 			copy_quoted_text(&input, &expanded);
-		else if (*input == '$')
+		else if (*input == '$' && *(input + 1) && !chrsetcmp(*(input + 1), IFS))
 			copy_expanded_var(&input, &expanded, envp_dict);
 		else
 			*expanded++ = *input++;
