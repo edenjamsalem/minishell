@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/22 10:21:09 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/22 11:15:05 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,9 @@ const char *token_type_to_string(enum e_token token)
     switch (token)
     {
         case TEXT: return "TEXT";
-        case NUMBER: return "NUMBER";
         case CMD: return "CMD";
-        case VAR: return "VAR";
-        case KEYWORD: return "KEYWORD";
-        case S_QUOTES: return "S_QUOTES";
-        case D_QUOTES: return "D_QUOTES";
-        case PATH: return "PATH";
         case CONTROL_OP: return "CONTROL_OP";
        // case REDIRECT: return "REDIRECT";
-        case COMMENT: return "COMMENT";
-        case GLOB: return "GLOB";
-        case NLINE: return "NLINE";
         default: return "UNKNOWN";
     }
 }

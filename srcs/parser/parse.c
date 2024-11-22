@@ -28,7 +28,7 @@ int	main(int argc, char **argv, char **envp)
 	tmp = parsed_input;
 	while (tmp)
 	{
-		printf("%s ", ((t_word *)tmp->content)->text);
+		printf("%s\n", ((t_word *)tmp->content)->text);
 		tmp = tmp->next;
 	}
 	dict_clear(&envp_dict);

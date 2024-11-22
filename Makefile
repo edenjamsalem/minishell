@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+         #
+#    By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 14:01:35 by eamsalem          #+#    #+#              #
-#    Updated: 2024/11/20 14:18:45 by eamsalem         ###   ########.fr        #
+#    Updated: 2024/11/21 16:43:02 by mganchev         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ CFLAGS = -Wall -Werror -Wextra -g3
 OBJDIR = ./build
 OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
-LIBFTDIR = ../libft
+LIBFTDIR = ./libft
 LIBFT = $(LIBFTDIR)/libft.a
 LIBS = $(LIBFT) -lreadline
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/21 14:21:04 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/22 00:59:13 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #  define _DEFAULT_SOURCE
 # endif
 
-# include "../libft/libft.h"
+# include "./libft/libft.h"
 # include <dirent.h>
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -57,11 +57,12 @@ typedef struct s_shell
 	t_list_2	*input; // tokenised output of parsing 
 	int			**pipe_fd;	// dynamically allocated list of fd's for each pipe 
 	t_list_2	*cmds;		// list of cmds to be executed in each redirected pipe (see pipex)
-	int			exit_status;
+	bool		exit_status;
 }	t_shell;
 
 typedef enum	e_ctrl_op
 {
+	NONE,
 	AND,
 	OR,
 } e_ctrl_op;

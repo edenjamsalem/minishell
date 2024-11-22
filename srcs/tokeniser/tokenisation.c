@@ -3,114 +3,112 @@
 /*                                                        :::      ::::::::   */
 /*   tokenisation.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/16 09:09:19 by mganchev          #+#    #+#             */
-/*   Updated: 2024/11/19 17:27:16 by eamsalem         ###   ########.fr       */
+/*   Created: 2024/11/21 17:26:42 by mganchev          #+#    #+#             */
+/*   Updated: 2024/11/22 01:13:14 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-// checks if a word is control operator
-bool	is_control(char *word)
-{
-	int		i;
-	char	*controls[] = {"||", "&&", "&", "|", NULL};
-
-	i = 0;
-	while (controls[i] != NULL)
-	{
-		if (ft_strncmp(word, controls[i], ft_strlen(controls[i]) + 1) == 0)
-			return (true);
-		i++;
-	}
-	return (false);
-}
-
-// checks if token is keyword, cmd or control op and sets their type
-bool	is_special_token(char *word, enum e_token *token)
-{
-	if (is_keyword(word))
-	{
-		*token = KEYWORD;
-		return (true);
-	}
-	else if (is_command(word))
-	{
-		*token = CMD;
-		return (true);
-	}
-	else if (is_control(word))
-	{
-		*token = CONTROL_OP;
-		return (true);
-	}
-	return (false);
-}
-
-// checks if a word is double or single quotes and sets enum
-bool	is_quotes(char *word, enum e_token *token)
-{
-	if (ft_strncmp(word, "\"", 1) == 0)
-	{
-		*token = D_QUOTES;
-		return (true);
-	}
-	else if (ft_strncmp(word, "'", 1) == 0)
-	{
-		*token = S_QUOTES;
-		return (true);
-	}
-	return (false);
-}
-
-// checks if a word is the start of a comment, a glob or a new line
-bool	is_misc(char *word, enum e_token *token)
-{
-	if (word[0] == '#')
-	{
-		*token = COMMENT;
-		return (true);
-	}
-	else if (word[0] == '*')
-	{
-		*token = GLOB;
-		return (true);
-	}
-	else if (ft_strncmp(word, "\n", 1) == 0)
-	{
-		*token = NLINE;
-		return (true);
-	}
-	return (false);
-}
-
-// basic tokeniser, will have to be expanded 
-t_list_2	*tokenise(t_list_2 *parsed_input)
+// find the next token in input matching ref
+t_word	*find_next_token(t_list_2 *input, enum e_token ref)
 {
 	t_word		*word;
 	t_list_2	*temp;
 
-	temp = parsed_input;
+	temp = input;
 	while (temp)
 	{
 		word = (t_word *)temp->content;
-		if (is_special_token(word->text, &word->token) || is_quotes(word->text,
-				&word->token) || is_misc(word->text, &word->token))
+		if (word->token == ref)
+			return (word);
+		temp = temp->next;
+	}
+	return (NULL);
+}
+
+// create a new cmd struct to put inside cmds list
+t_cmd	*create_cmd(t_list_2 *input)
+{
+	t_cmd	*cmd;
+	t_word	*word;
+
+	cmd = malloc(sizeof(t_cmd));
+	if (!cmd)
+		return (NULL);
+	cmd->cmd = ((t_word *)(input->content))->text;
+	cmd->args = NULL;
+	word = find_next_token(input, CONTROL_OP);
+	if (word)
+	{
+		if (ft_strncmp(word->text, "&&", 3) == 0)
+			cmd->condition = AND;
+		else if (ft_strncmp(word->text, "||", 3) == 0)
+			cmd->condition = OR;
+	}
+	else
+		cmd->condition = NONE;
+	return (cmd);
+}
+
+// initial tokenisation for redirections, control ops and quotes only
+// had to put control ops here as well so i can keep track of them before
+// i have to set cmd->condition for cmds in input
+t_list_2	*primary_tokenisation(t_shell *shell)
+{
+	t_word		*word;
+	t_list_2	*temp;
+
+	temp = shell->input;
+	while (temp)
+	{
+		word = (t_word *)temp->content;
+		if (is_redirect(word) || is_quotes(word))
 		{
 			temp = temp->next;
 			continue ;
 		}
-		else if (is_number(word->text))
-			word->token = NUMBER;
-		else if (is_var(word->text))
-			word->token = VAR;
-//		else if (is_redirect(word->text))
-//			word->token = REDIRECT;
+		else if (is_control(word))
+		{
+			shell->exit_status = true;
+				// change flag to indicate we need to watch exit status of cmds
+			temp = temp->next;
+			continue ;
+		}
 		else
-			word->token = TEXT;
-		temp = temp->next;
+			temp = temp->next;
 	}
-	return (parsed_input);
+	return (shell->input);
 }
+
+// consequent tokenisation for all other tokens + creation of cmds list
+t_list_2	*secondary_tokenisation(t_shell *shell)
+{
+	t_word		*word;
+	t_list_2	*temp;
+
+	temp = shell->input;
+	while (temp)
+	{
+		word = (t_word *)temp->content;
+		if (is_command(word))
+		{
+			ft_lst_2add_back(&shell->cmds, ft_lst_2new(create_cmd(temp)));
+			temp = temp->next;
+			continue ;
+		}
+		else if (is_pipe(word))
+		{
+			temp = temp->next;
+			continue ;
+		}
+		else
+			temp = temp->next;
+	}
+	return (shell->input);
+}
+
+// t_list_2 *tokeniser(t_shell *shell)
+// function that tokenises, reparses and then retokenises again

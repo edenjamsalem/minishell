@@ -13,18 +13,9 @@ const char *token_type_to_string(enum e_token token)
     switch (token)
     {
         case TEXT: return "TEXT";
-        case NUMBER: return "NUMBER";
         case CMD: return "CMD";
-        case VAR: return "VAR";
-        case KEYWORD: return "KEYWORD";
-        case S_QUOTES: return "S_QUOTES";
-        case D_QUOTES: return "D_QUOTES";
-        case PATH: return "PATH";
         case CONTROL_OP: return "CONTROL_OP";
 //        case REDIRECT: return "REDIRECT";
-        case COMMENT: return "COMMENT";
-        case GLOB: return "GLOB";
-        case NLINE: return "NLINE";
         default: return "UNKNOWN";
     }
 }
