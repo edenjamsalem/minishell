@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   param_expansion.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 21:45:18 by mganchev          #+#    #+#             */
-/*   Updated: 2024/11/20 14:22:24 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/21 16:44:18 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../libft/libft.h"
+#include "../../libft/libft.h"
 #include "../../minishell.h"
 #include <stdio.h>
 

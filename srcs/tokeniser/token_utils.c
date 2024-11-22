@@ -6,99 +6,85 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 09:09:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/11/16 20:01:39 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/11/22 00:47:31 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-//  checks if a word is a keyword
-bool	is_keyword(char *word)
+// finds and tokenises both types of redirection
+bool	is_redirect(t_word *word)
+{
+	if (ft_strncmp(word->text, "<", 2) == 0 || ft_strncmp(word, ">", 2) == 0)
+	{
+		word->token = REDIRECT_OP;
+		return (true);
+	}
+	else if (ft_strncmp(word->text, "< ", 3) == 0 || ft_strncmp(word, "> ", 3) == 0)
+	{
+		word->token = REDIRECT_FILE;
+		return (true);
+	}
+	return (false);
+}
+
+// finds and tokenises quotes
+bool	is_quoted(t_word *word)
+{
+	if (ft_strncmp(word->text, "\"", 1) == 0 || ft_strncmp(word, "\'", 1) == 0)
+	{
+		word->token = QUOTED;
+		return (true);
+	}
+	return (false);
+}
+
+// finds and tokenises cmds
+bool	is_command(t_word *word)
 {
 	int			i;
-	const char	*keywords[] = {"if", "then", "else", "fi", "for", "while", "do",
-			"done", "case", "esac", "in", "function", NULL};
+	char		*cmds_key[] = {"env", "pwd", "cd", "export", "unset", "echo",
+				"exit", NULL};
 
 	i = 0;
-	while (keywords[i] != NULL)
+	while (cmds_key[i] != NULL)
 	{
-		if (ft_strncmp(word, keywords[i], ft_strlen(keywords[i]) + 1) == 0)
+		if (ft_strncmp(word->text, cmds_key[i], ft_strlen(word->text)) == 0)
+		{
+			word->token = CMD;
 			return (true);
+		}
 		i++;
 	}
 	return (false);
 }
 
-// checks if a word is a command
-bool	is_command(char *word)
+// finds and tokenises control ops
+bool	is_control(t_word *word)
 {
-	if (ft_strncmp(word, "env", 4) == 0)
-		return (true);
-	else if (ft_strncmp(word, "pwd", 4) == 0)
-		return (true);
-	else if (ft_strncmp(word, "cd", 3) == 0)
-		return (true);
-	else if (ft_strncmp(word, "export", 7) == 0)
-		return (true);
-	else if (ft_strncmp(word, "unset", 6) == 0)
-		return (true);
-	else if (ft_strncmp(word, "echo", 5) == 0)
-		return (true);
-	else if (ft_strncmp(word, "cat", 4) == 0)
-		return (true);
-	else if (ft_strncmp(word, "exit", 4) == 0)
-		return (true);
+	int		i;
+	char	*controls[] = {"||", "&&", NULL};
+
+	i = 0;
+	while (controls[i] != NULL)
+	{
+		if (ft_strncmp(word, controls[i], ft_strlen(controls[i]) + 1) == 0)
+		{
+			word->token = CONTROL_OP;
+			return (true);
+		}
+		i++;
+	}
 	return (false);
 }
 
-// checks if a word is a number
-bool	is_number(char *word)
+// finds and tokenises pipes
+bool	is_pipe(t_word *word)
 {
-	if (*word == '-' || *word == '+')
-		word++;
-	if (*word == '\0')
-		return (false);
-	while (*word)
+	if (ft_strncmp(word->text, "|", 2) == 0)
 	{
-		if (!ft_isdigit(*word))
-			return (false);
-		word++;
-	}
-	return (true);
-}
-
-// checks if a word is a variable and if that variable exists in env
-bool	is_var(char *word)
-{
-	char	*start = NULL;
-	char	var_name[word - start + 1];
-
-	if (word[0] != '$' || word[1] == '\0')
-		return (false);
-	word++;
-	if (!ft_isalpha(*word) && *word != '_')
-		return (false);
-	start = word;
-	while (*word && (ft_isalnum(*word) || *word == '_'))
-		word++;
-	ft_strlcpy(var_name, start, word - start + 1);
-	if (getenv(var_name) == NULL)
-		return (false);
-	return (true);
-}
-
-// checks if word is a redirection operator
-bool	is_redirect(char *word)
-{
-	int			i;
-	const char	*redirections[] = {"<", "<<", ">", ">>", NULL};
-
-	i = 0;
-	while (redirections[i] != NULL)
-	{
-		if (ft_strncmp(word, redirections[i], ft_strlen(redirections[i])) == 0)
-			return (true);
-		i++;
+		word->token = PIPE;
+		return (true);
 	}
 	return (false);
 }

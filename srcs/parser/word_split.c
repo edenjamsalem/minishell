@@ -17,7 +17,7 @@ static char	*get_word(char **input)
 	char	*start;
 
 	start = *input;
-	while (**input && !chrsetcmp(**input, IFS))
+	while (**input)// && !chrsetcmp(**input, IFS))
 	{
 		if (chrsetcmp(**input, QUOTES))
 			skip_quotes(input);

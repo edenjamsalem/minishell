@@ -18,7 +18,7 @@ t_list_2	*parse(char *input, t_dict *envp_dict)
 
 int	main(int argc, char **argv, char **envp)
 {
-	char		*input = "$";
+	char		*input = "< file1";
 	t_list_2	*parsed_input;
 	t_list_2	*tmp;
 	t_dict		*envp_dict;
@@ -30,7 +30,7 @@ int	main(int argc, char **argv, char **envp)
 	tmp = parsed_input;
 	while (tmp)
 	{
-		printf("%s ", ((t_word *)tmp->content)->text);
+		printf("%s\n", ((t_word *)tmp->content)->text);
 		tmp = tmp->next;
 	}
 	dict_clear(&envp_dict);
