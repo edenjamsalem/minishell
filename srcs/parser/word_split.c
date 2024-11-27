@@ -12,8 +12,6 @@
 
 #include "../../minishell.h"
 
-// HAS SIGSEGV FAULT, FIND WHY !!!
-
 void	split_ctrl_ops(char *content, t_list_2 **list)
 {
 	t_word	*op;

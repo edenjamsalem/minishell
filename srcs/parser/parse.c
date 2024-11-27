@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 11:16:25 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/27 16:06:49 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/27 18:09:28 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ t_list_2	*parse(char *input, t_dict *envp_dict)
 //	tokenise(words);
 	return (words);
 }
-
+/*
 int	main(int argc, char **argv, char **envp)
 {
-	char		*input = " This is my \"$PATH\" what>>\'isyours? $";
+	char		*input = " This is my $LANGUAGE\'hello\' what>>\'isyours? $";
 	t_list_2	*parsed_input;
 	t_list_2	*tmp;
 	t_dict		*envp_dict;
@@ -53,3 +53,4 @@ int	main(int argc, char **argv, char **envp)
 	dict_clear(&envp_dict);
 	ft_lst_2clear(&parsed_input, (void *)free_word);
 }
+*/

@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/26 16:25:28 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/27 18:04:01 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,20 +62,19 @@ typedef enum	e_ctrl_op
 typedef struct s_cmd
 {
 	char		*cmd; // ptr to input->content->text (No duplication)
-	t_list_2	*args; // arguments for command, also copy ptrs from input->content->text
-	t_list_2	*flags; //
+	t_arrlst	*args; // arguments for command, also copy ptrs from input->content->text
+	t_arrlst	*flags; //
 }	t_cmd;
 
 typedef struct s_ctrl_seq
 {
-	t_list_2	*cmds;
+	t_arrlst	*cmds;
 	e_ctrl_op	ctrl_op;
 	int			**pipe_fd;	// dynamically allocated list of fd's for each pipe 
 	char		*infile;
 	char		*outfile;
 	bool		exit_status;
 }	t_ctrl_seq;
-
 
 // SIGNALS
 
