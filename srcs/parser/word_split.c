@@ -12,7 +12,7 @@
 
 #include "../../minishell.h"
 
-void	split_ctrl_ops(char *content, t_list_2 **list)
+static void	split_ctrl_ops(char *content, t_arrlst *list)
 {
 	t_word	*op;
 	t_word	*text;
@@ -24,21 +24,21 @@ void	split_ctrl_ops(char *content, t_list_2 **list)
 	{
 		text = malloc(sizeof(t_word));
 		text->text = ft_strcut(content, skip_to(&content, "<>|&"));
-		ft_lst_2add_back(list, ft_lst_2new(text));
+		append_arrlst(list, text);
 	}
 	op = malloc(sizeof(t_word));
 	op->text = ft_strcut(content, skip_set(&content, "<>|&"));
-	ft_lst_2add_back(list, ft_lst_2new(op));
+	append_arrlst(list, op);
 	if (*content)
 	{
 		file = malloc(sizeof(t_word));
 		file->text = ft_strcut(content, skip_to(&content, IFS));
-		ft_lst_2add_back(list, ft_lst_2new(file));
+		append_arrlst(list, file);
 	}
 	free(ptr);
 }
 
-bool	check_for_op(char *content)
+static bool	check_for_ctrl_op(char *content)
 {
 	char		*op;
 	char		*first_quote;
@@ -73,27 +73,34 @@ static char	*get_word(char **input)
 	return (ft_strcut(start, *input));
 }
 
-t_list_2	*word_split(char *input)
+static void append_word(t_arrlst *list, char *content)
 {
-	t_list_2	*list;
-	char		*content;
 	t_word		*word;
+
+	word = malloc(sizeof(t_word));
+	if (!word)
+		return ;
+	word->text = content;
+	append_arrlst(list, (void *)word);		
+}
+
+t_arrlst	*word_split(char *input)
+{
+	t_arrlst	*list;
+	char		*content;
 	
-	list = NULL;
+	list = malloc(sizeof(t_arrlst));
+	if (!list)
+		return (NULL);
+	init_arrlst(list, 8);
 	skip_set(&input, IFS);
 	while (*input)
 	{
 		content = get_word(&input);
-		if (check_for_op(content))
-			split_ctrl_ops(content, &list);
+		if (check_for_ctrl_op(content))
+			split_ctrl_ops(content, list);
 		else
-		{
-			word = malloc(sizeof(t_word));
-			if (!word)
-				return NULL;
-			word->text = content;
-			ft_lst_2add_back(&list, ft_lst_2new(word));
-		}
+			append_word(list, content);
 		skip_set(&input, IFS);
 	}
 	return (list);

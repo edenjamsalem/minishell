@@ -73,21 +73,23 @@ char	*expand_vars(char *input, t_dict *envp_dict, bool ignore_quoted_vars)
 	return (ptr);
 }
 
-void	expand_vars_inside_quotes(t_list_2 *input, t_dict *envp_dict)
+void	expand_vars_inside_quotes(t_arrlst *input, t_dict *envp_dict)
 {
 	t_word	*word;
 	char	*expanded;
+	int		i;
 
-	while (input)
+	i = 0;
+	while (i < input->count)
 	{
-		word = (t_word *)(input->content);
+		word = (t_word *)(input->content)[i];
 		if (ft_strchr(word->text, '$') && ft_strchr(word->text, '\"'))
 		{
 			expanded = expand_vars(word->text, envp_dict, INC_QUOTED_VARS);
 			free(word->text);
 			word->text = expanded;
 		}
-		input = input->next;
+		i++;
 	}
 }
 /*

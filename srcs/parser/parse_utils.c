@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 11:56:09 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/27 16:04:32 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/27 18:49:12 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,15 +71,17 @@ static void	remove_quotes(char *text)
 	}
 }
 
-void	quote_removal(t_list_2 *input)
+void	quote_removal(t_arrlst *input)
 {
 	t_word	*word;
+	int		i;
 
-	while (input)
+	i = 0;
+	while (i < input->count)
 	{
-		word = (t_word *)(input->content);
+		word = (t_word *)input->content[i];
 		if (ft_strchrset(word->text, QUOTES))
 			remove_quotes(word->text);
-		input = input->next;
+		i++;
 	}
 }
