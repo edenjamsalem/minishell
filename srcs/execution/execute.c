@@ -3,40 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:13:34 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/21 16:45:33 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/11/26 17:20:32 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	execute(t_shell *mini)
+void	execute(t_list_2 *tokenised_input)
 {
-	pid_t	pid;
-	t_cmd	*cmd;
+	pid_t		pid;
+	t_list_2	*ctrl_seq;
+	t_ctrl_seq	*current;
+	t_ctrl_seq	*prev;
 	//int		fd[2];
 	int		status;
-	
-	while (mini->cmds)
+
+	ctrl_seq = init_ctrl_seq(tokenised_input); // handle in main()
+	while (ctrl_seq)
 	{
 		pid = fork();
 		if (pid == 0)
 		{
-			cmd = ((t_list_2 *)(mini->cmds))->content;
-			if (cmd->condition == AND && mini->exit_status != 0)
+			current = (t_ctrl_seq *)(ctrl_seq->content);
+			prev = (t_ctrl_seq *)(ctrl_seq->prev->content);
+			if (current->ctrl_op == AND && prev->exit_status != 0)
 				exit(-1);
-			else if (cmd->condition == OR && mini->exit_status == 0)
+			else if (current->ctrl_op == OR && prev->exit_status == 0)
 				exit(-1);
-			handle_redirections(mini->input, mini->pipe_fd); // need to handle independently for each condtional op
-			//exec_cmd(); // Any piping will happen here 
+			handle_redirections();
+			execute_cmds(); // piping occurs here
 		}
 		wait(&status);
 		if (WIFEXITED(status))
-			mini->exit_status = WEXITSTATUS(status);
+			current->exit_status = WEXITSTATUS(status);
 		// else handle error 
-		if (mini->exit_status == -1)
+		if (current->exit_status == -1)
 			;// handle command execution error
 	}
 }

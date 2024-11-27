@@ -14,7 +14,7 @@ const char *token_type_to_string(enum e_token token)
     {
         case TEXT: return "TEXT";
         case CMD: return "CMD";
-        case CONTROL_OP: return "CONTROL_OP";
+        case CTRL_OP: return "CONTROL_OP";
 //        case REDIRECT: return "REDIRECT";
         default: return "UNKNOWN";
     }

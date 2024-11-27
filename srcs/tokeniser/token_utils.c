@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 09:09:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/11/22 00:47:31 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/11/26 14:32:53 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ bool	is_control(t_word *word)
 	{
 		if (ft_strncmp(word, controls[i], ft_strlen(controls[i]) + 1) == 0)
 		{
-			word->token = CONTROL_OP;
+			word->token = CTRL_OP;
 			return (true);
 		}
 		i++;

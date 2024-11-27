@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenisation.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 17:26:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/11/22 01:13:14 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/11/26 14:32:53 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,16 @@ t_cmd	*create_cmd(t_list_2 *input)
 		return (NULL);
 	cmd->cmd = ((t_word *)(input->content))->text;
 	cmd->args = NULL;
-	word = find_next_token(input, CONTROL_OP);
+	word = find_next_token(input, CTRL_OP);
 	if (word)
 	{
 		if (ft_strncmp(word->text, "&&", 3) == 0)
-			cmd->condition = AND;
+			cmd->conditional = AND;
 		else if (ft_strncmp(word->text, "||", 3) == 0)
-			cmd->condition = OR;
+			cmd->conditional = OR;
 	}
 	else
-		cmd->condition = NONE;
+		cmd->conditional = NONE;
 	return (cmd);
 }
 

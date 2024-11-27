@@ -6,14 +6,15 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:31:16 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/20 14:15:41 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/26 17:03:46 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-// if words succeeding redirection symbols are more than 1 word long 
-// post-expansions we report an error
+// if words succeeding redirection symbols are more than 1 word long post-expansion
+// -> we report an error
+
 
 int	**allocate_pipe_fd(int size)
 {
@@ -40,7 +41,7 @@ int	**allocate_pipe_fd(int size)
 	return (pipe_fd);
 }
 
-int	get_here_doc_input(char *delimiter)
+int	get_heredoc_input(char *delimiter)
 {
 	pid_t	pid;
 	char	input[4096];
@@ -87,41 +88,15 @@ void	redirect_fd(char *operator, char *arg)
 	}
 	else if (MATCH(operator, "<<"))
 	{
-		fd = get_here_doc_input(arg);		
+		fd = get_heredoc_input(arg);
 		dup2(fd, STDIN_FILENO);
 	}
 }
+// NEED TO WORK OUT WHEN TO DO HEREDOC AND WHEN TO PARSE IT !
 
-void	redirect_file(char *word)
+void	handle_redirections(t_ctrl_seq *seq, char *operator)
 {
-	char	*operator;
-	char	*arg;
-	
-	operator = ft_strcut(word, skip_set(&word, "<>"));
-	arg = ft_strcut(word, skip_word(&word));
-	redirect_fd(operator, arg);
-	free(operator);
-	free(arg);
-}
-
-void	handle_redirections(t_list_2 *input, int **pipe_fd)
-{
-	t_word	*word;
-	t_word	*arg;
-	int		pipe_count;
-	
-	pipe_count = 0;
-	while (input)
-	{
-		word = (t_word *)(input->content);
-		arg = (t_word *)(input->next);
-		if (word->token == REDIRECT_OP)
-			redirect_fd(word->text, arg->text);
-		else if (word->token == REDIRECT_FILE)
-			redirect_file(word->text);
-		else if (word->token == PIPE)
-			pipe_count++;		
-		input = input->next;
-	}
-	pipe_fd = allocate_pipe_fd(pipe_count);
+	seq->infile = NULL;	
+	seq->outfile = NULL;
+		
 }

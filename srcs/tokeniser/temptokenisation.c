@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenisation.c                                     :+:      :+:    :+:   */
+/*   temptokenisation.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 09:09:19 by mganchev          #+#    #+#             */
-/*   Updated: 2024/11/21 16:54:47 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/11/26 14:32:53 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ bool	is_special_token(char *word, enum e_token *token)
 	}
 	else if (is_control(word))
 	{
-		*token = CONTROL_OP;
+		*token = CTRL_OP;
 		return (true);
 	}
 	return (false);

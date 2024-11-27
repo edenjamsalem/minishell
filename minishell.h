@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/22 00:59:13 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/11/26 16:25:28 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #  define _DEFAULT_SOURCE
 # endif
 
-# include "./libft/libft.h"
+# include "../libft/libft.h"
 # include <dirent.h>
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -40,9 +40,9 @@ typedef enum	e_token
 	TEXT,
 	QUOTED,
 	CMD,
-	CONTROL_OP,
-	REDIRECT_OP,
-	REDIRECT_FILE,
+	FLAG,
+	CTRL_OP,
+	REDIRECT,
 	PIPE,
 } e_token;
 
@@ -51,14 +51,6 @@ typedef struct s_word
 	char		*text;
 	e_token		token;
 }				t_word;
-
-typedef struct s_shell
-{
-	t_list_2	*input; // tokenised output of parsing 
-	int			**pipe_fd;	// dynamically allocated list of fd's for each pipe 
-	t_list_2	*cmds;		// list of cmds to be executed in each redirected pipe (see pipex)
-	bool		exit_status;
-}	t_shell;
 
 typedef enum	e_ctrl_op
 {
@@ -71,8 +63,18 @@ typedef struct s_cmd
 {
 	char		*cmd; // ptr to input->content->text (No duplication)
 	t_list_2	*args; // arguments for command, also copy ptrs from input->content->text
-	e_ctrl_op	condition;
+	t_list_2	*flags; //
 }	t_cmd;
+
+typedef struct s_ctrl_seq
+{
+	t_list_2	*cmds;
+	e_ctrl_op	ctrl_op;
+	int			**pipe_fd;	// dynamically allocated list of fd's for each pipe 
+	char		*infile;
+	char		*outfile;
+	bool		exit_status;
+}	t_ctrl_seq;
 
 
 // SIGNALS
@@ -106,11 +108,11 @@ t_list_2	*parse(char *input, t_dict *envp_dict);
 
 int		skip_quotes(char **text);
 
-char	*skip_word(char **text);
-
 char	*skip_while(char **text, int (*condition)(char));
 
 char	*skip_set(char **text, char *set);
+
+char	*skip_to(char **text, char *set);
 
 t_list_2	*word_split(char *input);
 

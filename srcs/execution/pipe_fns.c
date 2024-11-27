@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 14:33:13 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/20 14:19:28 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/22 12:38:50 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ pid_t	pipe_fork(int pipe_fd[2])
 	}
 	return (pid);
 }
-/*
+
 void	pipe_infile_to_cmd(int pipe_fd[2], int fd_in, char *cmd, char **envp)
 {
 	pid_t	pid;
@@ -40,7 +40,6 @@ void	pipe_infile_to_cmd(int pipe_fd[2], int fd_in, char *cmd, char **envp)
 	if (pid == 0)
 	{
 		close(pipe_fd[0]);
-		dup2(fd_in, STDIN_FILENO);
 		dup2(pipe_fd[1], STDOUT_FILENO);
 		ft_exec(cmd, envp);
 	}
@@ -67,7 +66,5 @@ void	pipe_cmd_to_cmd(int **pipe_fd, char **cmds, int i, char **envp)
 void	pipe_cmd_to_outfile(int pipe_fd[2], int fd_out, char *cmd, char **envp)
 {
 	dup2(pipe_fd[0], STDIN_FILENO);
-	dup2(fd_out, STDOUT_FILENO);
 	ft_exec(cmd, envp);
 }
-*/

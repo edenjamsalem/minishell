@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 11:56:09 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/20 15:14:56 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/26 14:06:44 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	copy_expanded_var(char **input, char **expanded, t_dict *envp_dict)
 	if (value)
 	{
 		ft_strlcpy(*expanded, value, ft_strlen(value) + 1);	
-		skip_word(expanded);
+		skip_to(expanded, IFS);
 	}
 	skip_while(input, ft_isalnum);
 	free(key);

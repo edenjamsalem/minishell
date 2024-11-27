@@ -12,14 +12,15 @@
 
 #include "../../minishell.h"
 
-char	*skip_word(char **text)
+//This function skips to the next char which is in the set
+char	*skip_to(char **text, char *set)
 {
-	while(**text && !chrsetcmp(**text, IFS))
+	while(**text && !chrsetcmp(**text, set))
 		(*text)++;
 	return (*text);
 }
 
-//This function skips to the next char which is not in the set
+//This function skips to the next char which is NOT in the set
 char	*skip_set(char **text, char *set)
 {	
 	while(**text && chrsetcmp(**text, set))
@@ -30,7 +31,7 @@ char	*skip_set(char **text, char *set)
 //This function skips to the next char which does not meet the condition
 char	*skip_while(char **text, int (*condition)(char))
 {
-	while (condition(**text))
+	while (**text && condition(**text))
 		(*text)++;
 	return (*text);
 }
