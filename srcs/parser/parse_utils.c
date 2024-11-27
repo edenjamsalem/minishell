@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 11:56:09 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/26 14:06:44 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/27 16:04:32 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,13 @@ void	copy_quoted_text(char **input, char **expanded)
 		return ;
 	closing_quote = (char *)ft_strchr(*input + 1, **input);
 	if (closing_quote)
+	{
 		ft_strlcpy(*expanded, *input, (closing_quote - *input + 2));
+		skip_quotes(input);
+		skip_quotes(expanded);
+	}
 	else
-		**expanded = **input;
-	skip_quotes(input);
-	skip_quotes(expanded);
+		*(*expanded)++ = *(*input)++;
 }
 
 void	copy_expanded_var(char **input, char **expanded, t_dict *envp_dict)

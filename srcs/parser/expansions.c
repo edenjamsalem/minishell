@@ -54,7 +54,7 @@ char	*expand_vars(char *input, t_dict *envp_dict, bool ignore_quoted_vars)
 	char	*expanded;
 	char	*ptr;
 
-	expanded = malloc((get_len(input, envp_dict, ignore_quoted_vars) + 1));
+	expanded = malloc((get_len(input, envp_dict, ignore_quoted_vars) + 2));
 	if (!expanded)
 		return (NULL);
 	ptr = expanded;
@@ -90,13 +90,11 @@ void	expand_vars_inside_quotes(t_list_2 *input, t_dict *envp_dict)
 		input = input->next;
 	}
 }
-
-
 /*
 int main(int argc, char **argv, char **envp)
 {
 	t_dict *envp_dict = init_envp_dict(envp);	
 
-	printf("%d\n", get_len("\'$LANGUAGE\' $PATH", envp_dict));
+	printf("%s\n", expand_vars(" This is my \"$PATH\" what>>\'isyours?", envp_dict, true));
 }
 */

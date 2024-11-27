@@ -50,4 +50,3 @@ int	skip_quotes(char **text)
 		(*text)++;
 	return (*text - start);
 }
-
