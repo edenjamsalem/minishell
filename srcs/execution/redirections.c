@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:31:16 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/26 17:03:46 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/28 12:34:24 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,34 +69,33 @@ int	get_heredoc_input(char *delimiter)
 
 void	redirect_fd(char *operator, char *arg)
 {
-	int	fd;
 
+
+}
+// NEED TO WORK OUT WHEN TO DO HEREDOC AND WHEN TO PARSE IT !
+
+void	handle_redirections(t_ctrl_seq *seq, )
+{
+	int	fd;
+	
 	if (MATCH(operator, ">"))
 	{
-		fd = open(arg, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0643);
 		dup2(fd, STDOUT_FILENO);
 	}
 	else if (MATCH(operator, ">>"))
 	{	
-		fd = open(arg, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0643);
 		dup2(fd, STDOUT_FILENO);
 	}
 	else if (MATCH(operator, "<"))
 	{
-		fd = open(arg, O_RDONLY);
+		fd = open(file, O_RDONLY);
 		dup2(fd, STDIN_FILENO);
 	}
 	else if (MATCH(operator, "<<"))
 	{
-		fd = get_heredoc_input(arg);
+		fd = get_heredoc_input(file);
 		dup2(fd, STDIN_FILENO);
 	}
-}
-// NEED TO WORK OUT WHEN TO DO HEREDOC AND WHEN TO PARSE IT !
-
-void	handle_redirections(t_ctrl_seq *seq, char *operator)
-{
-	seq->infile = NULL;	
-	seq->outfile = NULL;
-		
 }

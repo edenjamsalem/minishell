@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/27 18:04:01 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/28 13:06:33 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef enum	e_token
 	PIPE,
 } e_token;
 
-typedef struct s_word
+typedef struct s_word  // NOT USING THIS ANYMORE AS COMPLICATES CODE
 {
 	char		*text;
 	e_token		token;
@@ -58,13 +58,6 @@ typedef enum	e_ctrl_op
 	AND,
 	OR,
 } e_ctrl_op;
-
-typedef struct s_cmd
-{
-	char		*cmd; // ptr to input->content->text (No duplication)
-	t_arrlst	*args; // arguments for command, also copy ptrs from input->content->text
-	t_arrlst	*flags; //
-}	t_cmd;
 
 typedef struct s_ctrl_seq
 {
@@ -101,9 +94,9 @@ void	ft_cd(char *file_path);
 
 // PARSE FNS
 
-t_list_2	*word_split(char *input);
+t_arrlst	*word_split(char *input);
 
-t_list_2	*parse(char *input, t_dict *envp_dict);
+t_arrlst	*parse(char *input, t_dict *envp_dict);
 
 int		skip_quotes(char **text);
 
@@ -113,9 +106,7 @@ char	*skip_set(char **text, char *set);
 
 char	*skip_to(char **text, char *set);
 
-t_list_2	*word_split(char *input);
-
-void	quote_removal(t_list_2 *input);
+void	quote_removal(t_arrlst *input);
 
 
 
@@ -123,7 +114,7 @@ void	quote_removal(t_list_2 *input);
 
 char	*expand_vars(char *input, t_dict *envp_dict, bool ignore_quotes);
 
-void	expand_vars_inside_quotes(t_list_2 *input, t_dict *envp_dict);
+void	expand_vars_inside_quotes(t_arrlst *input, t_dict *envp_dict);
 
 char	*expand_params(char *input, t_dict *envp_dict); // ???
 

@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 11:16:25 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/27 18:50:36 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/28 13:04:51 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_arrlst	*parse(char *input, t_dict *envp_dict)
 
 int	main(int argc, char **argv, char **envp)
 {
-	char		*input = " This is my \"$LANGUAGE\"\'hello\' what>>\'isyours? $";
+	char		*input = " This is my \"\'$SHELL\'\" \'hello\' what>>\'isyours? $";
 	t_arrlst	*parsed_input;
 	t_dict		*envp_dict;
 	int			i = 0;
@@ -44,12 +44,12 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	envp_dict = init_envp_dict(envp);
 	parsed_input = parse(input, envp_dict);
-	while (i < parsed_input->capacity)
+	while (i < parsed_input->count)
 	{
-		printf("%s\n", ((t_word *)parsed_input->content[i])->text);
+		printf("%s\n", (char *)parsed_input->content[i]);
 		i++;
 	}
 	dict_clear(&envp_dict);
-	free_arrlst(parsed_input, (void *)free_word);
+	free_arrlst(parsed_input, free);
 	free(parsed_input);
 }

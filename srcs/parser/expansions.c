@@ -75,19 +75,17 @@ char	*expand_vars(char *input, t_dict *envp_dict, bool ignore_quoted_vars)
 
 void	expand_vars_inside_quotes(t_arrlst *input, t_dict *envp_dict)
 {
-	t_word	*word;
 	char	*expanded;
 	int		i;
 
 	i = 0;
 	while (i < input->count)
 	{
-		word = (t_word *)(input->content)[i];
-		if (ft_strchr(word->text, '$') && ft_strchr(word->text, '\"'))
+		if (ft_strchr(input->content[i], '$') && ft_strchr(input->content[i], '"'))
 		{
-			expanded = expand_vars(word->text, envp_dict, INC_QUOTED_VARS);
-			free(word->text);
-			word->text = expanded;
+			expanded = expand_vars(input->content[i], envp_dict, INC_QUOTED_VARS);
+			free(input->content[i]);
+			input->content[i] = expanded;
 		}
 		i++;
 	}

@@ -6,85 +6,56 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/26 15:55:29 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/26 17:01:32 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/28 12:39:24 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	append_new_seq(t_ctrl_seq *ctrl_seq, char *ctrl_op)
+void	append_new_seq(t_arrlst *ctrl_seq, char *ctrl_op)
 {
 	t_ctrl_seq	*new_seq;
 
 	new_seq = malloc(sizeof(t_ctrl_seq));
-	if (MATCH(ctrl_op, "&&"))
+	if (MATCH(ctrl_op, "none"))
+		new_seq->ctrl_op = NONE;
+	else if (MATCH(ctrl_op, "&&"))
 		new_seq->ctrl_op = AND;
 	else if (MATCH(ctrl_op, "||"))
 		new_seq->ctrl_op = OR;
-	ft_lst_2add_back(&ctrl_seq, ft_lst_2new((void *)new_seq));
+	append_arrlst(ctrl_seq, new_seq);
 }
 
-void	append_args(t_cmd *cmd, t_list_2 **input)
+void	append_cmd(t_arrlst *cmds, char *cmd)
 {
-	t_list_2 *arg;
-	
-	while (((t_word *)((*input)->content))->token == FLAG)
-	{
-		arg = (((t_word *)(*input)->content))->text;
-		ft_lst_2add_back(cmd->args, ft_lst_2new(arg));
-		*input = (*input)->next;
-	}
+
 }
 
-void	append_flags(t_cmd *cmd, t_list_2 **input)
+t_list_2	*init_ctrl_seq(t_arrlst *ctrl_seq, t_arrlst *input)
 {
-	t_list_2 *flag;
-	
-	while (((t_word *)((*input)->content))->token == FLAG)
-	{
-		flag = (((t_word *)(*input)->content))->text;
-		ft_lst_2add_back(cmd->flags, ft_lst_2new(flag));
-		*input = (*input)->next;
-	}
-}
-
-void	append_cmd(t_list_2 *cmds, char *cmd)
-{
-	t_cmd		*new_cmd;
-	
-	new_cmd = ft_lst_2new(malloc(sizeof(t_cmd)));
-	new_cmd->cmd = cmd;
-	ft_lst_2add_back(&cmds, new_cmd);
-}
-
-t_list_2	*init_ctrl_seq(t_list_2 *input)
-{
-	t_list_2	*ctrl_seq;
-	t_list_2	*tmp;
-	t_ctrl_seq	*seq;
+	t_ctrl_seq	*current_seq;
 	t_word		*word;
+	int			i;
+	int			j;
 
-	ctrl_seq = ft_lst_2new(malloc(sizeof(t_ctrl_seq)));
-	tmp = ctrl_seq;
-	while (input)
+	init_arrlst(ctrl_seq, 4);
+	append_new_seq(ctrl_seq, "none");
+	i = 0;
+	j = 0;
+	while (i < input->count)
 	{
-		seq = (t_ctrl_seq *)(tmp->content);
-		word = (t_word *)(input->content);
+		current_seq = (t_ctrl_seq *)(ctrl_seq->content[j]);
+		word = (t_word *)((input)->content[i]);
 		if (word->token == CMD)
-		{
-			append_cmd(seq->cmds, word->text);
-			append_flags(seq->cmds->content, &input);
-			append_args(seq->cmds->content, &input);
-		}
+			append_cmd(current_seq->cmds, input->content[i]);
 		else if (word->token == REDIRECT)
-			handle_redirections(seq, word->text);
+			handle_redirections(current_seq, );
 		else if (word->token == CTRL_OP)
 		{
 			append_new_seq(ctrl_seq, word->text);
-			tmp = tmp->next;
+			j++;
 		}
-		else
-			input = input->next;
+		i++;
 	}
 	return (ctrl_seq);
 }

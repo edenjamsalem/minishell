@@ -12,27 +12,24 @@
 
 #include "../../minishell.h"
 
-static void	split_ctrl_ops(char *content, t_arrlst *list)
+static void	split_ctrl_ops(t_arrlst *list, char *content)
 {
-	t_word	*op;
-	t_word	*text;
-	t_word	*file;
+	char	*op;
+	char	*text;
+	char	*file;
 	char	*ptr;
 
 	ptr = content;
 	if (!chrsetcmp(*content, "<>|&"))
 	{
-		text = malloc(sizeof(t_word));
-		text->text = ft_strcut(content, skip_to(&content, "<>|&"));
+		text = ft_strcut(content, skip_to(&content, "<>|&"));
 		append_arrlst(list, text);
 	}
-	op = malloc(sizeof(t_word));
-	op->text = ft_strcut(content, skip_set(&content, "<>|&"));
+	op = ft_strcut(content, skip_set(&content, "<>|&"));
 	append_arrlst(list, op);
 	if (*content)
 	{
-		file = malloc(sizeof(t_word));
-		file->text = ft_strcut(content, skip_to(&content, IFS));
+		file = ft_strcut(content, skip_to(&content, IFS));
 		append_arrlst(list, file);
 	}
 	free(ptr);
@@ -73,17 +70,6 @@ static char	*get_word(char **input)
 	return (ft_strcut(start, *input));
 }
 
-static void append_word(t_arrlst *list, char *content)
-{
-	t_word		*word;
-
-	word = malloc(sizeof(t_word));
-	if (!word)
-		return ;
-	word->text = content;
-	append_arrlst(list, (void *)word);		
-}
-
 t_arrlst	*word_split(char *input)
 {
 	t_arrlst	*list;
@@ -98,9 +84,9 @@ t_arrlst	*word_split(char *input)
 	{
 		content = get_word(&input);
 		if (check_for_ctrl_op(content))
-			split_ctrl_ops(content, list);
+			split_ctrl_ops(list, content);
 		else
-			append_word(list, content);
+			append_arrlst(list, content);
 		skip_set(&input, IFS);
 	}
 	return (list);
