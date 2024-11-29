@@ -6,20 +6,25 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 13:19:18 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/12 14:08:50 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/29 15:55:27 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	ft_cd(char *file_path)
+int	ft_cd(char **cmd)
 {
-	if (!file_path || !(*file_path))
-		return ;
-	if (chdir(file_path) == -1)
+	if (!cmd || !(*cmd))
+		exit(-1);
+	if (ft_2darr_len((void **)cmd) > 2)
 	{
-		ft_putstr_fd(2, "bash: cd: ");
-		ft_putstr_fd(2, file_path);
-		ft_putstr_fd(2, ": No such file or directory\n");
+		ft_fprintf(2, "bash: cd: too many arguments\n");
+		exit(-1);
 	}
+	if (chdir(cmd[1]) == -1)
+	{
+		ft_fprintf(2, "bash: cd: %s: no such file or directory\n", cmd[1]);
+		exit(-1);
+	}
+	return (1);
 }

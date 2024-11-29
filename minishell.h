@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/28 13:06:33 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/29 17:07:34 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,25 +32,19 @@ extern volatile sig_atomic_t	g_flag;
 
 # define IFS " \t\n"
 # define QUOTES "\'\""
-#define IGNORE_QUOTED_VARS 1
-#define INC_QUOTED_VARS 0
+# define IGNORE_QUOTED_VARS 1
+# define INC_QUOTED_VARS 0
 
 typedef enum	e_token
 {
 	TEXT,
-	QUOTED,
+	QUOTED, // NEEDED TO DISTINGUISH BETWEEN TEXT AND OTHER TOKENS BEFORE QUOTE REMOVAL
 	CMD,
-	FLAG,
+	FILE_,
 	CTRL_OP,
 	REDIRECT,
 	PIPE,
 } e_token;
-
-typedef struct s_word  // NOT USING THIS ANYMORE AS COMPLICATES CODE
-{
-	char		*text;
-	e_token		token;
-}				t_word;
 
 typedef enum	e_ctrl_op
 {
@@ -59,14 +53,14 @@ typedef enum	e_ctrl_op
 	OR,
 } e_ctrl_op;
 
-typedef struct s_ctrl_seq
+typedef struct s_ctrl_seq // CONTROL SEQUENCE
 {
-	t_arrlst	*cmds;
-	e_ctrl_op	ctrl_op;
+	t_arrlst	*cmds; // list of 2d arrays with commands + flags + args
+	e_ctrl_op	condition; // && or ||
 	int			**pipe_fd;	// dynamically allocated list of fd's for each pipe 
-	char		*infile;
-	char		*outfile;
-	bool		exit_status;
+	int			infile;
+	int			outfile;
+	bool		exit_status; // of prev cmd execution
 }	t_ctrl_seq;
 
 // SIGNALS
@@ -78,19 +72,18 @@ void	setup_sig_handlers(void);
 
 // BUILTINS
 
-void	ft_echo(char *text, bool n_flag);
-
 int		ft_env(t_dict *envp_vars);
 
 int		ft_pwd(void);
 
-void	ft_export(t_dict *new_var, t_dict **envp_vars);
+int		ft_export(char **cmd, t_dict **envp_vars);
 
-void	ft_unset(t_dict *var, t_dict **envp_vars);
+int		ft_unset(char **cmd, t_dict **envp_vars);
 
-void	ft_cd(char *file_path);
+int		ft_cd(char **cmd);
 
-void	ft_cd(char *file_path);
+int		ft_echo(char **cmd);
+
 
 // PARSE FNS
 
@@ -107,7 +100,6 @@ char	*skip_set(char **text, char *set);
 char	*skip_to(char **text, char *set);
 
 void	quote_removal(t_arrlst *input);
-
 
 
 // PARAM EXPANSION
@@ -133,14 +125,23 @@ void	copy_expanded_var(char **input, char **expanded, t_dict *envp_dict);
 
 t_dict	*init_envp_dict(char **envp);
 
-void	free_word(t_word *word);
-
-void	free_envp_dict(t_list_2 *envp_dict);
 
 // EXECUTION
 
-void	handle_redirections(t_list_2 *input, int **pipe_fd);
+void	handle_redirections(t_ctrl_seq *seq, void **input, e_token *tokens);
 
 pid_t	pipe_fork(int pipe_fd[2]);
+
+void	exec_infile_to_pipe(int pipe_fd[2], int fd_in, char *cmd, char **envp);
+
+void	exec_pipe_to_pipe(int **pipe_fd, char *cmd, int i, char **envp);
+
+void	exec_pipe_to_outfile(int pipe_fd[2], int fd_out, char *cmd, char **envp);
+
+void	ft_exec(char **cmd, t_dict *envp);
+
+t_ctrl_seq	**generate_ctrl_seq(t_arrlst *input, e_token *tokens);
+
+int		builtin(char **cmd, t_dict *envp);
 
 #endif

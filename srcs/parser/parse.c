@@ -6,21 +6,16 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 11:16:25 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/28 13:04:51 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/28 17:31:06 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	free_word(t_word *word)
-{
-	free(word->text);
-	free(word);
-}
-
 t_arrlst	*parse(char *input, t_dict *envp_dict)
 {
 	t_arrlst	*words;
+//	t_arrlst	*tokens;
 	char		*expanded_input;
 
 	expanded_input = expand_vars(input, envp_dict, IGNORE_QUOTED_VARS);
@@ -29,7 +24,7 @@ t_arrlst	*parse(char *input, t_dict *envp_dict)
 //	tokenise_quotes();
 	expand_vars_inside_quotes(words, envp_dict);
 	quote_removal(words);
-//	tokenise(words);
+//	tokenise(words, tokens);
 	return (words);
 }
 

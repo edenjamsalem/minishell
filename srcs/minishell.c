@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/26 14:32:53 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/28 18:09:58 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ t_dict	*init_envp_dict(char **envp)
 	return (envp_dict);
 }
 /*
-
 const char *token_type_to_string(enum e_token token)
 {
     switch (token)
@@ -43,12 +42,14 @@ const char *token_type_to_string(enum e_token token)
         default: return "UNKNOWN";
     }
 }
+
 int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
-	char		**args;
 	t_dict		*envp_dict;
-	t_list_2	*parsed;
+	t_arrlst	*parsed_input;
+	e_token		*tokens;
+	t_ctrl_seq	**ctrl_seq;
 
 	(void)argc;
 	(void)argv;
@@ -75,8 +76,11 @@ int	main(int argc, char **argv, char **envp)
 			free(input); // handles ENTER key press
 			continue ;
 		}
-		parsed = parse(input, envp_dict);
-		t_word	*word;
+		parsed_input = parse(input, envp_dict);
+		tokens = tokenise(parsed_input);
+		ctrl_seq = generate_ctrl_seq(input, tokens);
+		execute(ctrl_seq);
+		
 		while (parsed)
     	{
         	word = (t_word *)parsed->content;

@@ -75,10 +75,8 @@ t_arrlst	*word_split(char *input)
 	t_arrlst	*list;
 	char		*content;
 	
-	list = malloc(sizeof(t_arrlst));
-	if (!list)
-		return (NULL);
-	init_arrlst(list, 8);
+	list = init_arrlst(8);
+		// handle malloc error
 	skip_set(&input, IFS);
 	while (*input)
 	{

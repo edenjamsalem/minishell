@@ -6,30 +6,29 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 10:07:28 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/21 13:42:56 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:00:05 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	ft_echo(char *text, bool n_flag)
+int	ft_echo(char **cmd)
 {
-	if (text)
-	{
-		text += 5; // hardcoded skipping echo + -n for now, it should be tokenised before execution
-		if (text[0] == '-' && text[1] == 'n')
-		{
-			text += 3;
-			n_flag = true;
-		}
-		while (*text != '\0')
-		{
-			write(STDOUT_FILENO, text, 1);
-			text++;
-		}
-	}
-	if (n_flag)
-		ft_printf("%% \n"); // % is there just to check if it's executing correctly
-	else if (!n_flag || !text)
+	bool	n_flag;
+	int		i;
+	
+	if (ft_2darr_len((void **)cmd) < 2)
 		ft_printf("\n");
+	i = 1;
+	n_flag = false;
+	if (MATCH(cmd[1], "-n"))
+	{
+		n_flag = true;
+		i++;
+	}
+	while (cmd[i])
+		ft_printf("%s ", cmd[i]);
+	if (n_flag)
+		ft_printf("\n");
+	return (1);
 }

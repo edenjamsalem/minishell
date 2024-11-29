@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:31:16 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/28 12:34:24 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/11/29 13:07:49 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,17 @@ int	**allocate_pipe_fd(int size)
 	return (pipe_fd);
 }
 
+void	allocate_pipes(t_ctrl_seq **ctrl_seq)
+{
+	int	i;
+
+	while (ctrl_seq[i])
+	{
+		ctrl_seq[i]->pipe_fd = allocate_pipe_fd(ctrl_seq[i]->cmds->count - 1);
+		i++;
+	}
+}
+
 int	get_heredoc_input(char *delimiter)
 {
 	pid_t	pid;
@@ -67,35 +78,29 @@ int	get_heredoc_input(char *delimiter)
 	return (pipe_fd[0]);
 }
 
-void	redirect_fd(char *operator, char *arg)
+void	redirect_fd(t_ctrl_seq *seq, char *operator, char *file)
 {
-
-
-}
-// NEED TO WORK OUT WHEN TO DO HEREDOC AND WHEN TO PARSE IT !
-
-void	handle_redirections(t_ctrl_seq *seq, )
-{
-	int	fd;
-	
 	if (MATCH(operator, ">"))
-	{
-		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0643);
-		dup2(fd, STDOUT_FILENO);
-	}
+		seq->outfile = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0643);
 	else if (MATCH(operator, ">>"))
-	{	
-		fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0643);
-		dup2(fd, STDOUT_FILENO);
-	}
+		seq->outfile = open(file, O_WRONLY | O_CREAT | O_APPEND, 0643);
 	else if (MATCH(operator, "<"))
-	{
-		fd = open(file, O_RDONLY);
-		dup2(fd, STDIN_FILENO);
-	}
+		seq->infile = open(file, O_RDONLY);
 	else if (MATCH(operator, "<<"))
+		seq->infile = get_heredoc_input(file);
+
+	// NEED TO HANDLE UNKOWN FILE ERROR HERE
+}
+
+void	handle_redirections(t_ctrl_seq *seq, void **input, e_token *tokens)
+{
+	int	i;
+
+	i = 0;
+	while (input[i] && tokens[i] != CTRL_OP)
 	{
-		fd = get_heredoc_input(file);
-		dup2(fd, STDIN_FILENO);
+		if (tokens[i] == REDIRECT && tokens[i + 1] == FILE_)
+			redirect_fd(seq, input[i], input[i + 1]);
+		i++;
 	}
 }
