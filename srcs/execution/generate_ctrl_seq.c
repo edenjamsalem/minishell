@@ -33,7 +33,7 @@ static void	assign_ctrl_op(t_ctrl_seq *seq, char *operator)
 		seq->ctrl_op = OR;
 }
 
-static int	append_cmds(t_arrlst *cmds, void **input, e_token *tokens)
+static int	append_cmds(t_arrlst *cmds, void **input, t_token *tokens)
 {
 	t_arrlst	*cmd_argv;
 	int	i;
@@ -58,7 +58,7 @@ static int	append_cmds(t_arrlst *cmds, void **input, e_token *tokens)
 	return (i);
 }
 
-static int	get_seq_count(e_token *tokens)
+static int	get_seq_count(t_token *tokens)
 {
 	int	count;
 
@@ -72,7 +72,7 @@ static int	get_seq_count(e_token *tokens)
 	return (count + 1);
 }
 
-t_ctrl_seq	**generate_ctrl_seq(void **input, e_token *tokens)
+t_ctrl_seq	**generate_ctrl_seq(void **input, t_token *tokens)
 {
 	t_ctrl_seq	**ctrl_seq;
 	int			i;

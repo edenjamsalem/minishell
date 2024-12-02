@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/02 19:31:04 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/02 21:29:19 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_dict	*init_envp_dict(char **envp)
 	return (envp_dict);
 }
 /*
-const char *token_type_to_string(enum e_token token)
+const char *token_type_to_string(enum t_token token)
 {
     switch (token)
     {
@@ -48,7 +48,7 @@ int	main(int argc, char **argv, char **envp)
 	char		*input;
 	t_dict		*envp_dict;
 	t_arrlst	*words;
-	e_token		*tokens;
+	t_token		*tokens;
 	t_ctrl_seq	**ctrl_seq;
 
 	(void)argc;
@@ -78,7 +78,8 @@ int	main(int argc, char **argv, char **envp)
 		}
 		words = parse(input, envp_dict);
 		tokens = tokenise(words);
-		quote_remova(words);
+		quote_removal(words);
+		grammar_check(words, tokens); > will look for syntax errors
 		ctrl_seq = generate_ctrl_seq(input->content, tokens);
 		execute(ctrl_seq);
 		

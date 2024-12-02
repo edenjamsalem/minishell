@@ -6,14 +6,14 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 17:26:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/02 20:46:16 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/02 21:43:52 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
 // find the next token in input matching ref
-int	find_next_token(e_token *tokens, enum e_token ref)
+int	find_next_token(t_token *tokens, enum e_token ref)
 {
 	int	i;
 	
@@ -27,7 +27,7 @@ int	find_next_token(e_token *tokens, enum e_token ref)
 	return (-1);
 }
 
-e_token	get_prev_token(e_token *tokens, int index)
+t_token	get_prev_token(t_token *tokens, int index)
 {
 	return (tokens[index - 1]);
 }
@@ -35,7 +35,7 @@ e_token	get_prev_token(e_token *tokens, int index)
 // initial tokenisation for redirections, control ops and quotes only
 // had to put control ops here as well so i can keep track of them before
 // i have to set cmd->condition for cmds in input
-e_token	*primary_tokenisation(t_arrlst *words, e_token **tokens)
+t_token	*primary_tokenisation(t_arrlst *words, t_token **tokens)
 {
 	int	i;
 	
@@ -56,7 +56,7 @@ e_token	*primary_tokenisation(t_arrlst *words, e_token **tokens)
 }
 
 // consequent tokenisation for all other tokens + creation of cmds list
-e_token	*secondary_tokenisation(t_arrlst *words, e_token **tokens)
+t_token	*secondary_tokenisation(t_arrlst *words, t_token **tokens)
 {
 	int	i;
 
@@ -72,11 +72,11 @@ e_token	*secondary_tokenisation(t_arrlst *words, e_token **tokens)
 	return (*tokens);
 }
 
-e_token *tokenise(t_arrlst *words)
+t_token *tokenise(t_arrlst *words)
 {
-	e_token	*tokens;
+	t_token	*tokens;
 
-	tokens = malloc(sizeof(e_token) * words->count);
+	tokens = malloc(sizeof(t_token) * words->count);
 	if (!tokens)
 		return (NULL);
 	tokens = primary_tokenisation(words, &tokens);
@@ -85,7 +85,7 @@ e_token *tokenise(t_arrlst *words)
 }
 
 /*
-const char *token_to_string(e_token token)
+const char *token_to_string(t_token token)
 {
     switch (token)
     {
@@ -109,7 +109,7 @@ const char *token_to_string(e_token token)
 int main()
 {
     t_arrlst words;
-    e_token *tokens;
+    t_token *tokens;
     int i;
 
     char *sample_input[] = {"echo", "hello", ">", "file.txt", "|", "grep", "hello", NULL};

@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 09:09:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/02 20:17:37 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/02 21:29:19 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ bool	is_redirect(void *word)
 	return (false);
 }
 
-bool	is_file(int index, e_token *tokens)
+bool	is_file(int index, t_token *tokens)
 {
 	if (get_prev_token(tokens, index) == REDIRECT)
 		return (true);
@@ -33,7 +33,7 @@ bool	is_file(int index, e_token *tokens)
 
 // finds cmds
 // checks if index is 0 or that prev token is PIPE/CONTROL OP
-bool	is_command(int index, e_token *tokens)
+bool	is_command(int index, t_token *tokens)
 {
 	if (index == 0)
 		return (true);
