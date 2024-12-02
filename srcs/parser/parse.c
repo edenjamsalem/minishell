@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 11:16:25 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/02 14:23:06 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/02 18:02:27 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,13 @@
 t_arrlst	*parse(char *input, t_dict *envp_dict)
 {
 	t_arrlst	*words;
-//	t_arrlst	*tokens;
+	t_arrlst	*tokens;
 	char		*expanded_input;
 
 	expanded_input = expand_vars(input, envp_dict, IGNORE_QUOTED_VARS);
 	words = word_split(expanded_input);
 	free(expanded_input);
-//	tokenise_quotes();
 	expand_vars_inside_quotes(words, envp_dict);
-	quote_removal(words);
-//	tokenise(words, tokens);
 	return (words);
 }
 /*
