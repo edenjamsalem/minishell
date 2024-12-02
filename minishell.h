@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/02 16:29:45 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/02 20:18:10 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #  define _DEFAULT_SOURCE
 # endif
 
-# include "../libft/libft.h"
+# include "./libft/libft.h"
 # include <dirent.h>
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -133,6 +133,27 @@ void	copy_expanded_var(char **input, char **expanded, t_dict *envp_dict);
 
 t_dict	*init_envp_dict(char **envp);
 
+// TOKENISER
+
+int find_next_token(e_token *tokens, enum e_token ref);
+
+e_token get_prev_token(e_token *tokens, int index);
+
+e_token *primary_tokenisation(t_arrlst *words, e_token **tokens);
+
+e_token *secondary_tokenisation(t_arrlst *words, e_token **tokens);
+
+e_token *tokenise(t_arrlst *words);
+
+bool is_redirect(void *word);
+
+bool is_file(int index, e_token *tokens);
+
+bool is_command(int index, e_token *tokens);
+
+bool is_control(void *word);
+
+bool is_pipe(void *word);
 
 // EXECUTION
 

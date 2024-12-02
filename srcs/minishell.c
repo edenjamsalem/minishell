@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/02 18:03:28 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/02 19:31:04 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
 	t_dict		*envp_dict;
-	t_arrlst	*parsed_input;
+	t_arrlst	*words;
 	e_token		*tokens;
 	t_ctrl_seq	**ctrl_seq;
 
