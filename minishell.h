@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/29 17:07:34 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/02 16:29:45 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,14 @@ extern volatile sig_atomic_t	g_flag;
 # define QUOTES "\'\""
 # define IGNORE_QUOTED_VARS 1
 # define INC_QUOTED_VARS 0
+# define CALCULATE_DIFF(key, envp_dict) \
+	ft_strlen(get_dict_value(key, envp_dict)) - (ft_strlen(key) + 1)
+	
+# define AND_FAILURE(seq) \
+	(seq)->ctrl_op == AND && (seq)->prev_exit_status == EXIT_FAILURE
+
+# define OR_FAILURE(seq) \
+	(seq)->ctrl_op == OR && (seq)->prev_exit_status == EXIT_SUCCESS
 
 typedef enum	e_token
 {
@@ -55,12 +63,12 @@ typedef enum	e_ctrl_op
 
 typedef struct s_ctrl_seq // CONTROL SEQUENCE
 {
-	t_arrlst	*cmds; // list of 2d arrays with commands + flags + args
-	e_ctrl_op	condition; // && or ||
+	t_arrlst	*cmds; // list of 2d char arrays with command + flags + args
+	e_ctrl_op	ctrl_op; // && or ||
 	int			**pipe_fd;	// dynamically allocated list of fd's for each pipe 
 	int			infile;
 	int			outfile;
-	bool		exit_status; // of prev cmd execution
+	bool		prev_exit_status; // of prev cmd execution
 }	t_ctrl_seq;
 
 // SIGNALS
@@ -132,11 +140,11 @@ void	handle_redirections(t_ctrl_seq *seq, void **input, e_token *tokens);
 
 pid_t	pipe_fork(int pipe_fd[2]);
 
-void	exec_infile_to_pipe(int pipe_fd[2], int fd_in, char *cmd, char **envp);
+void	exec_infile_to_pipe(int pipe_fd[2], char *cmd, char **envp);
 
 void	exec_pipe_to_pipe(int **pipe_fd, char *cmd, int i, char **envp);
 
-void	exec_pipe_to_outfile(int pipe_fd[2], int fd_out, char *cmd, char **envp);
+void	exec_pipe_to_outfile(int pipe_fd[2], char *cmd, char **envp);
 
 void	ft_exec(char **cmd, t_dict *envp);
 

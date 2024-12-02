@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/28 18:09:58 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/02 16:32:44 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	main(int argc, char **argv, char **envp)
 		}
 		parsed_input = parse(input, envp_dict);
 		tokens = tokenise(parsed_input);
-		ctrl_seq = generate_ctrl_seq(input, tokens);
+		ctrl_seq = generate_ctrl_seq(input->content, tokens);
 		execute(ctrl_seq);
 		
 		while (parsed)

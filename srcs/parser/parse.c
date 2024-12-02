@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 11:16:25 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/28 17:31:06 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/02 14:23:06 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_arrlst	*parse(char *input, t_dict *envp_dict)
 //	tokenise(words, tokens);
 	return (words);
 }
-
+/*
 int	main(int argc, char **argv, char **envp)
 {
 	char		*input = " This is my \"\'$SHELL\'\" \'hello\' what>>\'isyours? $";
@@ -48,3 +48,4 @@ int	main(int argc, char **argv, char **envp)
 	free_arrlst(parsed_input, free);
 	free(parsed_input);
 }
+*/
