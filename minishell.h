@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/04 18:45:49 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/04 20:10:44 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ extern volatile sig_atomic_t	g_flag;
 typedef enum e_token
 {
 	TEXT,
-	QUOTED,
-	// NEEDED TO DISTINGUISH BETWEEN TEXT AND OTHER TOKENS BEFORE QUOTE REMOVAL
 	CMD,
 	FILE_,
 	CTRL_OP,
@@ -146,9 +144,9 @@ int								find_next_token(t_token *tokens, enum e_token ref);
 
 t_token							get_prev_token(t_token *tokens, int index);
 
-t_token							*primary_tokenisation(t_arrlst *words, t_token **tokens);
+t_token							*primary_tokenisation(t_arrlst *words, t_token *tokens);
 
-t_token							*secondary_tokenisation(t_arrlst *words, t_token **tokens);
+t_token							*secondary_tokenisation(t_arrlst *words, t_token *tokens);
 
 t_token							*tokenise(t_arrlst *words);
 

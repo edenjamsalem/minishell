@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 17:26:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/04 18:38:58 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/04 19:20:32 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_token	get_prev_token(t_token *tokens, int index)
 // initial tokenisation for redirections, control ops and quotes only
 // had to put control ops here as well so i can keep track of them before
 // i have to set cmd->condition for cmds in input
-t_token	*primary_tokenisation(t_arrlst *words, t_token **tokens)
+t_token	*primary_tokenisation(t_arrlst *words, t_token *tokens)
 {
 	int	i;
 	
@@ -43,33 +43,33 @@ t_token	*primary_tokenisation(t_arrlst *words, t_token **tokens)
 	while (words->content[i])
 	{
 		if (is_redirect(words->content[i]))
-			(*tokens)[i] = REDIRECT;
+			tokens[i] = REDIRECT;
 		else if (is_control(words->content[i]))
-			(*tokens)[i] = CTRL_OP;
+			tokens[i] = CTRL_OP;
 		else if (is_pipe(words->content[i]))
-			(*tokens)[i] = PIPE;
+			tokens[i] = PIPE;
 		else
-			(*tokens)[i] = TEXT;
+			tokens[i] = TEXT;
 		i++;
 	}
-	return (*tokens);
+	return (tokens);
 }
 
 // consequent tokenisation for all other tokens + creation of cmds list
-t_token	*secondary_tokenisation(t_arrlst *words, t_token **tokens)
+t_token	*secondary_tokenisation(t_arrlst *words, t_token *tokens)
 {
 	int	i;
 
 	i = 0;
 	while (words->content[i])
 	{
-		if (is_command(i, *tokens))
-			(*tokens)[i] = CMD_;
-		else if (is_file(i, *tokens))
-			(*tokens)[i] = DIRECT;
+		if (is_command(i, tokens))
+			tokens[i] = CMD;
+		else if (is_file(i, tokens))
+			tokens[i] = FILE_;
 		i++;
 	}
-	return (*tokens);
+	return (tokens);
 }
 
 t_token *tokenise(t_arrlst *words)
@@ -79,8 +79,8 @@ t_token *tokenise(t_arrlst *words)
 	tokens = malloc(sizeof(t_token) * words->count);
 	if (!tokens)
 		return (NULL);
-	tokens = primary_tokenisation(words, &tokens);
-	tokens = secondary_tokenisation(words, &tokens);
+	tokens = primary_tokenisation(words, tokens);
+	tokens = secondary_tokenisation(words, tokens);
 	return (tokens);
 }
 
