@@ -12,6 +12,23 @@
 
 #include "../../minishell.h"
 
+static void append_ctrl_op(t_arrlst *list, char **content)
+{
+	while (chrsetcmp(**content, "<>|&"))
+	{
+		if (**content == *(*content + 1))
+		{
+			append_arrlst(list, ft_strcut((*content), (*content + 2)));
+			*content += 2;
+		}
+		else 
+		{
+			append_arrlst(list, ft_strcut(*content, *content + 1));
+			(*content)++;
+		}
+	}
+}
+
 static void	split_ctrl_ops(t_arrlst *list, char *content)
 {
 	char	*op;
@@ -25,8 +42,7 @@ static void	split_ctrl_ops(t_arrlst *list, char *content)
 		text = ft_strcut(content, skip_to(&content, "<>|&"));
 		append_arrlst(list, text);
 	}
-	op = ft_strcut(content, skip_set(&content, "<>|&"));
-	append_arrlst(list, op);
+	append_ctrl_op(list, &content);
 	if (*content)
 	{
 		file = ft_strcut(content, skip_to(&content, IFS));
@@ -81,27 +97,25 @@ t_arrlst	*word_split(char *input)
 	while (*input)
 	{
 		content = get_word(&input);
-		if (check_for_ctrl_op(content))
-			split_ctrl_ops(list, content);
+		if (check_for_ctrl_op(content)) // also need to split ctrl ops
+			split_ctrl_ops(list, content); // split any bunched up redirection
 		else
 			append_arrlst(list, content);
 		skip_set(&input, IFS);
 	}
 	return (list);
 }
-/*
+
 int main(void)
 {
-	t_list_2 *list = word_split(" This is my \"$PATH\" what>>\'isyours? $");
-	t_list_2 *tmp;
+	t_arrlst *list = word_split(" This is my \"$PATH\" what>>&|&||\'isyours? $");
+	int	i = 0;
 
-	tmp = list;
-	while (tmp)
+	while (i < list->count)
 	{
-		ft_printf("%s\n", ((t_word *)tmp->content)->text);
-		tmp = tmp->next;
+		ft_printf("%s\n", list->content[i]);
+		i++;
 	}
-	ft_lst_2clear(&list, (void *)free_word);
+	free_arrlst(list, free);
 	free(list);
 }
-*/
