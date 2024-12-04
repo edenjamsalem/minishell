@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 17:26:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/02 21:43:52 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/04 17:04:07 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ t_token	*secondary_tokenisation(t_arrlst *words, t_token **tokens)
 	while (words->content[i])
 	{
 		if (is_command(i, *tokens))
-			(*tokens)[i] = CMD;
+			(*tokens)[i] = CMD_;
 		else if (is_file(i, *tokens))
-			(*tokens)[i] = FILE_;
+			(*tokens)[i] = DIRECT;
 		i++;
 	}
 	return (*tokens);

@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/02 21:54:50 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/04 17:02:00 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,8 @@ typedef enum e_ctrl_op
 typedef enum e_error
 {
 	SYNTAX,
-	CMD,
-	FILE,
+	CMD_,
+	DIRECT,
 } t_error;
 
 typedef struct s_ctrl_seq // CONTROL SEQUENCE
