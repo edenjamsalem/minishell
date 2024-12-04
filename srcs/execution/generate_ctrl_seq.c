@@ -34,7 +34,7 @@ static t_ctrl_seq	*init_seq()
 static void	assign_ctrl_op(t_ctrl_seq *seq, char *operator)
 {
 	// TESTED
-	if (MATCH(operator, "&&"))
+	if (ft_match(operator, "&&"))
 		seq->ctrl_op = AND;
 	else if (ft_match(operator, "||"))
 		seq->ctrl_op = OR;
@@ -63,29 +63,20 @@ static void	append_cmds(t_arrlst *cmds, void **input, t_token *tokens)
 	int		j;
 
 	i = 0;
-	j = 0;
-	while (input[i])
+	while (input[i] && tokens[i] != CTRL_OP)
 	{
-		cmd_argv = malloc(sizeof(char *) * get_cmd_len(input, tokens) + 1);
+		j = 0;
+		cmd_argv = malloc(sizeof(char *) * (get_cmd_len(input, tokens) + 1));
 		if (!cmd_argv)
 			return ;
 		while (input[i] && tokens[i] != CTRL_OP && tokens[i] != PIPE)
 		{
 			if (tokens[i] == CMD || tokens[i] == TEXT)
-			{
-				cmd_argv[j] = ft_strdup(input[i]);
-			//	ft_printf("cmd_argv = %s\n", cmd_argv[j]);
-				j++;
-			}
+				cmd_argv[j++] = ft_strdup(input[i]);
 			i++;
 		}
 		cmd_argv[j] = NULL;
-		append_arrlst(cmds, cmd_argv);
-		if (tokens[i] == CTRL_OP)
-		{
-			cmd_argv[j] = NULL;
-			break ;
-		}
+		append_arrlst(cmds, (void *)cmd_argv);
 		if (tokens[i] == PIPE)
 			i++;
 	}
@@ -125,9 +116,11 @@ t_ctrl_seq	**generate_ctrl_seq(t_arrlst *input, t_token *tokens)
 	{
 		ctrl_seq[j] = init_seq();
 		handle_redirections(ctrl_seq[j], input->content + i, tokens + i);
-		assign_ctrl_op(ctrl_seq[j], input->content[i]);
 		append_cmds(ctrl_seq[j]->cmds, input->content + i, tokens + i);
+		assign_ctrl_op(ctrl_seq[j], input->content[i]); // NOT WORKING !!
 		while (input->content[i] && tokens[i] != CTRL_OP)
+			i++;
+		if (input->content[i])
 			i++;
 		j++;
 	}
@@ -140,7 +133,7 @@ int main(int argc, char **argv, char **envp)
 {
 	char		*input = "head -n 5 >file1 | tail -n 2 && echo hello";
 	t_dict		*envp_dict = init_envp_dict(envp);
-	t_arrlst	*parsed_input;
+	t_arrlst	*words;
 	t_token 	*tokens; 
 	t_ctrl_seq	**ctrl_seq;
 	int			i;
@@ -149,20 +142,29 @@ int main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	parsed_input = parse(input, envp_dict);
-	tokens = tokenise(parsed_input);
-	quote_removal(parsed_input);
-	ctrl_seq = generate_ctrl_seq(parsed_input, tokens);
+	words = parse(input, envp_dict);
+	tokens = tokenise(words);
+	quote_removal(words);
+/*
+	i = 0;
+	while (i < words->count)
+	{
+		ft_printf("%s:%d\n", words->content[i], tokens[i]);
+		i++;
+	}
+*/
+	ctrl_seq = generate_ctrl_seq(words, tokens);
 	i = 0;
 	while (ctrl_seq[i])
 	{
+		char ***cmds = (char ***)(ctrl_seq[i]->cmds->content);
 		ft_printf("COMMANDS: ");
 		j = 0;
-		while (ctrl_seq[i]->cmds->content[j])
+		while (cmds[j])
 		{
 			k = 0;
-			while (((char **)(ctrl_seq[i]->cmds->content[j]))[k])
-				ft_printf("%s ", ((char **)(ctrl_seq[i]->cmds->content[j]))[k++]);
+			while (cmds[j][k])
+				ft_printf("%s ", cmds[j][k++]);
 			ft_printf(",");
 			j++;
 		}
@@ -173,7 +175,7 @@ int main(int argc, char **argv, char **envp)
 		i++;
 	}
 	dict_clear(&envp_dict);
-	free_arrlst(parsed_input, free);
-	free(parsed_input);
+	free_arrlst(words, free);
+	free(words);
 	//execute(ctrl_seq);
 }

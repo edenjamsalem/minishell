@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/04 18:39:35 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/04 19:19:22 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,6 @@ extern volatile sig_atomic_t	g_flag;
 typedef enum e_token
 {
 	TEXT,
-	QUOTED,
-	// NEEDED TO DISTINGUISH BETWEEN TEXT AND OTHER TOKENS BEFORE QUOTE REMOVAL
 	CMD,
 	FILE_,
 	CTRL_OP,
@@ -58,14 +56,14 @@ typedef enum e_ctrl_op
 	AND,
 	OR,
 }								t_ctrl_op;
-/*
+
 typedef enum e_error
 {
 	SYNTAX,
-	CMD,
-	FILE,
+	CMD_,
+	DIRECT,
 } t_error;
-*/
+
 typedef struct s_ctrl_seq // CONTROL SEQUENCE
 {
 	t_arrlst	*cmds;    // list of 2d char arrays with command + flags + args
@@ -146,9 +144,9 @@ int								find_next_token(t_token *tokens, enum e_token ref);
 
 t_token							get_prev_token(t_token *tokens, int index);
 
-t_token							*primary_tokenisation(t_arrlst *words, t_token **tokens);
+t_token							*primary_tokenisation(t_arrlst *words, t_token *tokens);
 
-t_token							*secondary_tokenisation(t_arrlst *words, t_token **tokens);
+t_token							*secondary_tokenisation(t_arrlst *words, t_token *tokens);
 
 t_token							*tokenise(t_arrlst *words);
 

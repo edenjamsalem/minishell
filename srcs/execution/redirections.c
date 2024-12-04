@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:31:16 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/04 18:38:50 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/04 19:52:38 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,10 +101,7 @@ void	handle_redirections(t_ctrl_seq *seq, void **input, t_token *tokens)
 	while (input[i] && tokens[i] != CTRL_OP)
 	{
 		if (tokens[i] == REDIRECT && tokens[i + 1] == FILE_)
-		{
-			ft_printf("file = %s\n", input[i + 1]);
 			redirect_fd(seq, (char *)input[i], (char *)input[i + 1]);
-		}
 		i++;
 	}
 }
