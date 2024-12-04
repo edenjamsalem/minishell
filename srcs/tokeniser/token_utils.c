@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 09:09:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/02 21:29:19 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/04 17:22:09 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 // finds both types of redirection
 bool	is_redirect(void *word)
 {
-	if (MATCH(word, "<") || MATCH(word, ">"))
+	if (ft_match(word, "<") || ft_match(word, ">"))
 		return (true);
-	else if (MATCH(word, ">>") || MATCH(word, "<<"))
+	else if (ft_match(word, ">>") || ft_match(word, "<<"))
 		return (true);
 	return (false);
 }
@@ -48,7 +48,7 @@ bool	is_command(int index, t_token *tokens)
 // check if prev token is CONTROL OP then it's error (grammar check)
 bool	is_control(void *word)
 {
-	if (MATCH(word, "&&") || MATCH(word, "||"))
+	if (ft_match(word, "&&") || ft_match(word, "||"))
 		return (true);
 	return (false);
 }
@@ -57,7 +57,7 @@ bool	is_control(void *word)
 // check if prev token is PIPE then it's error (grammar check)
 bool	is_pipe(void *word)
 {
-	if (MATCH(word, "|"))
+	if (ft_match(word, "|"))
 		return (true);
 	return (false);
 }

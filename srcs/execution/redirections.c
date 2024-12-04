@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:31:16 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/02 21:29:19 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/04 17:22:09 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	get_heredoc_input(char *delimiter)
 			write(1, "> ", 2);
 			bytes_read = read(STDIN_FILENO, input, 4096);
 			input[bytes_read] = '\0';
-			if (MATCH(input, delimiter))
+			if (ft_match(input, delimiter))
 				exit(EXIT_SUCCESS);
 			write(pipe_fd[1], input, bytes_read);
 		}
@@ -80,13 +80,13 @@ int	get_heredoc_input(char *delimiter)
 
 void	redirect_fd(t_ctrl_seq *seq, char *operator, char *file)
 {
-	if (MATCH(operator, ">"))
+	if (ft_match(operator, ">"))
 		seq->outfile = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0643);
-	else if (MATCH(operator, ">>"))
+	else if (ft_match(operator, ">>"))
 		seq->outfile = open(file, O_WRONLY | O_CREAT | O_APPEND, 0643);
-	else if (MATCH(operator, "<"))
+	else if (ft_match(operator, "<"))
 		seq->infile = open(file, O_RDONLY);
-	else if (MATCH(operator, "<<"))
+	else if (ft_match(operator, "<<"))
 		seq->infile = get_heredoc_input(file);
 
 	// NEED TO HANDLE UNKOWN FILE ERROR HERE

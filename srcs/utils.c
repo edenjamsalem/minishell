@@ -1,27 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/05 15:58:59 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/04 17:22:09 by mganchev         ###   ########.fr       */
+/*   Created: 2024/12/04 17:05:51 by mganchev          #+#    #+#             */
+/*   Updated: 2024/12/04 17:40:05 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../libft.h"
 
-int	ft_unset(char **cmd, t_dict **envp_vars)
+bool ft_match(char *s1, char *s2)
 {
-	int	i;
-
-	i = 1;
-	while (envp_vars)
-	{
-		if (ft_match(cmd[i], (*envp_vars)->key))
-			del_dict_node(envp_vars);
-		*envp_vars = (*envp_vars)->next;
-	}
-	return (1);
+    return (ft_strncmp(s1, s2, ft_strlen(s1) + 1) == 0);
 }
