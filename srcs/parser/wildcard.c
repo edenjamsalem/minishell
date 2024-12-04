@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 00:43:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/11/20 14:20:19 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/02 18:44:53 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,11 @@ int	match_pattern(const char *pattern, const char *str)
 }
 
 // expansion of wildcard ; not sure if we need to handle the ? wildcard
-t_list	*expand_wildcards(const char *pattern)
+t_arrlst	*expand_wildcards(const char *pattern)
 {
 	DIR				*dir;
 	struct dirent	*entry;
-	t_list			*matches;
+	t_arrlst			*matches;
 
 	dir = opendir(".");
 	if (!dir)
@@ -73,7 +73,7 @@ t_list	*expand_wildcards(const char *pattern)
 	while (entry)
 	{
 		if (match_pattern(pattern, entry->d_name))
-			ft_lstadd_back(&matches, ft_lstnew(ft_strdup(entry->d_name)));
+			append_arrlst(&matches, (void *)entry->d_name);
 		entry = readdir(dir);
 	}
 	closedir(dir);

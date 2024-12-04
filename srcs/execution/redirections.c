@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:31:16 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/29 13:07:49 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/02 21:29:19 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	redirect_fd(t_ctrl_seq *seq, char *operator, char *file)
 	// NEED TO HANDLE UNKOWN FILE ERROR HERE
 }
 
-void	handle_redirections(t_ctrl_seq *seq, void **input, e_token *tokens)
+void	handle_redirections(t_ctrl_seq *seq, void **input, t_token *tokens)
 {
 	int	i;
 

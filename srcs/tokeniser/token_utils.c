@@ -3,88 +3,61 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 09:09:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/11/26 14:32:53 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/02 21:29:19 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-// finds and tokenises both types of redirection
-bool	is_redirect(t_word *word)
+// instead of quotes do a check for FILE after REDIRECT	(grammar check)
+
+// finds both types of redirection
+bool	is_redirect(void *word)
 {
-	if (ft_strncmp(word->text, "<", 2) == 0 || ft_strncmp(word, ">", 2) == 0)
-	{
-		word->token = REDIRECT_OP;
+	if (MATCH(word, "<") || MATCH(word, ">"))
 		return (true);
-	}
-	else if (ft_strncmp(word->text, "< ", 3) == 0 || ft_strncmp(word, "> ", 3) == 0)
-	{
-		word->token = REDIRECT_FILE;
+	else if (MATCH(word, ">>") || MATCH(word, "<<"))
 		return (true);
-	}
 	return (false);
 }
 
-// finds and tokenises quotes
-bool	is_quoted(t_word *word)
+bool	is_file(int index, t_token *tokens)
 {
-	if (ft_strncmp(word->text, "\"", 1) == 0 || ft_strncmp(word, "\'", 1) == 0)
-	{
-		word->token = QUOTED;
+	if (get_prev_token(tokens, index) == REDIRECT)
 		return (true);
-	}
 	return (false);
 }
 
-// finds and tokenises cmds
-bool	is_command(t_word *word)
+// finds cmds
+// checks if index is 0 or that prev token is PIPE/CONTROL OP
+bool	is_command(int index, t_token *tokens)
 {
-	int			i;
-	char		*cmds_key[] = {"env", "pwd", "cd", "export", "unset", "echo",
-				"exit", NULL};
-
-	i = 0;
-	while (cmds_key[i] != NULL)
-	{
-		if (ft_strncmp(word->text, cmds_key[i], ft_strlen(word->text)) == 0)
-		{
-			word->token = CMD;
-			return (true);
-		}
-		i++;
-	}
+	if (index == 0)
+		return (true);
+	else if (get_prev_token(tokens, index) == CTRL_OP)
+		return (true);
+	else if (get_prev_token(tokens, index) == PIPE)
+		return (true);
 	return (false);
 }
 
 // finds and tokenises control ops
-bool	is_control(t_word *word)
+// check if prev token is CONTROL OP then it's error (grammar check)
+bool	is_control(void *word)
 {
-	int		i;
-	char	*controls[] = {"||", "&&", NULL};
-
-	i = 0;
-	while (controls[i] != NULL)
-	{
-		if (ft_strncmp(word, controls[i], ft_strlen(controls[i]) + 1) == 0)
-		{
-			word->token = CTRL_OP;
-			return (true);
-		}
-		i++;
-	}
+	if (MATCH(word, "&&") || MATCH(word, "||"))
+		return (true);
 	return (false);
 }
 
 // finds and tokenises pipes
-bool	is_pipe(t_word *word)
+// check if prev token is PIPE then it's error (grammar check)
+bool	is_pipe(void *word)
 {
-	if (ft_strncmp(word->text, "|", 2) == 0)
-	{
-		word->token = PIPE;
+	if (MATCH(word, "|"))
 		return (true);
-	}
 	return (false);
 }

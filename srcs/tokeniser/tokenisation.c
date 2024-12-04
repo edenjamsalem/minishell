@@ -3,112 +3,129 @@
 /*                                                        :::      ::::::::   */
 /*   tokenisation.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 17:26:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/11/26 14:32:53 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/02 21:43:52 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
 // find the next token in input matching ref
-t_word	*find_next_token(t_list_2 *input, enum e_token ref)
+int	find_next_token(t_token *tokens, enum e_token ref)
 {
-	t_word		*word;
-	t_list_2	*temp;
-
-	temp = input;
-	while (temp)
+	int	i;
+	
+	i = 0;
+	while (tokens[i])
 	{
-		word = (t_word *)temp->content;
-		if (word->token == ref)
-			return (word);
-		temp = temp->next;
+		if (tokens[i] == ref)
+			return (i);
+		i++;
 	}
-	return (NULL);
+	return (-1);
 }
 
-// create a new cmd struct to put inside cmds list
-t_cmd	*create_cmd(t_list_2 *input)
+t_token	get_prev_token(t_token *tokens, int index)
 {
-	t_cmd	*cmd;
-	t_word	*word;
-
-	cmd = malloc(sizeof(t_cmd));
-	if (!cmd)
-		return (NULL);
-	cmd->cmd = ((t_word *)(input->content))->text;
-	cmd->args = NULL;
-	word = find_next_token(input, CTRL_OP);
-	if (word)
-	{
-		if (ft_strncmp(word->text, "&&", 3) == 0)
-			cmd->conditional = AND;
-		else if (ft_strncmp(word->text, "||", 3) == 0)
-			cmd->conditional = OR;
-	}
-	else
-		cmd->conditional = NONE;
-	return (cmd);
+	return (tokens[index - 1]);
 }
 
 // initial tokenisation for redirections, control ops and quotes only
 // had to put control ops here as well so i can keep track of them before
 // i have to set cmd->condition for cmds in input
-t_list_2	*primary_tokenisation(t_shell *shell)
+t_token	*primary_tokenisation(t_arrlst *words, t_token **tokens)
 {
-	t_word		*word;
-	t_list_2	*temp;
-
-	temp = shell->input;
-	while (temp)
+	int	i;
+	
+	i = 0;
+	while (words->content[i])
 	{
-		word = (t_word *)temp->content;
-		if (is_redirect(word) || is_quotes(word))
-		{
-			temp = temp->next;
-			continue ;
-		}
-		else if (is_control(word))
-		{
-			shell->exit_status = true;
-				// change flag to indicate we need to watch exit status of cmds
-			temp = temp->next;
-			continue ;
-		}
+		if (is_redirect(words->content[i]))
+			(*tokens)[i] = REDIRECT;
+		else if (is_control(words->content[i]))
+			(*tokens)[i] = CTRL_OP;
+		else if (is_pipe(words->content[i]))
+			(*tokens)[i] = PIPE;
 		else
-			temp = temp->next;
+			(*tokens)[i] = TEXT;
+		i++;
 	}
-	return (shell->input);
+	return (*tokens);
 }
 
 // consequent tokenisation for all other tokens + creation of cmds list
-t_list_2	*secondary_tokenisation(t_shell *shell)
+t_token	*secondary_tokenisation(t_arrlst *words, t_token **tokens)
 {
-	t_word		*word;
-	t_list_2	*temp;
+	int	i;
 
-	temp = shell->input;
-	while (temp)
+	i = 0;
+	while (words->content[i])
 	{
-		word = (t_word *)temp->content;
-		if (is_command(word))
-		{
-			ft_lst_2add_back(&shell->cmds, ft_lst_2new(create_cmd(temp)));
-			temp = temp->next;
-			continue ;
-		}
-		else if (is_pipe(word))
-		{
-			temp = temp->next;
-			continue ;
-		}
-		else
-			temp = temp->next;
+		if (is_command(i, *tokens))
+			(*tokens)[i] = CMD;
+		else if (is_file(i, *tokens))
+			(*tokens)[i] = FILE_;
+		i++;
 	}
-	return (shell->input);
+	return (*tokens);
 }
 
-// t_list_2 *tokeniser(t_shell *shell)
-// function that tokenises, reparses and then retokenises again
+t_token *tokenise(t_arrlst *words)
+{
+	t_token	*tokens;
+
+	tokens = malloc(sizeof(t_token) * words->count);
+	if (!tokens)
+		return (NULL);
+	tokens = primary_tokenisation(words, &tokens);
+	tokens = secondary_tokenisation(words, &tokens);
+	return (tokens);
+}
+
+/*
+const char *token_to_string(t_token token)
+{
+    switch (token)
+    {
+    case REDIRECT:
+        return "REDIRECT";
+    case CTRL_OP:
+        return "CTRL_OP";
+    case PIPE:
+        return "PIPE";
+    case TEXT:
+        return "TEXT";
+    case CMD:
+        return "CMD";
+    case FILE_:
+        return "FILE_";
+    default:
+        return "UNKNOWN";
+    }
+}
+
+int main()
+{
+    t_arrlst words;
+    t_token *tokens;
+    int i;
+
+    char *sample_input[] = {"echo", "hello", ">", "file.txt", "|", "grep", "hello", NULL};
+    words.content = (void **)sample_input;
+    words.count = 7;
+
+    tokens = tokenise(&words);
+    if (!tokens)
+    {
+        fprintf(stderr, "Tokenisation failed\n");
+        return 1;
+    }
+    for (i = 0; i < words.count; i++)
+    {
+        printf("Token %d: %s\n", i, token_to_string(tokens[i]));
+    }
+    free(tokens);
+    return 0;
+}*/
