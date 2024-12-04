@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:13:34 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/04 15:20:15 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/04 18:38:40 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,17 @@ int	ctrl_op_success(t_ctrl_seq *seq)
 
 int	builtin(char **cmd, t_dict *envp)
 {
-	if (MATCH(cmd[0], "env"))
+	if (ft_match(cmd[0], "env"))
 		return (ft_env(envp));
-	else if (MATCH(cmd[0], "cd"))
+	else if (ft_match(cmd[0], "cd"))
 		return (ft_cd(cmd));
-	else if (MATCH(cmd[0], "echo"))
+	else if (ft_match(cmd[0], "echo"))
 		return (ft_echo(cmd));
-	else if (MATCH(cmd[0], "export"))
+	else if (ft_match(cmd[0], "export"))
 		return (ft_export(cmd, envp));
-	else if (MATCH(cmd[0], "pwd"))
+	else if (ft_match(cmd[0], "pwd"))
 		return (ft_pwd());
-	else if (MATCH(cmd[0], "unset"))
+	else if (ft_match(cmd[0], "unset"))
 		return (ft_unset(cmd, envp));
 	return (0);
 }

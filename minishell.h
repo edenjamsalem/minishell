@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/04 17:22:54 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/04 18:39:35 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ extern volatile sig_atomic_t	g_flag;
 typedef enum e_token
 {
 	TEXT,
-	QUOTED, // NEEDED TO DISTINGUISH BETWEEN TEXT AND OTHER TOKENS BEFORE QUOTE REMOVAL
+	QUOTED,
+	// NEEDED TO DISTINGUISH BETWEEN TEXT AND OTHER TOKENS BEFORE QUOTE REMOVAL
 	CMD,
 	FILE_,
 	CTRL_OP,
@@ -141,16 +142,13 @@ t_dict							*init_envp_dict(char **envp);
 
 // TOKENISER
 
-int								find_next_token(t_token *tokens,
-									enum e_token ref);
+int								find_next_token(t_token *tokens, enum e_token ref);
 
 t_token							get_prev_token(t_token *tokens, int index);
 
-t_token							*primary_tokenisation(t_arrlst *words,
-									t_token **tokens);
+t_token							*primary_tokenisation(t_arrlst *words, t_token **tokens);
 
-t_token							*secondary_tokenisation(t_arrlst *words,
-									t_token **tokens);
+t_token							*secondary_tokenisation(t_arrlst *words, t_token **tokens);
 
 t_token							*tokenise(t_arrlst *words);
 

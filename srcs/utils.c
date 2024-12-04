@@ -1,34 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/03 10:07:28 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/04 17:22:09 by mganchev         ###   ########.fr       */
+/*   Created: 2024/12/04 17:05:51 by mganchev          #+#    #+#             */
+/*   Updated: 2024/12/04 17:40:05 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../libft.h"
 
-int	ft_echo(char **cmd)
+bool ft_match(char *s1, char *s2)
 {
-	bool	n_flag;
-	int		i;
-	
-	if (ft_2darr_len((void **)cmd) < 2)
-		ft_printf("\n");
-	i = 1;
-	n_flag = false;
-	if (ft_match(cmd[1], "-n"))
-	{
-		n_flag = true;
-		i++;
-	}
-	while (cmd[i])
-		ft_printf("%s ", cmd[i]);
-	if (n_flag)
-		ft_printf("\n");
-	return (1);
+    return (ft_strncmp(s1, s2, ft_strlen(s1) + 1) == 0);
 }

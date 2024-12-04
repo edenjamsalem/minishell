@@ -36,7 +36,7 @@ static void	assign_ctrl_op(t_ctrl_seq *seq, char *operator)
 	// TESTED
 	if (MATCH(operator, "&&"))
 		seq->ctrl_op = AND;
-	else if (MATCH(operator, "||"))
+	else if (ft_match(operator, "||"))
 		seq->ctrl_op = OR;
 }
 
