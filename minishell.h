@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/04 17:02:00 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/04 17:19:41 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ extern volatile sig_atomic_t	g_flag;
 typedef enum e_token
 {
 	TEXT,
-	QUOTED,
-	// NEEDED TO DISTINGUISH BETWEEN TEXT AND OTHER TOKENS BEFORE QUOTE REMOVAL
+	QUOTED, // NEEDED TO DISTINGUISH BETWEEN TEXT AND OTHER TOKENS BEFORE QUOTE REMOVAL
 	CMD,
 	FILE_,
 	CTRL_OP,
@@ -72,7 +71,7 @@ typedef struct s_ctrl_seq // CONTROL SEQUENCE
 	t_ctrl_op	ctrl_op; // && or ||
 	int	**pipe_fd;     // dynamically allocated list of fd's for each pipe
 	int infile;
-	int outfile;
+	int outfile;bool ft_match(char *s1, char *s2)
 	bool prev_exit_status; // of prev cmd execution
 }								t_ctrl_seq;
 

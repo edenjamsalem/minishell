@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/02 21:29:19 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/04 14:18:58 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
 	t_dict		*envp_dict;
-	t_arrlst	*words;
-	t_token		*tokens;
+	t_arrlst	*parsed_input;
+	e_token		*tokens;
 	t_ctrl_seq	**ctrl_seq;
 
 	(void)argc;
@@ -76,10 +76,8 @@ int	main(int argc, char **argv, char **envp)
 			free(input); // handles ENTER key press
 			continue ;
 		}
-		words = parse(input, envp_dict);
-		tokens = tokenise(words);
-		quote_removal(words);
-		grammar_check(words, tokens); > will look for syntax errors
+		parsed_input = parse(input, envp_dict);
+		tokens = tokenise(parsed_input);
 		ctrl_seq = generate_ctrl_seq(input->content, tokens);
 		execute(ctrl_seq);
 		
