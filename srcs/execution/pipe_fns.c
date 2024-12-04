@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 14:33:13 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/02 15:39:55 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/04 15:25:22 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ pid_t	pipe_fork(int pipe_fd[2])
 	return (pid);
 }
 
-void	exec_infile_to_pipe(int pipe_fd[2], char *cmd, char **envp)
+void	exec_infile_to_pipe(int pipe_fd[2], char **cmd, t_dict *envp)
 {
 	pid_t	pid;
 
@@ -45,7 +45,7 @@ void	exec_infile_to_pipe(int pipe_fd[2], char *cmd, char **envp)
 	wait(EXIT_SUCCESS);
 }
 
-void	exec_pipe_to_pipe(int **pipe_fd, char *cmd, int i, char **envp)
+void	exec_pipe_to_pipe(int **pipe_fd, char **cmd, int i, t_dict *envp)
 {
 	pid_t	pid;
 
@@ -61,7 +61,7 @@ void	exec_pipe_to_pipe(int **pipe_fd, char *cmd, int i, char **envp)
 	wait(EXIT_SUCCESS);
 }
 
-void	exec_pipe_to_outfile(int pipe_fd[2], char *cmd, char **envp)
+void	exec_pipe_to_outfile(int pipe_fd[2], char **cmd, t_dict *envp)
 {
 	pid_t	pid;
 

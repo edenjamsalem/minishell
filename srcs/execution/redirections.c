@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:31:16 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/02 21:29:19 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:58:01 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,13 +94,17 @@ void	redirect_fd(t_ctrl_seq *seq, char *operator, char *file)
 
 void	handle_redirections(t_ctrl_seq *seq, void **input, t_token *tokens)
 {
+	// TESTED
 	int	i;
 
 	i = 0;
 	while (input[i] && tokens[i] != CTRL_OP)
 	{
 		if (tokens[i] == REDIRECT && tokens[i + 1] == FILE_)
-			redirect_fd(seq, input[i], input[i + 1]);
+		{
+			ft_printf("file = %s\n", input[i + 1]);
+			redirect_fd(seq, (char *)input[i], (char *)input[i + 1]);
+		}
 		i++;
 	}
 }

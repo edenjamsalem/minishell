@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/04 14:18:37 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/04 17:22:54 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #  define _DEFAULT_SOURCE
 # endif
 
-# include "./libft/libft.h"
+# include "../libft/libft.h"
 # include <dirent.h>
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -57,28 +57,27 @@ typedef enum e_ctrl_op
 	AND,
 	OR,
 }								t_ctrl_op;
-
+/*
 typedef enum e_error
 {
 	SYNTAX,
 	CMD,
 	FILE,
 } t_error;
-
+*/
 typedef struct s_ctrl_seq // CONTROL SEQUENCE
 {
 	t_arrlst	*cmds;    // list of 2d char arrays with command + flags + args
 	t_ctrl_op	ctrl_op; // && or ||
-	int	**pipe_fd;     // dynamically allocated list of fd's for each pipe
-	int infile;
-	int outfile;
-	bool prev_exit_status; // of prev cmd execution
+	int			**pipe_fd;     // dynamically allocated list of fd's for each pipe
+	int			infile;
+	int			outfile;
+	bool		prev_exit_status; // of prev cmd execution
 }								t_ctrl_seq;
 
 // SIGNALS
 
-void							handle_signal(int signum, siginfo_t *info,
-									void *context);
+void	handle_signal(int signum, siginfo_t *info, void *context);
 
 void							setup_sig_handlers(void);
 
@@ -88,9 +87,9 @@ int								ft_env(t_dict *envp_vars);
 
 int								ft_pwd(void);
 
-int								ft_export(char **cmd, t_dict **envp_vars);
+int								ft_export(char **cmd, t_dict *envp_vars);
 
-int								ft_unset(char **cmd, t_dict **envp_vars);
+int								ft_unset(char **cmd, t_dict *envp_vars);
 
 int								ft_cd(char **cmd);
 
@@ -167,25 +166,22 @@ bool							is_pipe(void *word);
 
 // EXECUTION
 
-void							handle_redirections(t_ctrl_seq *seq,
-									void **input, t_token *tokens);
+void			handle_redirections(t_ctrl_seq *seq, void **input, t_token *tokens);
 
-pid_t							pipe_fork(int pipe_fd[2]);
+pid_t			pipe_fork(int pipe_fd[2]);
 
-void							exec_infile_to_pipe(int pipe_fd[2], char *cmd,
-									char **envp);
+void			exec_infile_to_pipe(int pipe_fd[2], char **cmd, t_dict *envp);
 
-void							exec_pipe_to_pipe(int **pipe_fd, char *cmd,
-									int i, char **envp);
+void			exec_pipe_to_pipe(int **pipe_fd, char **cmd, int i, t_dict *envp);
 
-void							exec_pipe_to_outfile(int pipe_fd[2], char *cmd,
-									char **envp);
+void			exec_pipe_to_outfile(int pipe_fd[2], char **cmd, t_dict *envp);
 
-void							ft_exec(char **cmd, t_dict *envp);
+void			ft_exec(char **cmd, t_dict *envp);
 
-t_ctrl_seq						**generate_ctrl_seq(t_arrlst *input,
-									t_token *tokens);
+t_ctrl_seq		**generate_ctrl_seq(t_arrlst *input, t_token *tokens);
 
-int								builtin(char **cmd, t_dict *envp);
+int			builtin(char **cmd, t_dict *envp);
+
+void		allocate_pipes(t_ctrl_seq **ctrl_seq);
 
 #endif

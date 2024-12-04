@@ -105,7 +105,7 @@ t_arrlst	*word_split(char *input)
 	}
 	return (list);
 }
-
+/*
 int main(void)
 {
 	t_arrlst *list = word_split(" This is my \"$PATH\" what>>&|&||\'isyours? $");
@@ -119,3 +119,4 @@ int main(void)
 	free_arrlst(list, free);
 	free(list);
 }
+*/

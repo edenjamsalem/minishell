@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenisation.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 17:26:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/02 21:43:52 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/04 16:15:51 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,4 +128,5 @@ int main()
     }
     free(tokens);
     return 0;
-}*/
+}
+*/

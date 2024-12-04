@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:13:34 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/02 15:54:56 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/04 15:20:15 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,15 @@ void	execute_cmds(t_ctrl_seq* seq, t_dict *envp)
 	dup2(seq->infile, STDIN_FILENO);
 	dup2(seq->outfile, STDOUT_FILENO);
 	if (seq->cmds->count == 1)
-		ft_exec(seq->cmds->content, envp); // handle command not found error
-	exec_infile_to_pipe(seq->pipe_fd[0], seq->cmds->content[0], envp);
+		ft_exec((char **)seq->cmds->content, envp); // handle command not found error
+	exec_infile_to_pipe(seq->pipe_fd[0], (char **)seq->cmds->content[0], envp);
 	i = 1;
 	while (i < seq->cmds->count - 1)
 	{
-		exec_pipe_to_pipe(seq->pipe_fd, seq->cmds->content[i], i, envp);
+		exec_pipe_to_pipe(seq->pipe_fd, (char **)seq->cmds->content[i], i, envp);
 		i++;
 	}
-	exec_pipe_to_outfile(seq->pipe_fd[i - 1], seq->cmds->content[i], envp);
+	exec_pipe_to_outfile(seq->pipe_fd[i - 1], (char **)seq->cmds->content[i], envp);
 }
 
 void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
