@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/04 14:18:58 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/04 19:52:30 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,18 +31,6 @@ t_dict	*init_envp_dict(char **envp)
 	return (envp_dict);
 }
 /*
-const char *token_type_to_string(enum t_token token)
-{
-    switch (token)
-    {
-        case TEXT: return "TEXT";
-        case CMD: return "CMD";
-        case CTRL_OP: return "CTRL_OP";
-       // case REDIRECT: return "REDIRECT";
-        default: return "UNKNOWN";
-    }
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
@@ -87,27 +75,6 @@ int	main(int argc, char **argv, char **envp)
         	printf("Word: %s, Token Type: %s\n", word->text, token_type_to_string(word->token));
         	parsed = parsed->next;
     	}
-		args = ft_split(input, ' ');
-		if (ft_strncmp(args[0], "env", 4) == 0)
-			ft_env(envp_dict);
-		else if (ft_strncmp(args[0], "pwd", 4) == 0)
-			ft_pwd();
-		else if (ft_strncmp(args[0], "cd", 3) == 0)
-			ft_cd(args[1]);
-		else if (ft_strncmp(args[0], "export", 7) == 0)
-			ft_export(str_to_dict(args[1]), &envp_dict);
-		else if (ft_strncmp(args[0], "unset", 6) == 0)
-			ft_unset(str_to_dict(args[1]), &envp_dict);
-		else if (ft_strncmp(args[0], "echo", 5) == 0)
-			ft_echo(input, NULL);
-		else if (ft_strncmp(args[0], "cat", 4) == 0) // handle cat (it handles ctrl+D special case on its own)
-			execve("/bin/cat", args, __environ);
-		else if (ft_strncmp(args[0], "exit", 4) == 0)
-		{
-			free_2darr((void *)args, ft_2darr_len((void *)args));
-			free(input);
-			break ;
-		}
 		free_2darr((void *)args, ft_2darr_len((void *)args));
 		free(input);
 	}

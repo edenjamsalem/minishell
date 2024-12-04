@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   grammar_check.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 21:24:14 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/04 18:38:54 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/04 18:46:58 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 // // here_doc terminator must not be surrounded by spaces + must match
 
 // checks for every token that isn't supposed to repeat
-bool    is_repeat(t_token *tokens, int count, int *index)
+bool    is_repeat(t_token *tokens, int count, int index)
 {
     int i;
 
@@ -47,7 +47,7 @@ bool    is_repeat(t_token *tokens, int count, int *index)
 }
 
 // checks syntax of file names following REDIRECT
-bool    is_file_name(t_arrlst *words, t_token *tokens, int *index)
+bool    is_file_name(t_arrlst *words, t_token *tokens, int index)
 {
     int i;
 
@@ -83,8 +83,8 @@ void    grammar_check(t_arrlst *words, t_token *tokens)
     int index;
     
     index = -1;
-    if (is_repeat(tokens, words->count, &index))
+    if (is_repeat(tokens, words->count, index))
         return (ft_perror(SYNTAX, words->content[index])); // function that builds a perror message with a specific string
-    else if (!is_file_name(words, tokens, &index))
+    else if (!is_file_name(words, tokens, index))
         return (ft_perror(DIRECT, words->content[index]));
 }

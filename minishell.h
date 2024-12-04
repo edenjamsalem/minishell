@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/04 18:39:35 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/04 18:45:49 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,14 +58,14 @@ typedef enum e_ctrl_op
 	AND,
 	OR,
 }								t_ctrl_op;
-/*
+
 typedef enum e_error
 {
 	SYNTAX,
-	CMD,
-	FILE,
+	CMD_,
+	DIRECT,
 } t_error;
-*/
+
 typedef struct s_ctrl_seq // CONTROL SEQUENCE
 {
 	t_arrlst	*cmds;    // list of 2d char arrays with command + flags + args
