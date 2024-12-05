@@ -144,6 +144,7 @@ t_ctrl_seq	**generate_ctrl_seq(t_arrlst *input, t_token *tokens)
 		handle_redirections(ctrl_seq[j], input->content + i, tokens + i);
 		i += assign_ctrl_op(ctrl_seq[j], input->content[i]);
 		i += append_cmds(ctrl_seq[j]->cmds, input->content + i, tokens + i);
+		ctrl_seq[j]->pipe_fd = allocate_pipe_fd(ctrl_seq[j]->cmds->count - 1);
 		j++;
 	}
 	ctrl_seq[j] = NULL;
@@ -194,6 +195,7 @@ int main(int argc, char **argv, char **envp)
 		ft_printf("\nCTRL OP: %d\n", ctrl_seq[i]->ctrl_op);
 		ft_printf("INFILE: %d\n", ctrl_seq[i]->infile);
 		ft_printf("OUTFILE: %d\n", ctrl_seq[i]->outfile);
+		ft_printf("PIPE COUNT = %d\n", ft_2darr_len((void **)(ctrl_seq[i]->pipe_fd)));
 		ft_printf("EXIT STATUS: %d\n\n", ctrl_seq[i]->prev_exit_status);
 		i++;
 	}
