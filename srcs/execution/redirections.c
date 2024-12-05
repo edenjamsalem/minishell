@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:31:16 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/05 12:21:39 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/05 12:33:12 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,41 +16,27 @@
 // -> we report an error
 
 
-int	**allocate_pipe_fd(int size)
+void	allocate_pipe_fd(t_ctrl_seq *seq, int size)
 {
 	int	i;
-	int	**pipe_fd;
 
 	if (size < 1)
-		return (NULL);
-	pipe_fd = malloc(sizeof(int *) * (size + 1));
-	if (!pipe_fd)
-		return (NULL);
+		return ;
+	seq->pipe_fd = malloc(sizeof(int *) * (size + 1));
+	if (!seq->pipe_fd)
+		return ;
 	i = 0;
 	while (i < size)
 	{
-		pipe_fd[i] = malloc(sizeof(int) * 2);
-		if (!pipe_fd[i])
+		seq->pipe_fd[i] = malloc(sizeof(int) * 2);
+		if (!seq->pipe_fd[i])
 		{
-			free_2darr((void *)pipe_fd, i - 1);
-			return (NULL);
+			free_2darr((void *)seq->pipe_fd, i - 1);
+			return ;
 		}
 		i++;
 	}
-	pipe_fd[size] = NULL;
-	return (pipe_fd);
-}
-
-void	allocate_pipes(t_ctrl_seq **ctrl_seq)
-{
-	int	i;
-
-	i = 0;
-	while (ctrl_seq[i])
-	{
-		ctrl_seq[i]->pipe_fd = allocate_pipe_fd(ctrl_seq[i]->cmds->count - 1);
-		i++;
-	}
+	seq->pipe_fd[size] = NULL;
 }
 
 int	get_heredoc_input(char *delimiter)

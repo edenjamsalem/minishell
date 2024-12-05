@@ -93,7 +93,7 @@ static int	append_cmds(t_arrlst *cmds, void **input, t_token *tokens)
 		j = 0;
 		cmd_argv = malloc(sizeof(char *) * (get_cmd_len(input, tokens) + 1));
 		if (!cmd_argv)
-			return (-1);
+			return (-1); // handle malloc error
 		while (input[i] && tokens[i] != CTRL_OP && tokens[i] != PIPE)
 		{
 			if (tokens[i] == CMD || tokens[i] == TEXT)
@@ -127,6 +127,7 @@ static int	get_seq_count(t_token *tokens, int size)
 
 t_ctrl_seq	**generate_ctrl_seq(t_arrlst *input, t_token *tokens)
 {
+	// TESTED
 	t_ctrl_seq	**ctrl_seq;
 	int			i;
 	int			j;
@@ -138,24 +139,23 @@ t_ctrl_seq	**generate_ctrl_seq(t_arrlst *input, t_token *tokens)
 		return (NULL);
 	i = 0;
 	j = 0;
-	while (input->content[i] && j < count)
+	while (input->content[i])
 	{
 		ctrl_seq[j] = init_seq();
 		handle_redirections(ctrl_seq[j], input->content + i, tokens + i);
 		i += assign_ctrl_op(ctrl_seq[j], input->content[i]);
 		i += append_cmds(ctrl_seq[j]->cmds, input->content + i, tokens + i);
-		ctrl_seq[j]->pipe_fd = allocate_pipe_fd(ctrl_seq[j]->cmds->count - 1);
+		allocate_pipe_fd(ctrl_seq[j], ctrl_seq[j]->cmds->count - 1);
 		j++;
 	}
 	ctrl_seq[j] = NULL;
-//	allocate_pipes(ctrl_seq);
 	return (ctrl_seq);
 }
 
-
+/*
 int main(int argc, char **argv, char **envp)
 {
-	char		*input = " head -n 5 <file2>file1 | tail -n 2 && echo >file2 hello";
+	char		*input = " head -n 5 <file2>file1 | tail -n 2 || echo >file2 hello | echo hello || echo hello | echo hello";
 	t_dict		*envp_dict = init_envp_dict(envp);
 	t_arrlst	*words;
 	t_token 	*tokens; 
@@ -204,3 +204,4 @@ int main(int argc, char **argv, char **envp)
 	free(words);
 	//execute(ctrl_seq);
 }
+*/

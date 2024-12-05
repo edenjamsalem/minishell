@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:13:34 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/04 18:38:40 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/05 17:13:56 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 int	ctrl_op_success(t_ctrl_seq *seq)
 {
-	if (AND_FAILURE(seq) || OR_FAILURE(seq))
+	if (seq->ctrl_op == AND && seq->prev_exit_status == EXIT_FAILURE)
+		return (0); 
+	else if (seq->ctrl_op == OR && seq->prev_exit_status == EXIT_SUCCESS)
 		return (0);
 	return (1);	
 }
@@ -43,7 +45,9 @@ void	execute_cmds(t_ctrl_seq* seq, t_dict *envp)
 	dup2(seq->infile, STDIN_FILENO);
 	dup2(seq->outfile, STDOUT_FILENO);
 	if (seq->cmds->count == 1)
-		ft_exec((char **)seq->cmds->content, envp); // handle command not found error
+	{
+		ft_exec((char **)seq->cmds->content[0], envp); // handle command not found error
+	}
 	exec_infile_to_pipe(seq->pipe_fd[0], (char **)seq->cmds->content[0], envp);
 	i = 1;
 	while (i < seq->cmds->count - 1)
@@ -81,6 +85,36 @@ void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
 	}
 }
 
+int main(int argc, char **argv, char **envp)
+{
+	char		*input = " head -n 5 file1 | tail ";
+	t_dict		*envp_dict = init_envp_dict(envp);
+	t_arrlst	*words;
+	t_token 	*tokens; 
+	t_ctrl_seq	**ctrl_seq;
+	int			i;
+	int			j;
+	int			k;
+
+	(void)argc;
+	(void)argv;
+	words = parse(input, envp_dict);
+	tokens = tokenise(words);
+	quote_removal(words);
+
+	i = 0;
+	while (i < words->count)
+	{
+		ft_printf("%s:%d\n", words->content[i], tokens[i]);
+		i++;
+	}
+	ctrl_seq = generate_ctrl_seq(words, tokens);
+	execute(ctrl_seq, envp_dict);
+	dict_clear(&envp_dict);
+	free_arrlst(words, free);
+	free(words);
+	//execute(ctrl_seq);
+}
 /*
 int	main(void)
 {
