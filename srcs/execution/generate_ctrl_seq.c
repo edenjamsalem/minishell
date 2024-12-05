@@ -12,6 +12,24 @@
 
 #include "../../minishell.h"
 
+// set up envp dictionary
+t_dict	*init_envp_dict(char **envp) // REMEMBER TO DEL AFTER TESTING
+{
+	int			i;
+	t_dict		*node;
+	t_dict		*envp_dict;
+
+	i = 0;
+	envp_dict = NULL;
+	while (envp[i])
+	{
+		node = str_to_dict(envp[i]);
+		dict_addback(&envp_dict, node);
+		i++;
+	}
+	return (envp_dict);
+}
+
 static t_ctrl_seq	*init_seq()
 {
 	// TESTED
@@ -31,13 +49,20 @@ static t_ctrl_seq	*init_seq()
 	return (seq);
 }
 
-static void	assign_ctrl_op(t_ctrl_seq *seq, char *operator)
+static int	assign_ctrl_op(t_ctrl_seq *seq, char *operator)
 {
 	// TESTED
 	if (ft_match(operator, "&&"))
+	{
 		seq->ctrl_op = AND;
+		return (1);
+	}
 	else if (ft_match(operator, "||"))
+	{
 		seq->ctrl_op = OR;
+		return (1);
+	}
+	return (0);
 }
 
 static int get_cmd_len(void **input, t_token *tokens)
@@ -56,7 +81,7 @@ static int get_cmd_len(void **input, t_token *tokens)
 	return (len);
 }
 
-static void	append_cmds(t_arrlst *cmds, void **input, t_token *tokens)
+static int	append_cmds(t_arrlst *cmds, void **input, t_token *tokens)
 {
 	char	**cmd_argv;
 	int		i;
@@ -68,7 +93,7 @@ static void	append_cmds(t_arrlst *cmds, void **input, t_token *tokens)
 		j = 0;
 		cmd_argv = malloc(sizeof(char *) * (get_cmd_len(input, tokens) + 1));
 		if (!cmd_argv)
-			return ;
+			return (-1);
 		while (input[i] && tokens[i] != CTRL_OP && tokens[i] != PIPE)
 		{
 			if (tokens[i] == CMD || tokens[i] == TEXT)
@@ -80,6 +105,7 @@ static void	append_cmds(t_arrlst *cmds, void **input, t_token *tokens)
 		if (tokens[i] == PIPE)
 			i++;
 	}
+	return (i);
 }
 
 static int	get_seq_count(t_token *tokens, int size)
@@ -116,12 +142,8 @@ t_ctrl_seq	**generate_ctrl_seq(t_arrlst *input, t_token *tokens)
 	{
 		ctrl_seq[j] = init_seq();
 		handle_redirections(ctrl_seq[j], input->content + i, tokens + i);
-		append_cmds(ctrl_seq[j]->cmds, input->content + i, tokens + i);
-		assign_ctrl_op(ctrl_seq[j], input->content[i]); // NOT WORKING !!
-		while (input->content[i] && tokens[i] != CTRL_OP)
-			i++;
-		if (input->content[i])
-			i++;
+		i += assign_ctrl_op(ctrl_seq[j], input->content[i]);
+		i += append_cmds(ctrl_seq[j]->cmds, input->content + i, tokens + i);
 		j++;
 	}
 	ctrl_seq[j] = NULL;
@@ -129,10 +151,10 @@ t_ctrl_seq	**generate_ctrl_seq(t_arrlst *input, t_token *tokens)
 	return (ctrl_seq);
 }
 
-/*
+
 int main(int argc, char **argv, char **envp)
 {
-	char		*input = "head -n 5 >file1 | tail -n 2 && echo hello";
+	char		*input = " head -n 5 <file2>file1 | tail -n 2 && echo >file2 hello";
 	t_dict		*envp_dict = init_envp_dict(envp);
 	t_arrlst	*words;
 	t_token 	*tokens; 
@@ -180,4 +202,3 @@ int main(int argc, char **argv, char **envp)
 	free(words);
 	//execute(ctrl_seq);
 }
-*/

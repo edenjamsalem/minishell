@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:31:16 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/04 22:57:16 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/05 11:47:37 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	get_heredoc_input(char *delimiter)
 			write(1, "> ", 2);
 			bytes_read = read(STDIN_FILENO, input, 4096);
 			input[bytes_read] = '\0';
-			if (ft_match(input, delimiter))
+			if (ft_match(delimiter, input))
 				exit(EXIT_SUCCESS);
 			write(pipe_fd[1], input, bytes_read);
 		}
@@ -88,8 +88,10 @@ void	redirect_fd(t_ctrl_seq *seq, char *operator, char *file)
 	else if (ft_match(operator, "<"))
 		seq->infile = open(file, O_RDONLY);
 	else if (ft_match(operator, "<<"))
+	{
+		ft_printf("EOF = %s\n", file);
 		seq->infile = get_heredoc_input(file);
-
+	}
 	// NEED TO HANDLE UNKOWN FILE ERROR HERE
 }
 

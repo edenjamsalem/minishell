@@ -46,6 +46,11 @@ static void	split_ctrl_ops(t_arrlst *list, char *content)
 	if (*content)
 	{
 		file = ft_strcut(content, skip_to(&content, IFS));
+		if (ft_strchrset(file, "<>|&"))
+		{
+			split_ctrl_ops(list, file); // see if causes mem leak
+			return ;
+		}
 		append_arrlst(list, file);
 	}
 	free(ptr);
