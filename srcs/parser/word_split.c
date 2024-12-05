@@ -31,7 +31,7 @@ static void append_ctrl_op(t_arrlst *list, char **content)
 
 static void	split_ctrl_ops(t_arrlst *list, char *content)
 {
-	char	*op;
+	//char	*op;
 	char	*text;
 	char	*file;
 	char	*ptr;

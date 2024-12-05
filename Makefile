@@ -6,7 +6,7 @@
 #    By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 14:01:35 by eamsalem          #+#    #+#              #
-#    Updated: 2024/11/21 16:43:02 by mganchev         ###   ########.fr        #
+#    Updated: 2024/12/04 23:41:58 by mganchev         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,30 +25,36 @@ LIBS = $(LIBFT) -lreadline
 SRCDIR = srcs
 PARSEDIR = $(SRCDIR)/parser
 EXECDIR	= $(SRCDIR)/execution
-TOKENDIR	= $(SRCDIR)/tokeniser
+TOKENDIR = $(SRCDIR)/tokeniser
 BUILTINDIR = $(SRCDIR)/builtins
 
 SRCS =	$(SRCDIR)/minishell.c \
 		$(SRCDIR)/signals.c \
+		$(SRCDIR)/test_utils.c \
 \
 		$(PARSEDIR)/expansions.c \
 		$(PARSEDIR)/parse.c \
 		$(PARSEDIR)/parse_utils.c \
-		$(PARSEDIR)/param_expansion.c \
 		$(PARSEDIR)/skip_fns.c \
 		$(PARSEDIR)/wildcard.c \
 		$(PARSEDIR)/word_split.c \
 \
 		$(EXECDIR)/execute.c \
+		$(EXECDIR)/exec_utils.c \
+		$(EXECDIR)/generate_ctrl_seq.c \
 		$(EXECDIR)/redirections.c \
 		$(EXECDIR)/pipe_fns.c \
+\
+		$(TOKENDIR)/grammar_check.c \
+		$(TOKENDIR)/tokenisation.c \
+		$(TOKENDIR)/token_utils.c \
 \
 		$(BUILTINDIR)/env.c \
 		$(BUILTINDIR)/pwd.c \
 		$(BUILTINDIR)/cd.c \
 		$(BUILTINDIR)/export.c \
 		$(BUILTINDIR)/unset.c \
-		$(BUILTINDIR)/echo.c
+		$(BUILTINDIR)/echo.c \
 
 all: $(NAME) $(OBJS) $(LIBFT) $(MINIDIR)
 

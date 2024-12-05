@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:31:16 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/04 19:52:38 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/04 22:57:16 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	allocate_pipes(t_ctrl_seq **ctrl_seq)
 {
 	int	i;
 
+	i = 0;
 	while (ctrl_seq[i])
 	{
 		ctrl_seq[i]->pipe_fd = allocate_pipe_fd(ctrl_seq[i]->cmds->count - 1);

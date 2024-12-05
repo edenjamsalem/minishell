@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/04 20:10:44 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/04 22:54:34 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #  define _DEFAULT_SOURCE
 # endif
 
-# include "../libft/libft.h"
+# include "./libft/libft.h"
 # include <dirent.h>
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -26,6 +26,7 @@
 # include <stdio.h>
 # include <sys/wait.h>
 # include <unistd.h>
+# include <stdlib.h>
 
 extern volatile sig_atomic_t	g_flag;
 // setting up global var to be used by all files w header file included
@@ -36,9 +37,9 @@ extern volatile sig_atomic_t	g_flag;
 # define INC_QUOTED_VARS 0
 # define CALCULATE_DIFF(key, envp_dict) ft_strlen(get_dict_value(key, envp_dict)) - (ft_strlen(key) + 1)
 
-# define AND_FAILURE(seq) (seq)->ctrl_op == AND && (seq)->prev_exit_status == EXIT_FAILURE
+# define AND_FAILURE(seq) ((seq)->ctrl_op == AND && (seq)->prev_exit_status == EXIT_FAILURE)
 
-# define OR_FAILURE(seq) (seq)->ctrl_op == OR && (seq)->prev_exit_status == EXIT_SUCCESS
+# define OR_FAILURE(seq) ((seq)->ctrl_op == OR && (seq)->prev_exit_status == EXIT_SUCCESS)
 
 typedef enum e_token
 {
@@ -160,7 +161,11 @@ bool							is_control(void *word);
 
 bool							is_pipe(void *word);
 
+void    grammar_check(t_arrlst *words, t_token *tokens);
+
 // EXECUTION
+
+void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp);
 
 void			handle_redirections(t_ctrl_seq *seq, void **input, t_token *tokens);
 

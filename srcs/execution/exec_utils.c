@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/02 16:40:44 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/04 22:56:52 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static char	*find_cmd_path(char *cmd, t_dict *envp)
 void	ft_exec(char **cmd, t_dict *envp)
 {
 	char	*cmd_path;
-	pid_t	pid; 
+	//pid_t	pid; 
 
 	if (builtin((char **)cmd, envp))
 		exit(EXIT_SUCCESS);

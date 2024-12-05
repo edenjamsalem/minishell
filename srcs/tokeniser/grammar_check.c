@@ -6,40 +6,37 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 21:24:14 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/04 18:46:58 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/04 22:07:11 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-// // CTRL OP can't be followed by another CTRL OP 
-// // PIPE can't be followed by another PIPE
-// // REDIRECT can't be followed by another REDIRECT
-// // FILE_ can't have space 
-// // here_doc terminator must not be surrounded by spaces + must match
-
 // checks for every token that isn't supposed to repeat
-bool    is_repeat(t_token *tokens, int count, int index)
+bool    is_repeat(t_token *tokens, int count, int *index)
 {
     int i;
 
     i = 0;
     while (i < count)
     {
-        if (tokens[i] == CTRL_OP && get_prev_token(tokens, i) == CTRL_OP)
+        if (tokens[i] == CTRL_OP || tokens[i] == REDIRECT || tokens[i] == PIPE)
         {
-            index = i;
-            return (true);
-        }
-        else if (tokens[i] == REDIRECT && get_prev_token(tokens, i) == REDIRECT)
-        {
-            index = i;
-            return (true);
-        }
-        else if (tokens[i] == PIPE && get_prev_token(tokens, i) == PIPE)
-        {
-            index = i;
-            return (true);
+            if (get_prev_token(tokens, i) == CTRL_OP)
+            {
+                *index = i;
+                return (true);
+            }
+            else if (get_prev_token(tokens, i) == REDIRECT)
+            {
+                *index = i;
+                return (true);
+            }
+            else if (get_prev_token(tokens, i) == PIPE)
+            {
+                *index = i;
+                return (true);
+            }
         }
         i++;
     }
@@ -47,7 +44,7 @@ bool    is_repeat(t_token *tokens, int count, int index)
 }
 
 // checks syntax of file names following REDIRECT
-bool    is_file_name(t_arrlst *words, t_token *tokens, int index)
+bool    is_file_name(t_arrlst *words, t_token *tokens, int *index)
 {
     int i;
 
@@ -58,7 +55,7 @@ bool    is_file_name(t_arrlst *words, t_token *tokens, int index)
         {
             if (ft_strchrset(words->content[i + 1], IFS))
             {
-                index = i + 1;
+                *index = i + 1;
                 return (false);
             }
         }
@@ -67,14 +64,16 @@ bool    is_file_name(t_arrlst *words, t_token *tokens, int index)
     return (true);
 }
 
+// custom perror function
 void    ft_perror(t_error type, char *error_msg)
 {
     if (type == SYNTAX)
-        ft_fprintf(2, "syntax error near unexpected token %s", error_msg);
+        ft_fprintf(2, "syntax error near unexpected token `%s'", error_msg);
     else if (type == CMD_)
-        ft_fprintf(2, "%s: command not found", error_msg);
+        ft_fprintf(2, "`%s': command not found", error_msg);
     else if (type == DIRECT)
-        ft_fprintf(2, "%s: No such file or directory", error_msg);
+        ft_fprintf(2, "`%s': No such file or directory", error_msg);
+    exit(EXIT_FAILURE); 
 }
 
 // prints error messages in case of syntax error
@@ -83,8 +82,12 @@ void    grammar_check(t_arrlst *words, t_token *tokens)
     int index;
     
     index = -1;
-    if (is_repeat(tokens, words->count, index))
-        return (ft_perror(SYNTAX, words->content[index])); // function that builds a perror message with a specific string
-    else if (!is_file_name(words, tokens, index))
-        return (ft_perror(DIRECT, words->content[index]));
+    if (is_repeat(tokens, words->count, &index))
+    {
+        if (tokens[index] == REDIRECT && get_prev_token(tokens, index) != REDIRECT)
+            return (ft_perror(SYNTAX, "newline"));
+        return (ft_perror(SYNTAX, (char *)words->content[index]));
+    }
+    else if (!is_file_name(words, tokens, &index))
+        return (ft_perror(DIRECT, (char *)words->content[index]));
 }

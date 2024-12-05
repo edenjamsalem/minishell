@@ -129,6 +129,7 @@ t_ctrl_seq	**generate_ctrl_seq(t_arrlst *input, t_token *tokens)
 	return (ctrl_seq);
 }
 
+/*
 int main(int argc, char **argv, char **envp)
 {
 	char		*input = "head -n 5 >file1 | tail -n 2 && echo hello";
@@ -145,14 +146,14 @@ int main(int argc, char **argv, char **envp)
 	words = parse(input, envp_dict);
 	tokens = tokenise(words);
 	quote_removal(words);
-/*
+
 	i = 0;
 	while (i < words->count)
 	{
 		ft_printf("%s:%d\n", words->content[i], tokens[i]);
 		i++;
 	}
-*/
+
 	ctrl_seq = generate_ctrl_seq(words, tokens);
 	i = 0;
 	while (ctrl_seq[i])
@@ -179,3 +180,4 @@ int main(int argc, char **argv, char **envp)
 	free(words);
 	//execute(ctrl_seq);
 }
+*/

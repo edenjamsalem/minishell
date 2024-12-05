@@ -6,14 +6,27 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/04 19:52:30 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/04 23:49:06 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+// // initialise
+// // set up signal handlers
+// // parse input
+// tokenise parsed input > skip quotes when checking for PIPE, CTRL OP and REDIRECT
+// // quote removal
+// // set up control seq
+// // execute
+// free
 volatile sig_atomic_t	g_flag = 0; // signal receiving flag
 
+void print_arrlst(t_arrlst *list);
+void print_tokens(t_arrlst *words, t_token *tokens);
+void print_ctrl_seq(t_ctrl_seq **ctrl_seq);
+
+// set up envp dictionary
 t_dict	*init_envp_dict(char **envp)
 {
 	int			i;
@@ -30,14 +43,63 @@ t_dict	*init_envp_dict(char **envp)
 	}
 	return (envp_dict);
 }
-/*
+
+// read input, add history and handling signals
+char	*read_input(void)
+{
+	char *input;
+
+	input = readline("minishell > ");
+	if (!input) // handling EOF / ctrl + D
+	{
+		ft_printf("exit\n");
+		exit(0);
+	}
+	if (*input)
+		add_history(input);
+	else
+	{
+		free(input); // handles ENTER key press
+		return (NULL);
+	}
+	return (input);
+}
+
+// process all input, generate ctrl seq and execute
+void	process(char *input, t_dict *envp_dict)
+{
+	t_arrlst *words;
+	t_token	*tokens;
+	t_ctrl_seq	**ctrl_seq;
+	
+	words = parse(input, envp_dict);
+	printf("Parsed words:\n");
+	print_arrlst(words);
+	tokens = tokenise(words);
+	printf("Tokenised words:\n");
+	print_tokens(words, tokens);
+	ctrl_seq = generate_ctrl_seq(words, tokens);
+	printf("Control sequences:\n");
+	print_ctrl_seq(ctrl_seq);
+	quote_removal(words);
+	printf("Words after quote removal:\n");
+	print_arrlst(words);
+	//execute(ctrl_seq, envp_dict);
+	free_2darr(words->content, ft_2darr_len(words->content));
+	free(words);
+}
+
+// clean up function
+void	cleanup(t_dict *envp_dict)
+{
+	rl_clear_history();
+	dict_clear(&envp_dict);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
-	char		*input;
+	char	*input;
 	t_dict		*envp_dict;
-	t_arrlst	*parsed_input;
-	e_token		*tokens;
-	t_ctrl_seq	**ctrl_seq;
 
 	(void)argc;
 	(void)argv;
@@ -51,34 +113,10 @@ int	main(int argc, char **argv, char **envp)
 			input = readline("minishell > "); // reset prompt
 			continue ;
 		}
-		input = readline("minishell > ");
-		if (!input) // handling EOF / ctrl + D
-		{
-			ft_printf("exit\n");
-			break;
-		}
-		if (*input)
-			add_history(input);
-		else
-		{
-			free(input); // handles ENTER key press
+		input = read_input();
+		if (!input)
 			continue ;
-		}
-		parsed_input = parse(input, envp_dict);
-		tokens = tokenise(parsed_input);
-		ctrl_seq = generate_ctrl_seq(input->content, tokens);
-		execute(ctrl_seq);
-		
-		while (parsed)
-    	{
-        	word = (t_word *)parsed->content;
-        	printf("Word: %s, Token Type: %s\n", word->text, token_type_to_string(word->token));
-        	parsed = parsed->next;
-    	}
-		free_2darr((void *)args, ft_2darr_len((void *)args));
-		free(input);
+		process(input, envp_dict);
 	}
-	rl_clear_history();
-	dict_clear(&envp_dict);
+	cleanup(envp_dict);
 }
-*/
