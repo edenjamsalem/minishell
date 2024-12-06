@@ -116,7 +116,7 @@ t_ctrl_seq	**generate_ctrl_seq(t_arrlst *input, t_token *tokens)
 	int			count;
 
 	count = get_seq_count(tokens, input->count);
-	ctrl_seq = malloc(sizeof(t_ctrl_seq *) * count + 1);
+	ctrl_seq = malloc(sizeof(t_ctrl_seq *) * (count + 1));
 	if (!ctrl_seq)
 		return (NULL);
 	i = 0;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   grammar_check.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 21:24:14 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/04 22:07:11 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/06 15:33:43 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 // checks for every token that isn't supposed to repeat
 bool    is_repeat(t_token *tokens, int count, int *index)
 {
+    // causing memory leaks as trying to check prev token for first token
     int i;
 
     i = 0;

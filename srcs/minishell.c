@@ -65,7 +65,7 @@ char	*read_input(void)
 	return (input);
 }
 
-// process all input, generate ctrl seq and execute
+// process input, generate ctrl seq and execute
 void	process(char *input, t_dict *envp_dict)
 {
 	t_arrlst *words;
@@ -102,7 +102,7 @@ int	main(int argc, char **argv, char **envp)
 		if (g_flag) // means a message is being received
 		{	
 			g_flag = 0; // reset flag
-//			input = readline("minishell > "); // reset prompt
+//			input = readline("minishell > "); // reset prompt | MAYBE DONT NEED ?
 			continue ;
 		}
 		input = read_input();

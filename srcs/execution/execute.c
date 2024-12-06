@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:13:34 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/06 14:21:00 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/06 15:36:27 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,9 @@ int	ctrl_op_success(t_ctrl_seq *seq)
 
 int	builtin(char **cmd, t_dict *envp)
 {
-	if (ft_match(cmd[0], "env"))
+	if (!cmd || !(*cmd))
+		return (0);
+	else if (ft_match(cmd[0], "env"))
 		return (ft_env(envp));
 	else if (ft_match(cmd[0], "cd"))
 		return (ft_cd(cmd));
