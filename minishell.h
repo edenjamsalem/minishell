@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/05 11:17:48 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/06 17:22:42 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #  define _DEFAULT_SOURCE
 # endif
 
-# include "../libft/libft.h"
+# include "./libft/libft.h"
 # include <dirent.h>
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -161,7 +161,11 @@ bool							is_control(void *word);
 
 bool							is_pipe(void *word);
 
+int	skip_redirect(t_token *tokens);
+
 void    grammar_check(t_arrlst *words, t_token *tokens);
+
+void    ft_perror(t_error type, char *error_msg);
 
 // EXECUTION
 

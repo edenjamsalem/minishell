@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 09:09:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/05 17:21:20 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:06:29 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,12 @@ bool	is_file(int index, t_token *tokens)
 // checks if index is 0 or that prev token is PIPE/CONTROL OP
 bool	is_command(int index, t_token *tokens)
 {
-	if (index == 0 && tokens[index] != REDIRECT)
+	int	i;
+
+	i = 0;
+	if (index == 0 && tokens[0] != REDIRECT)
+		return (true);
+	else if (get_prev_token(tokens, index) == FILE_)
 		return (true);
 	else if (get_prev_token(tokens, index) == CTRL_OP)
 		return (true);
