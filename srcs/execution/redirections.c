@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:31:16 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/06 16:54:25 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/06 16:57:53 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ void	redirect_fd(t_ctrl_seq *seq, char *operator, char *file, t_dict *envp)
 		seq->infile = open(file, O_RDONLY);
 	else if (ft_match(operator, "<<"))
 		seq->infile = get_heredoc_input(file, envp);
-	// NEED TO HANDLE UNKOWN FILE ERROR HERE
 }
 
 void	handle_redirections(t_ctrl_seq *seq, void **input, t_token *tokens, t_dict *envp)
