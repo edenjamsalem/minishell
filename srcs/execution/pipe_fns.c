@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 14:33:13 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/06 10:45:37 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/06 12:19:16 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,6 @@ void	exec_pipe_to_pipe(int **pipe_fd, char **cmd, int i, t_dict *envp)
 
 void	exec_pipe_to_outfile(int pipe_fd[2], char **cmd, t_dict *envp)
 {
-	pid_t	pid;
-	int		status;
-
 	dup2(pipe_fd[0], STDIN_FILENO);
 	close(pipe_fd[0]);
 	ft_exec(cmd, envp);

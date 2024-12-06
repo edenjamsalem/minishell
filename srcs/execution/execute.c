@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:13:34 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/06 10:47:19 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/06 12:21:23 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ int	builtin(char **cmd, t_dict *envp)
 		return (ft_pwd());
 	else if (ft_match(cmd[0], "unset"))
 		return (ft_unset(cmd, envp));
+	else if (ft_match(cmd[0], "exit"))
+		ft_exit(cmd);
 	return (0);
 }
 
@@ -68,9 +70,13 @@ void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
 	int		i;
 
 	i = 0;
-	// when no && or || -> dont need child process for builtin. Handle this case 
 	while (ctrl_seq[i] && ctrl_op_success(ctrl_seq[i]))
 	{
+		if (ctrl_seq[i]->cmds->count < 2 && builtin(ctrl_seq[i]->cmds->content[0], envp))
+		{
+			i++;
+			continue ;
+		}
 		pid = fork();
 		if (pid < 0)
 		{
@@ -87,10 +93,10 @@ void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
 			break ; // ???
 	}
 }
-
+/*
 int main(int argc, char **argv, char **envp)
 {
-	char		*input = "head -n 5 file1 && tail -n 2 file1";
+	char		*input = "exit";
 	t_dict		*envp_dict = init_envp_dict(envp);
 	t_arrlst	*words;
 	t_token 	*tokens; 
@@ -105,19 +111,19 @@ int main(int argc, char **argv, char **envp)
 	tokens = tokenise(words);
 	quote_removal(words);
 
-/*	i = 0;
+	i = 0;
 	while (i < words->count)
 	{
 		ft_printf("%s:%d\n", words->content[i], tokens[i]);
 		i++;
-	}*/
+	}
 	ctrl_seq = generate_ctrl_seq(words, tokens);
 	execute(ctrl_seq, envp_dict);
 	dict_clear(&envp_dict);
 	free_arrlst(words, free);
 	free(words);
 }
-/*
+
 int	main(void)
 {
 	pid_t	pid;

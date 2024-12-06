@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/05 11:17:48 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/06 11:38:59 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,7 @@ extern volatile sig_atomic_t	g_flag;
 # define INC_QUOTED_VARS 0
 # define CALCULATE_DIFF(key, envp_dict) ft_strlen(get_dict_value(key, envp_dict)) - (ft_strlen(key) + 1)
 
-# define AND_FAILURE(seq) ((seq)->ctrl_op == AND && (seq)->prev_exit_status == EXIT_FAILURE)
 
-# define OR_FAILURE(seq) ((seq)->ctrl_op == OR && (seq)->prev_exit_status == EXIT_SUCCESS)
 
 typedef enum e_token
 {
@@ -49,14 +47,14 @@ typedef enum e_token
 	CTRL_OP,
 	REDIRECT,
 	PIPE,
-}								t_token;
+}	t_token;
 
 typedef enum e_ctrl_op
 {
 	NONE,
 	AND,
 	OR,
-}								t_ctrl_op;
+}	t_ctrl_op;
 
 typedef enum e_error
 {
@@ -69,79 +67,76 @@ typedef struct s_ctrl_seq // CONTROL SEQUENCE
 {
 	t_arrlst	*cmds;    // list of 2d char arrays with command + flags + args
 	t_ctrl_op	ctrl_op; // && or ||
-	int			**pipe_fd;     // dynamically allocated list of fd's for each pipe
+	int			**pipe_fd;   // dynamically allocated list of fd's for each pipe
 	int			infile;
 	int			outfile;
-	bool		prev_exit_status; // of prev cmd execution
+	bool		prev_exit_status;
 }								t_ctrl_seq;
 
 // SIGNALS
 
 void	handle_signal(int signum, siginfo_t *info, void *context);
 
-void							setup_sig_handlers(void);
+void	setup_sig_handlers(void);
 
 // BUILTINS
 
-int								ft_env(t_dict *envp_vars);
+int		ft_env(t_dict *envp_vars);
 
-int								ft_pwd(void);
+int		ft_pwd(void);
 
-int								ft_export(char **cmd, t_dict *envp_vars);
+int		ft_export(char **cmd, t_dict *envp_vars);
 
-int								ft_unset(char **cmd, t_dict *envp_vars);
+int		ft_unset(char **cmd, t_dict *envp_vars);
 
-int								ft_cd(char **cmd);
+int		ft_cd(char **cmd);
 
-int								ft_echo(char **cmd);
+int		ft_echo(char **cmd);
+
+void	ft_exit(char **cmd_argv);
+
 
 // PARSE FNS
 
-t_arrlst						*word_split(char *input);
+t_arrlst		*word_split(char *input);
 
-t_arrlst						*parse(char *input, t_dict *envp_dict);
+t_arrlst		*parse(char *input, t_dict *envp_dict);
 
-int								skip_quotes(char **text);
+int				skip_quotes(char **text);
 
-char							*skip_while(char **text,
-									int (*condition)(char));
+char			*skip_while(char **text, int (*condition)(char));
 
-char							*skip_set(char **text, char *set);
+char			*skip_set(char **text, char *set);
 
-char							*skip_to(char **text, char *set);
+char			*skip_to(char **text, char *set);
 
-void							quote_removal(t_arrlst *input);
+void			quote_removal(t_arrlst *input);
 
 // PARAM EXPANSION
 
-char							*expand_vars(char *input, t_dict *envp_dict,
-									bool ignore_quotes);
+char			*expand_vars(char *input, t_dict *envp_dict, bool ignore_quotes);
 
-void							expand_vars_inside_quotes(t_arrlst *input,
-									t_dict *envp_dict);
+void			expand_vars_inside_quotes(t_arrlst *input, t_dict *envp_dict);
 
-char	*expand_params(char *input, t_dict *envp_dict); // ???
+char			*expand_params(char *input, t_dict *envp_dict); // ???
 
-void							copy_expanded_var(char **input, char **expanded,
-									t_dict *envp_dict);
+void			copy_expanded_var(char **input, char **expanded, t_dict *envp_dict);
 
-void							copy_quoted_text(char **input, char **expanded);
+void			copy_quoted_text(char **input, char **expanded);
 
-char							*expand_vars(char *input, t_dict *envp_dict,
-									bool ignore_quotes);
+char			*expand_vars(char *input, t_dict *envp_dict, bool ignore_quotes);
 
-void							copy_quoted_text(char **input, char **expanded);
+void			copy_quoted_text(char **input, char **expanded);
 
-void							copy_expanded_var(char **input, char **expanded,
-									t_dict *envp_dict);
+void			copy_expanded_var(char **input, char **expanded, t_dict *envp_dict);
 
 // ENVP FNS
 
-t_dict							*init_envp_dict(char **envp);
+t_dict			*init_envp_dict(char **envp);
 
 // TOKENISER
 
-int								find_next_token(t_token *tokens, enum e_token ref);
+int				find_next_token(t_token *tokens, enum e_token ref);
 
 t_token							get_prev_token(t_token *tokens, int index);
 
@@ -183,6 +178,7 @@ t_ctrl_seq		**generate_ctrl_seq(t_arrlst *input, t_token *tokens);
 
 int			builtin(char **cmd, t_dict *envp);
 
-void		allocate_pipes(t_ctrl_seq **ctrl_seq);
+void		allocate_pipe_fd(t_ctrl_seq *seq, int size);
+
 
 #endif

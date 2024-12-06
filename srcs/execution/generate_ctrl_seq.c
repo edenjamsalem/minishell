@@ -12,24 +12,6 @@
 
 #include "../../minishell.h"
 
-// set up envp dictionary
-t_dict	*init_envp_dict(char **envp) // REMEMBER TO DEL AFTER TESTING
-{
-	int			i;
-	t_dict		*node;
-	t_dict		*envp_dict;
-
-	i = 0;
-	envp_dict = NULL;
-	while (envp[i])
-	{
-		node = str_to_dict(envp[i]);
-		dict_addback(&envp_dict, node);
-		i++;
-	}
-	return (envp_dict);
-}
-
 static t_ctrl_seq	*init_seq()
 {
 	// TESTED

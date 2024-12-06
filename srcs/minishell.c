@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/04 23:49:06 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/06 12:22:47by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,18 +73,18 @@ void	process(char *input, t_dict *envp_dict)
 	t_ctrl_seq	**ctrl_seq;
 	
 	words = parse(input, envp_dict);
-	printf("Parsed words:\n");
-	print_arrlst(words);
+//	printf("Parsed words:\n");
+//	print_arrlst(words);
 	tokens = tokenise(words);
-	printf("Tokenised words:\n");
-	print_tokens(words, tokens);
-	ctrl_seq = generate_ctrl_seq(words, tokens);
-	printf("Control sequences:\n");
-	print_ctrl_seq(ctrl_seq);
+//	printf("Tokenised words:\n");
+//	print_tokens(words, tokens);
 	quote_removal(words);
-	printf("Words after quote removal:\n");
-	print_arrlst(words);
-	//execute(ctrl_seq, envp_dict);
+	//printf("Words after quote removal:\n");
+	//print_arrlst(words);
+	ctrl_seq = generate_ctrl_seq(words, tokens);
+	//printf("Control sequences:\n");
+	//print_ctrl_seq(ctrl_seq);
+	execute(ctrl_seq, envp_dict);
 	free_2darr(words->content, ft_2darr_len(words->content));
 	free(words);
 }

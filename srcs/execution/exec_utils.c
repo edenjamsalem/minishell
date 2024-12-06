@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/05 18:02:22 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/06 11:55:40 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ static char	*find_cmd_path(char *cmd, t_dict *envp)
 void	ft_exec(char **cmd, t_dict *envp)
 {
 	char	*cmd_path;
-	int		i = 0;
 
 	if (builtin(cmd, envp))
 		exit(EXIT_SUCCESS);
