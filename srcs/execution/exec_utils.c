@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/05 17:12:38 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:02:22 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,6 @@ void	ft_exec(char **cmd, t_dict *envp)
 	if (builtin(cmd, envp))
 		exit(EXIT_SUCCESS);
 	cmd_path = find_cmd_path((char *)cmd[0], envp);
-/*	ft_printf("cmd = %s\n", cmd[0]);
-	ft_printf("cmd path = %s\n", cmd_path);
-	while (cmd[i])
-	{
-		ft_printf("%s ", cmd[i++]);
-	}*/	
 	if (execve(cmd_path, cmd, dict_to_arr(envp)) == -1)
 	{
 		perror("execve");	// NEED TO CHECK IF THIS ERROR CHECK IS STILL VALID	

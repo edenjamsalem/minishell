@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:13:34 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/05 17:13:56 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/06 10:47:19 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,17 @@ void	execute_cmds(t_ctrl_seq* seq, t_dict *envp)
 	{
 		ft_exec((char **)seq->cmds->content[0], envp); // handle command not found error
 	}
-	exec_infile_to_pipe(seq->pipe_fd[0], (char **)seq->cmds->content[0], envp);
-	i = 1;
-	while (i < seq->cmds->count - 1)
+	else
 	{
-		exec_pipe_to_pipe(seq->pipe_fd, (char **)seq->cmds->content[i], i, envp);
-		i++;
+		exec_infile_to_pipe(seq->pipe_fd[0], (char **)seq->cmds->content[0], envp);
+		i = 1;
+		while (i < seq->cmds->count - 1)
+		{
+			exec_pipe_to_pipe(seq->pipe_fd, (char **)seq->cmds->content[i], i, envp);
+			i++;
+		}
+		exec_pipe_to_outfile(seq->pipe_fd[i - 1], (char **)seq->cmds->content[i], envp);
 	}
-	exec_pipe_to_outfile(seq->pipe_fd[i - 1], (char **)seq->cmds->content[i], envp);
 }
 
 void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
@@ -87,7 +90,7 @@ void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
 
 int main(int argc, char **argv, char **envp)
 {
-	char		*input = " head -n 5 file1 | tail ";
+	char		*input = "head -n 5 file1 && tail -n 2 file1";
 	t_dict		*envp_dict = init_envp_dict(envp);
 	t_arrlst	*words;
 	t_token 	*tokens; 
@@ -102,18 +105,17 @@ int main(int argc, char **argv, char **envp)
 	tokens = tokenise(words);
 	quote_removal(words);
 
-	i = 0;
+/*	i = 0;
 	while (i < words->count)
 	{
 		ft_printf("%s:%d\n", words->content[i], tokens[i]);
 		i++;
-	}
+	}*/
 	ctrl_seq = generate_ctrl_seq(words, tokens);
 	execute(ctrl_seq, envp_dict);
 	dict_clear(&envp_dict);
 	free_arrlst(words, free);
 	free(words);
-	//execute(ctrl_seq);
 }
 /*
 int	main(void)

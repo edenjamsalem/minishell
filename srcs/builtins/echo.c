@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 10:07:28 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/04 17:22:09 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/05 17:25:18 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ int	ft_echo(char **cmd)
 		i++;
 	}
 	while (cmd[i])
-		ft_printf("%s ", cmd[i]);
-	if (n_flag)
+		ft_printf("%s ", cmd[i++]);
+	if (!n_flag)
 		ft_printf("\n");
 	return (1);
 }

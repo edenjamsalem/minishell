@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 14:33:13 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/04 15:25:22 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/06 10:45:37 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ pid_t	pipe_fork(int pipe_fd[2])
 void	exec_infile_to_pipe(int pipe_fd[2], char **cmd, t_dict *envp)
 {
 	pid_t	pid;
+	int		status;
 
 	pid = pipe_fork(pipe_fd);
 	if (CHILD_PROCESS)
@@ -41,13 +42,14 @@ void	exec_infile_to_pipe(int pipe_fd[2], char **cmd, t_dict *envp)
 		dup2(pipe_fd[1], STDOUT_FILENO);
 		ft_exec(cmd, envp);
 	}
+	waitpid(pid, &status, 0);
 	close(pipe_fd[1]);
-	wait(EXIT_SUCCESS);
 }
 
 void	exec_pipe_to_pipe(int **pipe_fd, char **cmd, int i, t_dict *envp)
 {
 	pid_t	pid;
+	int		status;
 
 	pid = pipe_fork(pipe_fd[i]);
 	if (CHILD_PROCESS)
@@ -57,20 +59,16 @@ void	exec_pipe_to_pipe(int **pipe_fd, char **cmd, int i, t_dict *envp)
 		dup2(pipe_fd[i][1], STDOUT_FILENO);
 		ft_exec(cmd, envp);
 	}
+	waitpid(pid, &status, 0);
 	close(pipe_fd[i][1]);
-	wait(EXIT_SUCCESS);
 }
 
 void	exec_pipe_to_outfile(int pipe_fd[2], char **cmd, t_dict *envp)
 {
 	pid_t	pid;
+	int		status;
 
-	pid = pipe_fork(pipe_fd);
-	if (CHILD_PROCESS)
-	{
-		dup2(pipe_fd[0], STDIN_FILENO);
-		ft_exec(cmd, envp);
-	}
-	close(pipe_fd[1]);
-	wait(EXIT_SUCCESS);
+	dup2(pipe_fd[0], STDIN_FILENO);
+	close(pipe_fd[0]);
+	ft_exec(cmd, envp);
 }
