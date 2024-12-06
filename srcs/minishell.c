@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/04 23:49:06 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/06 12:22:47by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,11 @@ t_dict	*init_envp_dict(char **envp)
 char	*read_input(void)
 {
 	char *input;
+	char prompt[100];
 
-	input = readline("minishell > ");
+	getcwd(prompt, 100);
+	ft_printf("%s", prompt);
+	input = readline(" > ");
 	if (!input) // handling EOF / ctrl + D
 	{
 		ft_printf("exit\n");
@@ -65,26 +68,18 @@ char	*read_input(void)
 	return (input);
 }
 
-// process all input, generate ctrl seq and execute
-void	process(char *input, t_dict *envp_dict)
+// process input, generate ctrl seq and execute
+void	process(char *input, t_dict *envp)
 {
 	t_arrlst *words;
 	t_token	*tokens;
 	t_ctrl_seq	**ctrl_seq;
 	
-	words = parse(input, envp_dict);
-	printf("Parsed words:\n");
-	print_arrlst(words);
+	words = parse(input, envp);
 	tokens = tokenise(words);
-	printf("Tokenised words:\n");
-	print_tokens(words, tokens);
-	ctrl_seq = generate_ctrl_seq(words, tokens);
-	printf("Control sequences:\n");
-	print_ctrl_seq(ctrl_seq);
 	quote_removal(words);
-	printf("Words after quote removal:\n");
-	print_arrlst(words);
-	//execute(ctrl_seq, envp_dict);
+	ctrl_seq = generate_ctrl_seq(words, tokens, envp);
+	execute(ctrl_seq, envp);
 	free_2darr(words->content, ft_2darr_len(words->content));
 	free(words);
 }
@@ -110,7 +105,7 @@ int	main(int argc, char **argv, char **envp)
 		if (g_flag) // means a message is being received
 		{	
 			g_flag = 0; // reset flag
-			input = readline("minishell > "); // reset prompt
+//			input = readline("minishell > "); // reset prompt | MAYBE DONT NEED ?
 			continue ;
 		}
 		input = read_input();

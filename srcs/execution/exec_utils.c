@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/05 17:12:38 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/06 15:52:10 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,23 +37,41 @@ static char	*find_cmd_path(char *cmd, t_dict *envp)
 	return (NULL);
 }
 
+int	builtin(char **cmd, t_dict *envp)
+{
+	if (!cmd || !(*cmd))
+		return (0);
+	else if (ft_match(cmd[0], "env"))
+		return (ft_env(envp));
+	else if (ft_match(cmd[0], "cd"))
+		return (ft_cd(cmd));
+	else if (ft_match(cmd[0], "echo"))
+		return (ft_echo(cmd));
+	else if (ft_match(cmd[0], "export"))
+		return (ft_export(cmd, envp));
+	else if (ft_match(cmd[0], "pwd"))
+		return (ft_pwd());
+	else if (ft_match(cmd[0], "unset"))
+		return (ft_unset(cmd, envp));
+	else if (ft_match(cmd[0], "exit"))
+		ft_exit(cmd, false);
+	return (0);
+}
+
 void	ft_exec(char **cmd, t_dict *envp)
 {
 	char	*cmd_path;
-	int		i = 0;
 
+	if (!cmd || !(*cmd))
+		exit(EXIT_SUCCESS);
+	if (ft_match(cmd[0], "exit"))
+		ft_exit(cmd, true);
 	if (builtin(cmd, envp))
 		exit(EXIT_SUCCESS);
 	cmd_path = find_cmd_path((char *)cmd[0], envp);
-/*	ft_printf("cmd = %s\n", cmd[0]);
-	ft_printf("cmd path = %s\n", cmd_path);
-	while (cmd[i])
-	{
-		ft_printf("%s ", cmd[i++]);
-	}*/	
 	if (execve(cmd_path, cmd, dict_to_arr(envp)) == -1)
 	{
-		perror("execve");	// NEED TO CHECK IF THIS ERROR CHECK IS STILL VALID	
+		ft_fprintf(2, "%s: command not found\n", cmd[0]);	
 		exit(EXIT_FAILURE);
 	}
 }

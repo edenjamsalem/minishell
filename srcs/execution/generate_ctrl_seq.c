@@ -12,24 +12,6 @@
 
 #include "../../minishell.h"
 
-// set up envp dictionary
-t_dict	*init_envp_dict(char **envp) // REMEMBER TO DEL AFTER TESTING
-{
-	int			i;
-	t_dict		*node;
-	t_dict		*envp_dict;
-
-	i = 0;
-	envp_dict = NULL;
-	while (envp[i])
-	{
-		node = str_to_dict(envp[i]);
-		dict_addback(&envp_dict, node);
-		i++;
-	}
-	return (envp_dict);
-}
-
 static t_ctrl_seq	*init_seq()
 {
 	// TESTED
@@ -125,7 +107,7 @@ static int	get_seq_count(t_token *tokens, int size)
 	return (count + 1);
 }
 
-t_ctrl_seq	**generate_ctrl_seq(t_arrlst *input, t_token *tokens)
+t_ctrl_seq	**generate_ctrl_seq(t_arrlst *input, t_token *tokens, t_dict *envp)
 {
 	// TESTED
 	t_ctrl_seq	**ctrl_seq;
@@ -134,15 +116,16 @@ t_ctrl_seq	**generate_ctrl_seq(t_arrlst *input, t_token *tokens)
 	int			count;
 
 	count = get_seq_count(tokens, input->count);
-	ctrl_seq = malloc(sizeof(t_ctrl_seq *) * count + 1);
+	ctrl_seq = malloc(sizeof(t_ctrl_seq *) * (count + 1));
 	if (!ctrl_seq)
 		return (NULL);
 	i = 0;
 	j = 0;
 	while (input->content[i])
 	{
+//		write(1, "1\n", 2);
 		ctrl_seq[j] = init_seq();
-		handle_redirections(ctrl_seq[j], input->content + i, tokens + i);
+		handle_redirections(ctrl_seq[j], input->content + i, tokens + i, envp);
 		i += assign_ctrl_op(ctrl_seq[j], input->content[i]);
 		i += append_cmds(ctrl_seq[j]->cmds, input->content + i, tokens + i);
 		allocate_pipe_fd(ctrl_seq[j], ctrl_seq[j]->cmds->count - 1);

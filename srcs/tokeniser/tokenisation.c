@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 17:26:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/05 18:27:30 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/06 17:25:19 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,11 @@ t_token *tokenise(t_arrlst *words)
 {
 	int i;
 	t_token	*tokens;
-
-	tokens = malloc(sizeof(t_token) * words->count);
+	
+	tokens = malloc(sizeof(t_token) * (words->count + 1));
 	if (!tokens)
 		return (NULL);
+	tokens[words->count] = TEXT; // to stop reading past buf when input[i] == NULL
 	tokens = primary_tokenisation(words, tokens);
 	tokens = secondary_tokenisation(words, tokens);
 	i = 0;
