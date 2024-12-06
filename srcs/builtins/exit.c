@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 11:01:33 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/06 14:19:21 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/06 17:07:21 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ void	ft_exit(char **cmd_argv, bool inside_pipe)
 		perror("bash: exit: too many arguments");
 	else if (len == 1)
 	{
-		//cleanup();
+		//cleanup(); ???
 		if (!inside_pipe)
 			ft_printf("exit\n");
 		exit(EXIT_SUCCESS);
 	}
 	else
 	{
-		//cleanup(); 	
+		//cleanup(); ???	
 		if (!inside_pipe)
 			ft_printf("exit\n");
 		exit(ft_atoi(cmd_argv[1]));
