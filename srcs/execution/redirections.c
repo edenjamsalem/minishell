@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:31:16 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/06 15:30:32 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/06 16:54:25 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,13 @@ void	allocate_pipe_fd(t_ctrl_seq *seq, int size)
 	seq->pipe_fd[size] = NULL;
 }
 
-int	get_heredoc_input(char *eof)
+int	get_heredoc_input(char *eof, t_dict *envp)
 {
 	pid_t	pid;
 	char	input[4096];
 	int		pipe_fd[2];
 	int		bytes_read;
+	char	*expanded;
 
 	pid = pipe_fork(pipe_fd);
 	if (!pid)
@@ -66,7 +67,9 @@ int	get_heredoc_input(char *eof)
 			input[bytes_read] = '\0';
 			if (is_eof(input, eof))
 				exit(EXIT_SUCCESS);
-			write(pipe_fd[1], input, bytes_read);
+			expanded = expand_vars(input, envp, true, true);
+			write(pipe_fd[1], expanded, ft_strlen(expanded));
+			free(expanded);
 		}
 	}
 	close(pipe_fd[1]);
@@ -74,7 +77,7 @@ int	get_heredoc_input(char *eof)
 	return (pipe_fd[0]);
 }
 
-void	redirect_fd(t_ctrl_seq *seq, char *operator, char *file)
+void	redirect_fd(t_ctrl_seq *seq, char *operator, char *file, t_dict *envp)
 {
 	if (ft_match(operator, ">"))
 		seq->outfile = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0643);
@@ -83,11 +86,11 @@ void	redirect_fd(t_ctrl_seq *seq, char *operator, char *file)
 	else if (ft_match(operator, "<"))
 		seq->infile = open(file, O_RDONLY);
 	else if (ft_match(operator, "<<"))
-		seq->infile = get_heredoc_input(file);
+		seq->infile = get_heredoc_input(file, envp);
 	// NEED TO HANDLE UNKOWN FILE ERROR HERE
 }
 
-void	handle_redirections(t_ctrl_seq *seq, void **input, t_token *tokens)
+void	handle_redirections(t_ctrl_seq *seq, void **input, t_token *tokens, t_dict *envp)
 {
 	// TESTED
 	int	i;
@@ -96,7 +99,7 @@ void	handle_redirections(t_ctrl_seq *seq, void **input, t_token *tokens)
 	while (input[i] && tokens[i] != CTRL_OP)
 	{
 		if (tokens[i] == REDIRECT && tokens[i + 1] == FILE_)
-			redirect_fd(seq, (char *)input[i], (char *)input[i + 1]);
+			redirect_fd(seq, (char *)input[i], (char *)input[i + 1], envp);
 		i++;
 	}
 }

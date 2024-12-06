@@ -13,7 +13,7 @@
 #include "../../minishell.h"
 
 // This function calculates the expanded len of the input
-static int	get_len(char *input, t_dict *envp_dict, bool ignore_quoted_vars)
+static int	get_len(char *input, t_dict *envp_dict, bool inc_double, bool inc_single)
 {
 	int		input_len;
 	int		diff;
@@ -23,9 +23,9 @@ static int	get_len(char *input, t_dict *envp_dict, bool ignore_quoted_vars)
 	input_len = ft_strlen(input);
 	while (*input)
 	{
-		if (*input == '\'')
+		if (*input == '\'' && !inc_single)
 			skip_quotes(&input);// handles unclosed quotes
-		else if (*input == '\"' && ignore_quoted_vars)
+		else if (*input == '\"' && !inc_double)
 			skip_quotes(&input);
 		else if (*input == '$' && !chrsetcmp(*(input + 1), IFS))
 		{
@@ -40,23 +40,25 @@ static int	get_len(char *input, t_dict *envp_dict, bool ignore_quoted_vars)
 	return (input_len + diff);
 }
 
-char	*expand_vars(char *input, t_dict *envp_dict, bool ignore_quoted_vars)
+char	*expand_vars(char *input, t_dict *envp, bool inc_double, bool inc_single)
 {
 	char	*expanded;
 	char	*ptr;
 
-	expanded = malloc((get_len(input, envp_dict, ignore_quoted_vars) + 2));
+	if (!ft_strchr(input, '$'))
+		return (input);
+	expanded = malloc((get_len(input, envp, inc_double, inc_single) + 2));
 	if (!expanded)
 		return (NULL);
 	ptr = expanded;
 	while (*input)
 	{
-		if (*input == '\'')
+		if (*input == '\'' && !inc_single)
 			copy_quoted_text(&input, &expanded);
-		else if (*input == '\"' && ignore_quoted_vars)
+		else if (*input == '\"' && !inc_double)
 			copy_quoted_text(&input, &expanded);
 		else if (*input == '$' && *(input + 1) && !chrsetcmp(*(input + 1), IFS))
-			copy_expanded_var(&input, &expanded, envp_dict);
+			copy_expanded_var(&input, &expanded, envp);
 		else
 			*expanded++ = *input++;
 	}
@@ -64,7 +66,7 @@ char	*expand_vars(char *input, t_dict *envp_dict, bool ignore_quoted_vars)
 	return (ptr);
 }
 
-void	expand_vars_inside_quotes(t_arrlst *input, t_dict *envp_dict)
+void	expand_vars_in_double_quotes(t_arrlst *input, t_dict *envp_dict)
 {
 	char	*expanded;
 	int		i;
@@ -74,7 +76,7 @@ void	expand_vars_inside_quotes(t_arrlst *input, t_dict *envp_dict)
 	{
 		if (ft_strchr(input->content[i], '$') && ft_strchr(input->content[i], '"'))
 		{
-			expanded = expand_vars(input->content[i], envp_dict, INC_QUOTED_VARS);
+			expanded = expand_vars(input->content[i], envp_dict, true, false);
 			free(input->content[i]);
 			input->content[i] = expanded;
 		}

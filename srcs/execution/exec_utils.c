@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/06 15:38:13 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/06 15:52:10 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,27 @@ static char	*find_cmd_path(char *cmd, t_dict *envp)
 	}
 	FREE_2DARR(file_paths);
 	return (NULL);
+}
+
+int	builtin(char **cmd, t_dict *envp)
+{
+	if (!cmd || !(*cmd))
+		return (0);
+	else if (ft_match(cmd[0], "env"))
+		return (ft_env(envp));
+	else if (ft_match(cmd[0], "cd"))
+		return (ft_cd(cmd));
+	else if (ft_match(cmd[0], "echo"))
+		return (ft_echo(cmd));
+	else if (ft_match(cmd[0], "export"))
+		return (ft_export(cmd, envp));
+	else if (ft_match(cmd[0], "pwd"))
+		return (ft_pwd());
+	else if (ft_match(cmd[0], "unset"))
+		return (ft_unset(cmd, envp));
+	else if (ft_match(cmd[0], "exit"))
+		ft_exit(cmd, false);
+	return (0);
 }
 
 void	ft_exec(char **cmd, t_dict *envp)

@@ -107,7 +107,7 @@ static int	get_seq_count(t_token *tokens, int size)
 	return (count + 1);
 }
 
-t_ctrl_seq	**generate_ctrl_seq(t_arrlst *input, t_token *tokens)
+t_ctrl_seq	**generate_ctrl_seq(t_arrlst *input, t_token *tokens, t_dict *envp)
 {
 	// TESTED
 	t_ctrl_seq	**ctrl_seq;
@@ -125,7 +125,7 @@ t_ctrl_seq	**generate_ctrl_seq(t_arrlst *input, t_token *tokens)
 	{
 //		write(1, "1\n", 2);
 		ctrl_seq[j] = init_seq();
-		handle_redirections(ctrl_seq[j], input->content + i, tokens + i);
+		handle_redirections(ctrl_seq[j], input->content + i, tokens + i, envp);
 		i += assign_ctrl_op(ctrl_seq[j], input->content[i]);
 		i += append_cmds(ctrl_seq[j]->cmds, input->content + i, tokens + i);
 		allocate_pipe_fd(ctrl_seq[j], ctrl_seq[j]->cmds->count - 1);

@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/06 14:19:58 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/06 16:22:19by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,7 @@ extern volatile sig_atomic_t	g_flag;
 
 # define IFS " \t\n"
 # define QUOTES "\'\""
-# define IGNORE_QUOTED_VARS 1
-# define INC_QUOTED_VARS 0
 # define CALCULATE_DIFF(key, envp_dict) ft_strlen(get_dict_value(key, envp_dict)) - (ft_strlen(key) + 1)
-
-
 
 typedef enum e_token
 {
@@ -114,17 +110,15 @@ void			quote_removal(t_arrlst *input);
 
 // PARAM EXPANSION
 
-char			*expand_vars(char *input, t_dict *envp_dict, bool ignore_quotes);
+char			*expand_vars(char *input, t_dict *envp, bool ign_double, bool ign_single);
 
-void			expand_vars_inside_quotes(t_arrlst *input, t_dict *envp_dict);
+void			expand_vars_in_double_quotes(t_arrlst *input, t_dict *envp_dict);
 
 char			*expand_params(char *input, t_dict *envp_dict); // ???
 
 void			copy_expanded_var(char **input, char **expanded, t_dict *envp_dict);
 
 void			copy_quoted_text(char **input, char **expanded);
-
-char			*expand_vars(char *input, t_dict *envp_dict, bool ignore_quotes);
 
 void			copy_quoted_text(char **input, char **expanded);
 
@@ -156,13 +150,13 @@ bool							is_control(void *word);
 
 bool							is_pipe(void *word);
 
-void    grammar_check(t_arrlst *words, t_token *tokens);
+void    		grammar_check(t_arrlst *words, t_token *tokens);
 
 // EXECUTION
 
-void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp);
+void			execute(t_ctrl_seq **ctrl_seq, t_dict *envp);
 
-void			handle_redirections(t_ctrl_seq *seq, void **input, t_token *tokens);
+void			handle_redirections(t_ctrl_seq *seq, void **input, t_token *tokens, t_dict *envp);
 
 pid_t			pipe_fork(int pipe_fd[2]);
 
@@ -174,7 +168,7 @@ void			exec_pipe_to_outfile(int pipe_fd[2], char **cmd, t_dict *envp);
 
 void			ft_exec(char **cmd, t_dict *envp);
 
-t_ctrl_seq		**generate_ctrl_seq(t_arrlst *input, t_token *tokens);
+t_ctrl_seq		**generate_ctrl_seq(t_arrlst *input, t_token *tokens, t_dict *envp);
 
 int			builtin(char **cmd, t_dict *envp);
 

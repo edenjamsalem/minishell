@@ -48,8 +48,11 @@ t_dict	*init_envp_dict(char **envp)
 char	*read_input(void)
 {
 	char *input;
+	char prompt[100];
 
-	input = readline("minishell > ");
+	getcwd(prompt, 100);
+	ft_printf("%s", prompt);
+	input = readline(" > ");
 	if (!input) // handling EOF / ctrl + D
 	{
 		ft_printf("exit\n");
@@ -66,17 +69,17 @@ char	*read_input(void)
 }
 
 // process input, generate ctrl seq and execute
-void	process(char *input, t_dict *envp_dict)
+void	process(char *input, t_dict *envp)
 {
 	t_arrlst *words;
 	t_token	*tokens;
 	t_ctrl_seq	**ctrl_seq;
 	
-	words = parse(input, envp_dict);
+	words = parse(input, envp);
 	tokens = tokenise(words);
 	quote_removal(words);
-	ctrl_seq = generate_ctrl_seq(words, tokens);
-	execute(ctrl_seq, envp_dict);
+	ctrl_seq = generate_ctrl_seq(words, tokens, envp);
+	execute(ctrl_seq, envp);
 	free_2darr(words->content, ft_2darr_len(words->content));
 	free(words);
 }

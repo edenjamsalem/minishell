@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:13:34 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/06 15:36:27 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/06 15:51:58 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,27 +21,6 @@ int	ctrl_op_success(t_ctrl_seq *seq)
 	return (1);	
 }
 
-int	builtin(char **cmd, t_dict *envp)
-{
-	if (!cmd || !(*cmd))
-		return (0);
-	else if (ft_match(cmd[0], "env"))
-		return (ft_env(envp));
-	else if (ft_match(cmd[0], "cd"))
-		return (ft_cd(cmd));
-	else if (ft_match(cmd[0], "echo"))
-		return (ft_echo(cmd));
-	else if (ft_match(cmd[0], "export"))
-		return (ft_export(cmd, envp));
-	else if (ft_match(cmd[0], "pwd"))
-		return (ft_pwd());
-	else if (ft_match(cmd[0], "unset"))
-		return (ft_unset(cmd, envp));
-	else if (ft_match(cmd[0], "exit"))
-		ft_exit(cmd, false);
-	return (0);
-}
-
 void	execute_cmds(t_ctrl_seq* seq, t_dict *envp)
 {
 	int	i;
@@ -49,9 +28,7 @@ void	execute_cmds(t_ctrl_seq* seq, t_dict *envp)
 	dup2(seq->infile, STDIN_FILENO);
 	dup2(seq->outfile, STDOUT_FILENO);
 	if (seq->cmds->count == 1)
-	{
 		ft_exec((char **)seq->cmds->content[0], envp); // handle command not found error
-	}
 	else
 	{
 		exec_infile_to_pipe(seq->pipe_fd[0], (char **)seq->cmds->content[0], envp);
