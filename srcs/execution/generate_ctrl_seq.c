@@ -123,6 +123,7 @@ t_ctrl_seq	**generate_ctrl_seq(t_arrlst *input, t_token *tokens)
 	j = 0;
 	while (input->content[i])
 	{
+//		write(1, "1\n", 2);
 		ctrl_seq[j] = init_seq();
 		handle_redirections(ctrl_seq[j], input->content + i, tokens + i);
 		i += assign_ctrl_op(ctrl_seq[j], input->content[i]);

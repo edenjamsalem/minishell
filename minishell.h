@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/06 11:38:59 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/06 14:19:58 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int		ft_cd(char **cmd);
 
 int		ft_echo(char **cmd);
 
-void	ft_exit(char **cmd_argv);
+void	ft_exit(char **cmd_argv, bool inside_pipe);
 
 
 // PARSE FNS

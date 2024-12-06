@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:13:34 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/06 12:21:23 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/06 14:21:00 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	builtin(char **cmd, t_dict *envp)
 	else if (ft_match(cmd[0], "unset"))
 		return (ft_unset(cmd, envp));
 	else if (ft_match(cmd[0], "exit"))
-		ft_exit(cmd);
+		ft_exit(cmd, false);
 	return (0);
 }
 

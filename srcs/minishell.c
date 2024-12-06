@@ -73,17 +73,18 @@ void	process(char *input, t_dict *envp_dict)
 	t_ctrl_seq	**ctrl_seq;
 	
 	words = parse(input, envp_dict);
-//	printf("Parsed words:\n");
-//	print_arrlst(words);
 	tokens = tokenise(words);
-//	printf("Tokenised words:\n");
-//	print_tokens(words, tokens);
 	quote_removal(words);
-	//printf("Words after quote removal:\n");
-	//print_arrlst(words);
+
+/*	int i = 0;
+	while (i < words->count)
+	{
+		ft_printf("%s:%d\n", words->content[i], tokens[i]);
+		i++;
+	}
+	write(1, "\n", 1);
+*/
 	ctrl_seq = generate_ctrl_seq(words, tokens);
-	//printf("Control sequences:\n");
-	//print_ctrl_seq(ctrl_seq);
 	execute(ctrl_seq, envp_dict);
 	free_2darr(words->content, ft_2darr_len(words->content));
 	free(words);
