@@ -6,29 +6,28 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 21:24:14 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/06 17:25:04 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/06 19:04:17 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
 // checks for every token that isn't supposed to repeat
-bool    is_repeat(t_token *tokens, int count, int *index)
+bool    is_repeat(t_token *tokens, int *index)
 {
-    // causing memory leaks as trying to check prev token for first token
     int i;
 
     i = 0;
-    while (i < count)
+    while (tokens[i] != END)
     {
         if (tokens[i] == CTRL_OP || tokens[i] == PIPE)
         {
-            if (get_prev_token(tokens, i) == CTRL_OP)
+            if (i == 0)
             {
-                *index = i;
-                return (true);
+                *index = 0;
+                return (is_start(tokens, index));
             }
-            else if (get_prev_token(tokens, i) == PIPE)
+            else if (get_prev_token(tokens, i) == CTRL_OP || get_prev_token(tokens, i) == PIPE)
             {
                 *index = i;
                 return (true);
@@ -45,7 +44,7 @@ bool    is_file_name(t_arrlst *words, t_token *tokens, int *index)
     int i;
 
     i = 0;
-    while (i < words->count)
+    while (tokens[i] != END)
     {
         if (tokens[i] == REDIRECT)
         {
@@ -65,22 +64,23 @@ bool    is_start(t_token *tokens, int *index)
 {
     if (tokens[0] == CTRL_OP || tokens[0] == PIPE)
     {
-        index = 0;
+        *index = 0;
         return (false);
     }
     return (true);
 }
 
 // check if REDIRECT is at the end of the line without any FILE_ following
-bool    is_redirect_correct(t_arrlst *words, t_token *tokens, int *index)
+bool    is_redirect_correct(t_token *tokens, int *index)
 {
     int i;
 
     i = 0;
-    while (i < words->count)
+    while (tokens[i] != END)
     {
         if (tokens[i] == REDIRECT && !(tokens[i + 1]))
             return (false);
+        i++;
     }
     return (true);
 }
@@ -91,12 +91,12 @@ void    grammar_check(t_arrlst *words, t_token *tokens)
     int index;
     
     index = -1;
-    if (is_start(tokens, &index))
+    if (!is_start(tokens, &index))
         return (ft_perror(SYNTAX, words->content[index]));
-    else if (is_repeat(tokens, words->count, &index))
+    else if (is_repeat(tokens, &index))
         return (ft_perror(SYNTAX, (char *)words->content[index]));
-    else if (!is_redirect_correct(words, tokens, &index))
-        return (ft_perror(SYNTAX, "newline"));
     else if (!is_file_name(words, tokens, &index))
         return (ft_perror(DIRECT, (char *)words->content[index]));
+    else if (!is_redirect_correct(tokens, &index))
+        return (ft_perror(SYNTAX, "newline"));
 }

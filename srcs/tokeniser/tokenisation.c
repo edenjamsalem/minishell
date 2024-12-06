@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 17:26:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/06 17:25:19 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/06 19:17:51 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	find_next_token(t_token *tokens, enum e_token ref)
 	int	i;
 	
 	i = 0;
-	while (tokens[i])
+	while (tokens[i] != END)
 	{
 		if (tokens[i] == ref)
 			return (i);
@@ -27,11 +27,11 @@ int	find_next_token(t_token *tokens, enum e_token ref)
 	return (-1);
 }
 
-int	skip_redirect(t_token *tokens)
+int	skip_redirect(t_token *tokens, int index)
 {
 	int	i;
 
-	i = 0;
+	i = index;
 	while (tokens[i] == REDIRECT || tokens[i] == FILE_)
 		i++;
 	return (i);
@@ -65,10 +65,10 @@ t_token	*secondary_tokenisation(t_arrlst *words, t_token *tokens)
 {
 	int	i;
 
+	grammar_check(words, tokens);
 	i = 0;
 	while (words->content[i])
 	{
-		//grammar_check(words, tokens);
 		if (is_file(i, tokens))
 			tokens[i] = FILE_;
 		i++;
@@ -84,31 +84,33 @@ t_token *tokenise(t_arrlst *words)
 	tokens = malloc(sizeof(t_token) * (words->count + 1));
 	if (!tokens)
 		return (NULL);
-	tokens[words->count] = TEXT; // to stop reading past buf when input[i] == NULL
 	tokens = primary_tokenisation(words, tokens);
 	tokens = secondary_tokenisation(words, tokens);
+	tokens[words->count] = END; // terminate tokenised input
+	grammar_check(words, tokens);
 	i = 0;
 	while (words->content[i])
 	{
-		//grammar_check(words, tokens);
-		if (is_command(i, tokens))
-			tokens[i] = CMD;
-		else if (is_redirect(words->content[i]))
+		if (is_redirect(words->content[i]))
 		{
-			i = skip_redirect(tokens);
+			i = skip_redirect(tokens, i);
 			if (is_command(i, tokens))
 				tokens[i] = CMD;
 		}
+		else if (is_command(i, tokens))
+			tokens[i] = CMD;
 		i++;
 	}
 	return (tokens);
 }
-
+/*
 char *token_to_string(t_token token)
 {    
     switch (token)
     {
-    case REDIRECT:
+    case END:
+		return "END";
+	case REDIRECT:
         return "REDIRECT";
     case CTRL_OP:
         return "CTRL_OP";
@@ -131,9 +133,9 @@ int main()
     t_token *tokens;
     int i;
 
-    char *sample_input[] = {">", "echo", "file.txt", "|", ">>", "file.txt.", "grep", "hello", NULL};
+    char *sample_input[] = {NULL};
     words = malloc(sizeof(t_arrlst));
-    words->count = 8;
+    words->count = 0;
 	words->content = malloc(sizeof(void *) * words->count + 1);
 	for (i = 0; i < words->count; i++)
 		words->content[i] = (void *)ft_strdup(sample_input[i]);
@@ -144,11 +146,12 @@ int main()
         fprintf(stderr, "Tokenisation failed\n");
         return 1;
     }
-	//grammar_check(words, tokens);
-    for (i = 0; i < words->count; i++)
+	grammar_check(words, tokens);
+    for (i = 0; i <= words->count; i++)
     {
         printf("Token %d: %s\n", i, token_to_string(tokens[i]));
     }
     free(tokens);
     return 0;
 }
+*/

@@ -6,20 +6,24 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:05:51 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/06 17:17:38 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/06 18:30:28 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+// replacement for MATCH macro
 bool ft_match(char *s1, char *s2)
 {
     return (ft_strncmp(s1, s2, ft_strlen(s1) + 1) == 0);
 }
 
+// returns previous token in array, mainly for code readability
 t_token	get_prev_token(t_token *tokens, int index)
 {
-	return (tokens[index - 1]);
+	if (index == 0)
+        return (END);
+    return (tokens[index - 1]);
 }
 
 void    ft_perror(t_error type, char *error_msg)
