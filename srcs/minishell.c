@@ -75,15 +75,6 @@ void	process(char *input, t_dict *envp_dict)
 	words = parse(input, envp_dict);
 	tokens = tokenise(words);
 	quote_removal(words);
-
-/*	int i = 0;
-	while (i < words->count)
-	{
-		ft_printf("%s:%d\n", words->content[i], tokens[i]);
-		i++;
-	}
-	write(1, "\n", 1);
-*/
 	ctrl_seq = generate_ctrl_seq(words, tokens);
 	execute(ctrl_seq, envp_dict);
 	free_2darr(words->content, ft_2darr_len(words->content));
@@ -111,7 +102,7 @@ int	main(int argc, char **argv, char **envp)
 		if (g_flag) // means a message is being received
 		{	
 			g_flag = 0; // reset flag
-			input = readline("minishell > "); // reset prompt
+//			input = readline("minishell > "); // reset prompt
 			continue ;
 		}
 		input = read_input();
