@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 21:24:14 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/06 19:04:17 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/06 19:49:52 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,10 @@ bool    is_redirect_correct(t_token *tokens, int *index)
     while (tokens[i] != END)
     {
         if (tokens[i] == REDIRECT && !(tokens[i + 1]))
+        {
+            *index = i;
             return (false);
+        }
         i++;
     }
     return (true);

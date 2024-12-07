@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/06 15:52:10 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/06 19:49:02 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,10 @@ void	ft_exec(char **cmd, t_dict *envp)
 	if (builtin(cmd, envp))
 		exit(EXIT_SUCCESS);
 	cmd_path = find_cmd_path((char *)cmd[0], envp);
-	if (execve(cmd_path, cmd, dict_to_arr(envp)) == -1)
+	/*if (execve(cmd_path, cmd, dict_to_arr(envp)) == -1)
 	{
 		ft_fprintf(2, "%s: command not found\n", cmd[0]);	
 		exit(EXIT_FAILURE);
 	}
+	*/
 }

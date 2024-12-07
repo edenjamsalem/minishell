@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:31:16 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/06 16:57:53 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/07 02:04:14 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int	get_heredoc_input(char *eof, t_dict *envp)
 	pid = pipe_fork(pipe_fd);
 	if (!pid)
 	{
+		setup_sig_handlers();
 		close(pipe_fd[0]);
 		while (1)
 		{
@@ -69,7 +70,7 @@ int	get_heredoc_input(char *eof, t_dict *envp)
 				exit(EXIT_SUCCESS);
 			expanded = expand_vars(input, envp, true, true);
 			write(pipe_fd[1], expanded, ft_strlen(expanded));
-			free(expanded);
+			// free(expanded);
 		}
 	}
 	close(pipe_fd[1]);

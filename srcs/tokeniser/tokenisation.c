@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 17:26:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/06 19:17:51 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/06 23:32:13 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_token	*primary_tokenisation(t_arrlst *words, t_token *tokens)
 	int	i;
 	
 	i = 0;
-	while (words->content[i])
+	while (i < words->count)
 	{
 		if (is_redirect(words->content[i]))
 			tokens[i] = REDIRECT;
@@ -54,7 +54,9 @@ t_token	*primary_tokenisation(t_arrlst *words, t_token *tokens)
 		else if (is_pipe(words->content[i]))
 			tokens[i] = PIPE;
 		else
+		{
 			tokens[i] = TEXT;
+		}
 		i++;
 	}
 	return (tokens);
@@ -84,12 +86,12 @@ t_token *tokenise(t_arrlst *words)
 	tokens = malloc(sizeof(t_token) * (words->count + 1));
 	if (!tokens)
 		return (NULL);
+	tokens[words->count] = END; // terminate tokenised input
 	tokens = primary_tokenisation(words, tokens);
 	tokens = secondary_tokenisation(words, tokens);
-	tokens[words->count] = END; // terminate tokenised input
 	grammar_check(words, tokens);
 	i = 0;
-	while (words->content[i])
+	while (i < words->count)
 	{
 		if (is_redirect(words->content[i]))
 		{

@@ -98,6 +98,8 @@ t_arrlst	*word_split(char *input)
 	
 	list = init_arrlst(8);
 		// handle malloc error
+	for (int i = 0; i <= 8; i++) // need to initialise individual members of list, can't add it to init_arrlst bc it's in libft
+		list->content[i] = NULL;
 	skip_set(&input, IFS);
 	while (*input)
 	{

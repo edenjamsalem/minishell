@@ -165,6 +165,7 @@ void    ft_perror(t_error type, char *error_msg);
 
 int	skip_redirect(t_token *tokens, int index);
 
+
 // EXECUTION
 
 void			execute(t_ctrl_seq **ctrl_seq, t_dict *envp);
@@ -187,5 +188,14 @@ int			builtin(char **cmd, t_dict *envp);
 
 void		allocate_pipe_fd(t_ctrl_seq *seq, int size);
 
+// TEST FUNCTIONS; can remove those later
+
+void    print_arrlst(t_arrlst *list);
+
+char *token_to_string(t_token token);
+
+void    print_tokens(t_arrlst *words, t_token *tokens);
+
+void    print_ctrl_seq(t_ctrl_seq **ctrl_seq);
 
 #endif

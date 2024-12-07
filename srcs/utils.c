@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:05:51 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/06 18:30:28 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/06 20:46:05 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,6 @@ void    ft_perror(t_error type, char *error_msg)
     else if (type == CMD_)
         ft_fprintf(2, "`%s': command not found", error_msg);
     else if (type == DIRECT)
-        ft_fprintf(2, "`%s': No such file or directory", error_msg);
-    exit(EXIT_FAILURE); 
+        ft_fprintf(2, "`%s': No such file or directory", error_msg); 
+    return ;
 }
