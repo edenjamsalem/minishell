@@ -90,7 +90,7 @@ int		ft_cd(char **cmd);
 
 int		ft_echo(char **cmd);
 
-void	ft_exit(char **cmd_argv, bool inside_pipe);
+void	ft_exit(char **cmd_argv, bool inside_main_process);
 
 
 // PARSE FNS
