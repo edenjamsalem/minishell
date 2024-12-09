@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 23:21:33 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/04 23:48:02 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/06 21:25:46 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@ void    print_arrlst(t_arrlst *list)
     int i;
 
     i = 0;
+    if (!list->content[0])
+    {
+        printf("%d\n", list->capacity);
+        return ;
+    }
     while (list->content[i])
     {
         printf("%s ", (char *)list->content[i]);
@@ -29,6 +34,8 @@ char *token_to_string(t_token token)
 {    
     switch (token)
     {
+    case END:
+        return "END";
     case REDIRECT:
         return "REDIRECT";
     case CTRL_OP:
@@ -50,7 +57,7 @@ void    print_tokens(t_arrlst *words, t_token *tokens)
 {
     int i;
     
-    for (i = 0; i < words->count; i++)
+    for (i = 0; i <= words->count; i++)
         printf("Token %d: %s\n", i, token_to_string(tokens[i]));
     printf("\n");
 }

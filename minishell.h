@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:42:47 by eamsalem          #+#    #+#             */
 /*   Updated: 2024/12/06 16:22:19by eamsalem         ###   ########.fr       */
@@ -17,7 +17,7 @@
 #  define _DEFAULT_SOURCE
 # endif
 
-# include "../libft/libft.h"
+# include "./libft/libft.h"
 # include <dirent.h>
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -37,6 +37,7 @@ extern volatile sig_atomic_t	g_flag;
 
 typedef enum e_token
 {
+	END,
 	TEXT,
 	CMD,
 	FILE_,
@@ -152,6 +153,19 @@ bool							is_pipe(void *word);
 
 void    		grammar_check(t_arrlst *words, t_token *tokens);
 
+bool    is_repeat(t_token *tokens, int *index);
+
+bool    is_file_name(t_arrlst *words, t_token *tokens, int *index);
+
+bool    is_start(t_token *tokens, int *index);
+
+bool    is_redirect_correct(t_token *tokens, int *index);
+
+void    ft_perror(t_error type, char *error_msg);
+
+int	skip_redirect(t_token *tokens, int index);
+
+
 // EXECUTION
 
 void			execute(t_ctrl_seq **ctrl_seq, t_dict *envp);
@@ -174,5 +188,14 @@ int			builtin(char **cmd, t_dict *envp);
 
 void		allocate_pipe_fd(t_ctrl_seq *seq, int size);
 
+// TEST FUNCTIONS; can remove those later
+
+void    print_arrlst(t_arrlst *list);
+
+char *token_to_string(t_token token);
+
+void    print_tokens(t_arrlst *words, t_token *tokens);
+
+void    print_ctrl_seq(t_ctrl_seq **ctrl_seq);
 
 #endif

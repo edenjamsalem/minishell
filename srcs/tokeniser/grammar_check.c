@@ -3,37 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   grammar_check.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 21:24:14 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/06 15:33:43 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/06 19:49:52 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
 // checks for every token that isn't supposed to repeat
-bool    is_repeat(t_token *tokens, int count, int *index)
+bool    is_repeat(t_token *tokens, int *index)
 {
-    // causing memory leaks as trying to check prev token for first token
     int i;
 
     i = 0;
-    while (i < count)
+    while (tokens[i] != END)
     {
-        if (tokens[i] == CTRL_OP || tokens[i] == REDIRECT || tokens[i] == PIPE)
+        if (tokens[i] == CTRL_OP || tokens[i] == PIPE)
         {
-            if (get_prev_token(tokens, i) == CTRL_OP)
+            if (i == 0)
             {
-                *index = i;
-                return (true);
+                *index = 0;
+                return (is_start(tokens, index));
             }
-            else if (get_prev_token(tokens, i) == REDIRECT)
-            {
-                *index = i;
-                return (true);
-            }
-            else if (get_prev_token(tokens, i) == PIPE)
+            else if (get_prev_token(tokens, i) == CTRL_OP || get_prev_token(tokens, i) == PIPE)
             {
                 *index = i;
                 return (true);
@@ -50,7 +44,7 @@ bool    is_file_name(t_arrlst *words, t_token *tokens, int *index)
     int i;
 
     i = 0;
-    while (i < words->count)
+    while (tokens[i] != END)
     {
         if (tokens[i] == REDIRECT)
         {
@@ -65,16 +59,33 @@ bool    is_file_name(t_arrlst *words, t_token *tokens, int *index)
     return (true);
 }
 
-// custom perror function
-void    ft_perror(t_error type, char *error_msg)
+// check if input is starting on PIPE and CTRL OP
+bool    is_start(t_token *tokens, int *index)
 {
-    if (type == SYNTAX)
-        ft_fprintf(2, "syntax error near unexpected token `%s'", error_msg);
-    else if (type == CMD_)
-        ft_fprintf(2, "`%s': command not found", error_msg);
-    else if (type == DIRECT)
-        ft_fprintf(2, "`%s': No such file or directory", error_msg);
-    exit(EXIT_FAILURE); 
+    if (tokens[0] == CTRL_OP || tokens[0] == PIPE)
+    {
+        *index = 0;
+        return (false);
+    }
+    return (true);
+}
+
+// check if REDIRECT is at the end of the line without any FILE_ following
+bool    is_redirect_correct(t_token *tokens, int *index)
+{
+    int i;
+
+    i = 0;
+    while (tokens[i] != END)
+    {
+        if (tokens[i] == REDIRECT && !(tokens[i + 1]))
+        {
+            *index = i;
+            return (false);
+        }
+        i++;
+    }
+    return (true);
 }
 
 // prints error messages in case of syntax error
@@ -83,12 +94,12 @@ void    grammar_check(t_arrlst *words, t_token *tokens)
     int index;
     
     index = -1;
-    if (is_repeat(tokens, words->count, &index))
-    {
-        if (tokens[index] == REDIRECT && get_prev_token(tokens, index) != REDIRECT)
-            return (ft_perror(SYNTAX, "newline"));
+    if (!is_start(tokens, &index))
+        return (ft_perror(SYNTAX, words->content[index]));
+    else if (is_repeat(tokens, &index))
         return (ft_perror(SYNTAX, (char *)words->content[index]));
-    }
     else if (!is_file_name(words, tokens, &index))
         return (ft_perror(DIRECT, (char *)words->content[index]));
+    else if (!is_redirect_correct(tokens, &index))
+        return (ft_perror(SYNTAX, "newline"));
 }
