@@ -17,7 +17,7 @@
 #  define _DEFAULT_SOURCE
 # endif
 
-# include "./libft/libft.h"
+# include "../libft/libft.h"
 # include <dirent.h>
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -151,7 +151,7 @@ bool							is_control(void *word);
 
 bool							is_pipe(void *word);
 
-void    		grammar_check(t_arrlst *words, t_token *tokens);
+int    	grammar_check(t_arrlst *words, t_token *tokens);
 
 bool    is_repeat(t_token *tokens, int *index);
 
@@ -161,7 +161,7 @@ bool    is_start(t_token *tokens, int *index);
 
 bool    is_redirect_correct(t_token *tokens, int *index);
 
-void    ft_perror(t_error type, char *error_msg);
+int    ft_perror(t_error type, char *error_msg);
 
 int	skip_redirect(t_token *tokens, int index);
 

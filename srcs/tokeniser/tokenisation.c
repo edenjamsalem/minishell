@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenisation.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 17:26:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/06 23:32:13 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/09 15:00:35 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ t_token	*secondary_tokenisation(t_arrlst *words, t_token *tokens)
 {
 	int	i;
 
-	grammar_check(words, tokens);
 	i = 0;
 	while (words->content[i])
 	{
@@ -88,8 +87,9 @@ t_token *tokenise(t_arrlst *words)
 		return (NULL);
 	tokens[words->count] = END; // terminate tokenised input
 	tokens = primary_tokenisation(words, tokens);
+	if (!grammar_check(words, tokens))
+		return (NULL);
 	tokens = secondary_tokenisation(words, tokens);
-	grammar_check(words, tokens);
 	i = 0;
 	while (i < words->count)
 	{

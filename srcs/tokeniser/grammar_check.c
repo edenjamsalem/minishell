@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   grammar_check.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 21:24:14 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/06 19:49:52 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/09 14:53:18 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ bool    is_redirect_correct(t_token *tokens, int *index)
 }
 
 // prints error messages in case of syntax error
-void    grammar_check(t_arrlst *words, t_token *tokens)
+int    grammar_check(t_arrlst *words, t_token *tokens)
 {
     int index;
     
@@ -102,4 +102,5 @@ void    grammar_check(t_arrlst *words, t_token *tokens)
         return (ft_perror(DIRECT, (char *)words->content[index]));
     else if (!is_redirect_correct(tokens, &index))
         return (ft_perror(SYNTAX, "newline"));
+    return (1);
 }
