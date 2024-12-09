@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/09 13:47:13 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/09 16:39:51 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,6 @@ void	ft_exec(char **cmd, t_dict *envp)
 
 	if (!cmd || !(*cmd))
 		exit(EXIT_SUCCESS);
-	if (ft_match(cmd[0], "exit"))
-		ft_exit(cmd, true);
 	if (builtin(cmd, envp))
 		exit(EXIT_SUCCESS);
 	cmd_path = find_cmd_path((char *)cmd[0], envp);
