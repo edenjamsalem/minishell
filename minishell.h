@@ -67,7 +67,6 @@ typedef struct s_ctrl_seq // CONTROL SEQUENCE
 	int			**pipe_fd;   // dynamically allocated list of fd's for each pipe
 	int			infile;
 	int			outfile;
-	bool		prev_exit_status;
 }								t_ctrl_seq;
 
 // SIGNALS
@@ -114,8 +113,6 @@ void			quote_removal(t_arrlst *input);
 char			*expand_vars(char *input, t_dict *envp, bool ign_double, bool ign_single);
 
 void			expand_vars_in_double_quotes(t_arrlst *input, t_dict *envp_dict);
-
-char			*expand_params(char *input, t_dict *envp_dict); // ???
 
 void			copy_expanded_var(char **input, char **expanded, t_dict *envp_dict);
 

@@ -27,7 +27,6 @@ static t_ctrl_seq	*init_seq()
 	seq->ctrl_op = NONE;
 	seq->infile = STDIN_FILENO;
 	seq->outfile = STDOUT_FILENO;
-	seq->prev_exit_status = EXIT_SUCCESS;
 	return (seq);
 }
 

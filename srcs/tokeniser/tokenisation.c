@@ -72,12 +72,21 @@ t_token	*secondary_tokenisation(t_arrlst *words, t_token *tokens)
 			tokens[i] = FILE_;
 		i++;
 	}
+	i = 0;
+	while (i < words->count)
+	{
+		if (is_redirect(words->content[i]))
+			i = skip_redirect(tokens, i);
+		else if (is_command(i, tokens))
+			tokens[i++] = CMD;
+		else
+			i++;
+	}
 	return (tokens);
 }
 
 t_token *tokenise(t_arrlst *words)
 {
-	int i;
 	t_token	*tokens;
 	
 	tokens = malloc(sizeof(t_token) * (words->count + 1));
@@ -88,19 +97,6 @@ t_token *tokenise(t_arrlst *words)
 	if (!grammar_check(words, tokens))
 		return (NULL); // need to free mem here
 	tokens = secondary_tokenisation(words, tokens);
-	i = 0;
-	while (i < words->count)
-	{
-		if (is_redirect(words->content[i]))
-		{
-			i = skip_redirect(tokens, i);
-			if (is_command(i, tokens))
-				tokens[i] = CMD;
-		}
-		else if (is_command(i, tokens))
-			tokens[i] = CMD;
-		i++;
-	}
 	return (tokens);
 }
 /*

@@ -51,8 +51,8 @@ char	*read_input(void)
 	char prompt[100];
 
 	getcwd(prompt, sizeof(prompt));
-	ft_printf("%s", prompt);
-	input = readline(" > ");
+	ft_strlcat(prompt, " > ", 100);
+	input = readline(prompt);
 	if (!input) // handling EOF / ctrl + D
 	{
 		ft_printf("exit\n");
@@ -97,14 +97,17 @@ int	input_unfinished(t_arrlst *input, t_token *tokens, t_dict *envp)
 // process input, generate ctrl seq and execute
 void	process(char *input, t_dict *envp)
 {
-	t_arrlst *words;
-	t_token	*tokens;
+	t_arrlst	*words;
+	t_token		*tokens;
 	t_ctrl_seq	**ctrl_seq;
 	
 	words = NULL;
 	words = parse(input, envp);
 	if (!words)
-		return (free_2darr(words->content, ft_2darr_len(words->content)), free(words));
+	{
+		free_2darr(words->content, ft_2darr_len(words->content)), free(words);
+		return ;
+	}
 	tokens = tokenise(words);
 	if (!tokens)
 		return ; // need to free mem here
@@ -130,7 +133,7 @@ void	cleanup(t_dict *envp_dict)
 int	main(int argc, char **argv, char **envp)
 {
 	char	*input;
-	t_dict		*envp_dict;
+	t_dict	*envp_dict;
 
 	(void)argc;
 	(void)argv;

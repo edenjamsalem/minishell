@@ -6,17 +6,17 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:13:34 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/09 17:07:17 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/09 17:44:29by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-int	ctrl_op_success(t_ctrl_seq *seq)
+int	ctrl_op_success(t_ctrl_seq *seq, int exit_status)
 {
-	if (seq->ctrl_op == AND && seq->prev_exit_status == EXIT_FAILURE)
+	if (seq->ctrl_op == AND && exit_status == EXIT_FAILURE)
 		return (0); 
-	else if (seq->ctrl_op == OR && seq->prev_exit_status == EXIT_SUCCESS)
+	else if (seq->ctrl_op == OR && exit_status == EXIT_SUCCESS)
 		return (0);
 	return (1);	
 }
@@ -52,12 +52,12 @@ void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
 {
 	pid_t	pid;
 	int		status;
-	int		i;
+	int		exit_status;
 
-	i = 0;
-	while (ctrl_seq[i] && ctrl_op_success(ctrl_seq[i]))
+	while (*ctrl_seq && ctrl_op_success(*ctrl_seq, exit_status))
 	{
-		handle_exit_call(ctrl_seq[i]->cmds->content[0]);
+		handle_exit_call((*ctrl_seq)->cmds->content[0]);
+		// cd is not working as changing inside child process
 		pid = fork();
 		if (pid < 0)
 		{
@@ -65,15 +65,16 @@ void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
 			exit(EXIT_FAILURE);
 		}
 		if (CHILD_PROCESS)
-			execute_cmds(ctrl_seq[i], envp);
+			execute_cmds((*ctrl_seq), envp);
 		wait(&status);
-		i++;
-		if (ctrl_seq[i] && WIFEXITED(status))
-			ctrl_seq[i]->prev_exit_status = WEXITSTATUS(status);
+		ctrl_seq++;
+		if (*ctrl_seq && WIFEXITED(status))
+			exit_status = WEXITSTATUS(status);
 		else // process was interrupted by a signal
 			break ; // ???
 	}
 }
+
 /*
 int main(int argc, char **argv, char **envp)
 {
