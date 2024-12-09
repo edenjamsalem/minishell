@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 17:26:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/09 15:00:35 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/09 15:03:36eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,7 @@ t_token	*primary_tokenisation(t_arrlst *words, t_token *tokens)
 		else if (is_pipe(words->content[i]))
 			tokens[i] = PIPE;
 		else
-		{
 			tokens[i] = TEXT;
-		}
 		i++;
 	}
 	return (tokens);
@@ -85,10 +83,13 @@ t_token *tokenise(t_arrlst *words)
 	tokens = malloc(sizeof(t_token) * (words->count + 1));
 	if (!tokens)
 		return (NULL);
+//	i = 0;
+//	while (i < words->count + 1)
+//		tokens[i++] = END;
 	tokens[words->count] = END; // terminate tokenised input
 	tokens = primary_tokenisation(words, tokens);
 	if (!grammar_check(words, tokens))
-		return (NULL);
+		return (NULL); // need to free mem here
 	tokens = secondary_tokenisation(words, tokens);
 	i = 0;
 	while (i < words->count)

@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 14:13:34 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/06 15:51:58 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/09 16:30:56 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,8 @@ void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
 	i = 0;
 	while (ctrl_seq[i] && ctrl_op_success(ctrl_seq[i]))
 	{
-		if (ctrl_seq[i]->cmds->count < 2 && builtin(ctrl_seq[i]->cmds->content[0], envp))
-		{
-			i++;
-			continue ;
-		}
+		if (ft_match("exit", ((char **)(ctrl_seq[i]->cmds->content[0]))[0]))
+			ft_exit(ctrl_seq[i]->cmds->content[0], false);
 		pid = fork();
 		if (pid < 0)
 		{

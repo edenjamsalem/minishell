@@ -106,10 +106,7 @@ void	process(char *input, t_dict *envp)
 		return (free_2darr(words->content, ft_2darr_len(words->content)), free(words));
 	tokens = tokenise(words);
 	if (!tokens)
-	{
-		//cleanup();
 		return ;
-	}
 	if (input_unfinished(words, tokens, envp))
 	{
 		free(tokens);

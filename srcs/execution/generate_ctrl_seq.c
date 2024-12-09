@@ -121,6 +121,15 @@ t_ctrl_seq	**generate_ctrl_seq(t_arrlst *input, t_token *tokens, t_dict *envp)
 		return (NULL);
 	i = 0;
 	j = 0;
+/*
+	int k = 0;
+	while (tokens[k] != END)
+	{
+		printf("%s : %d\n", (char *)input->content[k], tokens[k]);
+		k++;
+	}
+	printf("%d\n", tokens[k]);
+*/
 	while (input->content[i])
 	{
 		ctrl_seq[j] = init_seq();
