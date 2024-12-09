@@ -72,7 +72,7 @@ int	input_unfinished(t_arrlst *input, t_token *tokens, t_dict *envp)
 {
 	int			bytes_read;
 	char		*buf;
-	t_arrlst	*completed;
+	t_arrlst	*rest_of_input;
 	int			i;
 	
 	if (tokens[input->count - 1] == CTRL_OP || tokens[input->count - 1] == PIPE)
@@ -81,13 +81,14 @@ int	input_unfinished(t_arrlst *input, t_token *tokens, t_dict *envp)
 		write(1, "> ", 2);
 		bytes_read = read(STDIN_FILENO, buf, 4096);
 		buf[bytes_read] = '\0';
-		completed = parse(buf, envp);
+		rest_of_input = parse(buf, envp);
 		i = 0;
-		while (i < completed->count)
+		while (i < rest_of_input->count)
 		{
-			append_arrlst(input, completed->content[i]);
+			append_arrlst(input, rest_of_input->content[i]);
 			i++;
 		}
+		// check why double free for buf if I free here
 		return (1);
 	}
 	return (0);

@@ -83,9 +83,6 @@ t_token *tokenise(t_arrlst *words)
 	tokens = malloc(sizeof(t_token) * (words->count + 1));
 	if (!tokens)
 		return (NULL);
-//	i = 0;
-//	while (i < words->count + 1)
-//		tokens[i++] = END;
 	tokens[words->count] = END; // terminate tokenised input
 	tokens = primary_tokenisation(words, tokens);
 	if (!grammar_check(words, tokens))
