@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:31:16 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/06 16:57:53 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/06 17:35:49 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	get_heredoc_input(char *eof, t_dict *envp)
 				exit(EXIT_SUCCESS);
 			expanded = expand_vars(input, envp, true, true);
 			write(pipe_fd[1], expanded, ft_strlen(expanded));
-			free(expanded);
+//			free(expanded); // handle case where input * is returned from expand vars
 		}
 	}
 	close(pipe_fd[1]);
