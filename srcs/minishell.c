@@ -116,6 +116,15 @@ void	process(char *input, t_dict *envp)
 		free(tokens);
 		tokens = tokenise(words);
 	}
+/* FOR DEBUGGING ONLY
+	int	i = 0;
+	while (i < words->count)
+	{
+		ft_printf("%s : %d\n", words->content[i], tokens[i]);
+		i++;
+	}
+	ft_printf("\n");
+*/
 	quote_removal(words);
 	ctrl_seq = generate_ctrl_seq(words, tokens, envp);
 	execute(ctrl_seq, envp);

@@ -77,7 +77,7 @@ t_token	*secondary_tokenisation(t_arrlst *words, t_token *tokens)
 	{
 		if (is_redirect(words->content[i]))
 			i = skip_redirect(tokens, i);
-		else if (is_command(i, tokens))
+		else if (is_command(i, tokens) && tokens[i] == TEXT)
 			tokens[i++] = CMD;
 		else
 			i++;

@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 10:07:28 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/09 17:50:57 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/10 15:44:10 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@ int	ft_echo(char **cmd)
 	int		i;
 	
 	if (ft_2darr_len((void **)cmd) < 2)
-	{
-		ft_printf("\n");
-		return (1);
-	}
+		return (ft_printf("\n"));
 	n_flag = false;
 	i = 1;
 	if (ft_match(cmd[1], "-n"))

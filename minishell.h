@@ -167,7 +167,7 @@ int	skip_redirect(t_token *tokens, int index);
 
 void			execute(t_ctrl_seq **ctrl_seq, t_dict *envp);
 
-void			handle_redirections(t_ctrl_seq *seq, void **input, t_token *tokens, t_dict *envp);
+void			assign_redirections(t_ctrl_seq *seq, void **input, t_token *tokens, t_dict *envp);
 
 pid_t			pipe_fork(int pipe_fd[2]);
 
@@ -181,7 +181,9 @@ void			ft_exec(char **cmd, t_dict *envp);
 
 t_ctrl_seq		**generate_ctrl_seq(t_arrlst *input, t_token *tokens, t_dict *envp);
 
-int			builtin(char **cmd, t_dict *envp);
+int			exec_builtin(char **cmd, t_dict *envp, bool inside_main_process);
+
+int			is_builtin(char **cmd);
 
 void		allocate_pipe_fd(t_ctrl_seq *seq, int size);
 

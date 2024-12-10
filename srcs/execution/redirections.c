@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:31:16 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/09 15:27:05 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/10 14:29:18 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	redirect_fd(t_ctrl_seq *seq, char *operator, char *file, t_dict *envp)
 		seq->infile = get_heredoc_input(file, envp);
 }
 
-void	handle_redirections(t_ctrl_seq *seq, void **input, t_token *tokens, t_dict *envp)
+void	assign_redirections(t_ctrl_seq *seq, void **input, t_token *tokens, t_dict *envp)
 {
 	// TESTED
 	int	i;

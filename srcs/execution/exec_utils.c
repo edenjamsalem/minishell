@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/09 18:27:48 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/10 15:53:19 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,28 @@ static char	*find_cmd_path(char *cmd, t_dict *envp)
 	return (NULL);
 }
 
-int	builtin(char **cmd, t_dict *envp)
+int	is_builtin(char **cmd)
+{
+	if (!cmd || !(*cmd))
+		return (0);
+	else if (ft_match(cmd[0], "env"))
+		return (1);
+	else if (ft_match(cmd[0], "cd"))
+		return (1);
+	else if (ft_match(cmd[0], "echo"))
+		return (1);
+	else if (ft_match(cmd[0], "export"))
+		return (1);
+	else if (ft_match(cmd[0], "pwd"))
+		return (1);
+	else if (ft_match(cmd[0], "unset"))
+		return (1);
+	else if (ft_match(cmd[0], "exit"))
+		return (1);
+	return (0);
+}
+
+int	exec_builtin(char **cmd, t_dict *envp, bool inside_main_process)
 {
 	if (!cmd || !(*cmd))
 		return (0);
@@ -54,7 +75,7 @@ int	builtin(char **cmd, t_dict *envp)
 	else if (ft_match(cmd[0], "unset"))
 		return (ft_unset(cmd, envp));
 	else if (ft_match(cmd[0], "exit"))
-		ft_exit(cmd, false);
+		ft_exit(cmd, inside_main_process);
 	return (0);
 }
 
@@ -64,7 +85,7 @@ void	ft_exec(char **cmd, t_dict *envp)
 
 	if (!cmd || !(*cmd))
 		exit(EXIT_SUCCESS);
-	if (builtin(cmd, envp))
+	if (exec_builtin(cmd, envp, false))
 		exit(EXIT_SUCCESS);
 	cmd_path = find_cmd_path((char *)cmd[0], envp);
 	if (execve(cmd_path, cmd, dict_to_arr(envp)) == -1)

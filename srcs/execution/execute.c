@@ -25,8 +25,8 @@ void	execute_cmds(t_ctrl_seq* seq, t_dict *envp)
 {
 	int	i;
 
-	dup2(seq->infile, STDIN_FILENO);
-	dup2(seq->outfile, STDOUT_FILENO);
+//	dup2(seq->infile, STDIN_FILENO);
+//	dup2(seq->outfile, STDOUT_FILENO);
 	if (seq->cmds->count == 1)
 		ft_exec((char **)seq->cmds->content[0], envp); // handle command not found error
 	else
@@ -42,10 +42,33 @@ void	execute_cmds(t_ctrl_seq* seq, t_dict *envp)
 	}
 }
 
-void	handle_exit_call(void **cmds)
+pid_t	ft_fork()
 {
-	if (cmds[0] && ft_match("exit", ((char **)cmds)[0]))
-		ft_exit((char **)cmds, true);
+	pid_t pid;
+
+	pid = fork();
+	if (pid < 0)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	return (pid);
+}
+
+void	handle_redirections(t_ctrl_seq *seq, int *stdin_out)
+{
+//	ft_printf("infile = %d\n", seq->infile);
+//	ft_printf("outfile = %d\n", seq->outfile);
+	stdin_out[0] = dup(STDIN_FILENO);
+	dup2(seq->infile, STDIN_FILENO);
+	stdin_out[1] = dup(STDOUT_FILENO);
+	dup2(seq->outfile, STDOUT_FILENO);
+}
+
+void	reset_stdin_out(int	*stdin_out)
+{
+	dup2(stdin_out[0], STDIN_FILENO);
+	dup2(stdin_out[1], STDOUT_FILENO);
 }
 
 void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
@@ -53,25 +76,27 @@ void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
 	pid_t	pid;
 	int		status;
 	int		exit_status;
+	int		stdin_out[2];
 
 	while (*ctrl_seq && ctrl_op_success(*ctrl_seq, exit_status))
 	{
-		handle_exit_call((*ctrl_seq)->cmds->content[0]);
-		// cd is not working as changing inside child process
-		pid = fork();
-		if (pid < 0)
+		exit_status = EXIT_SUCCESS;
+		handle_redirections((*ctrl_seq), stdin_out);
+		if ((*ctrl_seq)->cmds->count < 2 && is_builtin((*ctrl_seq)->cmds->content[0])) // no pipes
+			exec_builtin((*ctrl_seq)->cmds->content[0], envp, true);
+		else
 		{
-			perror("fork");
-			exit(EXIT_FAILURE);
+			pid = ft_fork();
+			if (CHILD_PROCESS)
+				execute_cmds((*ctrl_seq), envp);
+			wait(&status);
+			if (WIFEXITED(status))
+				exit_status = WEXITSTATUS(status);
+			else // process was interrupted by a signal
+				break ; // ???
 		}
-		if (CHILD_PROCESS)
-			execute_cmds((*ctrl_seq), envp);
-		wait(&status);
+		reset_stdin_out(stdin_out);
 		ctrl_seq++;
-		if (*ctrl_seq && WIFEXITED(status))
-			exit_status = WEXITSTATUS(status);
-		else // process was interrupted by a signal
-			break ; // ???
 	}
 }
 
