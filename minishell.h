@@ -33,7 +33,6 @@ extern volatile sig_atomic_t	g_flag;
 
 # define IFS " \t\n"
 # define QUOTES "\'\""
-# define CALCULATE_DIFF(key, envp_dict) ft_strlen(get_dict_value(key, envp_dict)) - (ft_strlen(key) + 1)
 
 typedef enum e_token
 {

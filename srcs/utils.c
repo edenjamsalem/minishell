@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:05:51 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/09 14:52:17 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/10 16:32:34 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,24 @@ int    ft_perror(t_error type, char *error_msg)
         return (0);
     }
     return (1);
+}
+
+// set up envp dictionary
+t_dict	*init_envp_dict(char **envp)
+{
+	int			i;
+	t_dict		*node;
+	t_dict		*envp_dict;
+
+	i = 0;
+	envp_dict = NULL;
+	while (envp[i])
+	{
+		node = str_to_dict(envp[i]);
+		dict_addback(&envp_dict, node);
+		i++;
+	}
+    node = str_to_dict("?=0");
+	dict_addback(&envp_dict, node);
+	return (envp_dict);
 }

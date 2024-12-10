@@ -98,6 +98,7 @@ void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
 		reset_stdin_out(stdin_out);
 		ctrl_seq++;
 	}
+	set_dict_value("?", ft_itoa(exit_status), envp);
 }
 
 /*

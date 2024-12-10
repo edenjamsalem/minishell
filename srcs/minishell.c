@@ -26,23 +26,7 @@ void print_arrlst(t_arrlst *list);
 void print_tokens(t_arrlst *words, t_token *tokens);
 void print_ctrl_seq(t_ctrl_seq **ctrl_seq);
 
-// set up envp dictionary
-t_dict	*init_envp_dict(char **envp)
-{
-	int			i;
-	t_dict		*node;
-	t_dict		*envp_dict;
 
-	i = 0;
-	envp_dict = NULL;
-	while (envp[i])
-	{
-		node = str_to_dict(envp[i]);
-		dict_addback(&envp_dict, node);
-		i++;
-	}
-	return (envp_dict);
-}
 
 // read input, add history and handling signals
 char	*read_input(void)

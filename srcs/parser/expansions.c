@@ -12,6 +12,11 @@
 
 #include "../../minishell.h"
 
+int	calculate_diff(char *key, t_dict *envp)
+{
+	return (ft_strlen(get_dict_value(key, envp)) - (ft_strlen(key) + 1));
+}
+
 // This function calculates the expanded len of the input
 static int	get_len(char *input, t_dict *envp_dict, bool inc_double, bool inc_single)
 {
@@ -31,7 +36,7 @@ static int	get_len(char *input, t_dict *envp_dict, bool inc_double, bool inc_sin
 		{
 			input++;
 			var = ft_strcut(input, skip_while(&input, ft_isalnum));
-			diff += CALCULATE_DIFF(var, envp_dict);
+			diff += calculate_diff(var, envp_dict);
 			free(var);
 		}
 		else
