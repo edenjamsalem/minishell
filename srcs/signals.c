@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 19:00:09 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/07 00:26:22 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/10 20:26:13 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,10 @@ void handle_signal(int signum, siginfo_t *info, void *context)
 {
 	(void)info;
 	(void)context;
-	if (signum == SIGINT) // handles ctrl+C
-	{
-		g_flag = 1;
+	g_signal = signum;
+	if (g_signal == SIGINT) // handles ctrl+C
 		write(STDOUT_FILENO, "\nminishell > ", 13);
-	}
-	else if (signum == EOF) // handles ctrl+D
+	else if (g_signal == EOF) // handles ctrl+D
 		exit(EXIT_FAILURE); // execve handles cat special case
 }
 

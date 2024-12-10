@@ -17,7 +17,7 @@
 #  define _DEFAULT_SOURCE
 # endif
 
-# include "../libft/libft.h"
+# include "./libft/libft.h"
 # include <dirent.h>
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -28,7 +28,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 
-extern volatile sig_atomic_t	g_flag;
+extern volatile sig_atomic_t	g_signal;
 // setting up global var to be used by all files w header file included
 
 # define IFS " \t\n"

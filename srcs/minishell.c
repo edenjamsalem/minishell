@@ -20,7 +20,7 @@
 // // set up control seq
 // // execute
 // free
-volatile sig_atomic_t	g_flag = 0; // signal receiving flag
+volatile sig_atomic_t	g_signal = 0; // store signal in global variable to avoid resetting by execve
 
 void print_arrlst(t_arrlst *list);
 void print_tokens(t_arrlst *words, t_token *tokens);
@@ -127,9 +127,9 @@ int	main(int argc, char **argv, char **envp)
 	setup_sig_handlers(); // initialise signal handlers first;
 	while (1)
 	{
-		if (g_flag) // means a message is being received
+		if (g_signal) // means a message is being received
 		{	
-			g_flag = 0; // reset flag
+			g_signal = 0; // reset flag
 			//input = readline("minishell > "); // reset prompt | MAYBE DONT NEED ?
 			continue ;
 		}
