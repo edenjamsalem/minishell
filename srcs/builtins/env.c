@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 12:45:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/29 16:01:30 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/10 17:29:32 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	ft_env(t_dict *envp_vars)
 {
 	print_dict(envp_vars);
-	return (1);
+	return (EXIT_SUCCESS);
 }
 /*
 int main(int argc, char **argv, char **envp)

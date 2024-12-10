@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:58:59 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/04 20:10:47 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/10 17:32:22 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,5 @@ int	ft_unset(char **cmd, t_dict *envp_vars)
 			del_dict_node(&envp_vars);
 		envp_vars = envp_vars->next;
 	}
-	return (1);
+	return (EXIT_SUCCESS);
 }

@@ -14,7 +14,7 @@
 
 int	ctrl_op_success(t_ctrl_seq *seq, int exit_status)
 {
-	if (seq->ctrl_op == AND && exit_status == EXIT_FAILURE)
+	if (seq->ctrl_op == AND && exit_status != EXIT_SUCCESS)
 		return (0); 
 	else if (seq->ctrl_op == OR && exit_status == EXIT_SUCCESS)
 		return (0);
@@ -80,10 +80,10 @@ void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
 
 	while (*ctrl_seq && ctrl_op_success(*ctrl_seq, exit_status))
 	{
-		exit_status = EXIT_SUCCESS;
+		exit_status = ft_atoi(get_dict_value("?", envp));
 		handle_redirections((*ctrl_seq), stdin_out);
 		if ((*ctrl_seq)->cmds->count < 2 && is_builtin((*ctrl_seq)->cmds->content[0])) // no pipes
-			exec_builtin((*ctrl_seq)->cmds->content[0], envp, true);
+			exit_status = exec_builtin((*ctrl_seq)->cmds->content[0], envp, true);
 		else
 		{
 			pid = ft_fork();
@@ -96,9 +96,9 @@ void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
 				break ; // ???
 		}
 		reset_stdin_out(stdin_out);
+		set_dict_value("?", ft_itoa(exit_status), envp);
 		ctrl_seq++;
 	}
-	set_dict_value("?", ft_itoa(exit_status), envp);
 }
 
 /*

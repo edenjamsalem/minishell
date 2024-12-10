@@ -35,5 +35,5 @@ int	ft_export(char **cmd, t_dict *envp_vars)
 		}
 		i++;
 	}
-	return (1);
+	return (EXIT_SUCCESS);
 }
