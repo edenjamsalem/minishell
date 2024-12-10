@@ -93,22 +93,15 @@ void	process(char *input, t_dict *envp)
 		return ;
 	}
 	tokens = tokenise(words);
-	if (!tokens)
+	if (!grammar_check(words, tokens))
 		return ; // need to free mem here
 	if (input_unfinished(words, tokens, envp))
 	{
 		free(tokens);
 		tokens = tokenise(words);
+		if (!grammar_check(words, tokens))
+			return ; // need to free mem here
 	}
-/* FOR DEBUGGING ONLY
-	int	i = 0;
-	while (i < words->count)
-	{
-		ft_printf("%s : %d\n", words->content[i], tokens[i]);
-		i++;
-	}
-	ft_printf("\n");
-*/
 	quote_removal(words);
 	ctrl_seq = generate_ctrl_seq(words, tokens, envp);
 	execute(ctrl_seq, envp);

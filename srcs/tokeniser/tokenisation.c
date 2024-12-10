@@ -94,8 +94,6 @@ t_token *tokenise(t_arrlst *words)
 		return (NULL);
 	tokens[words->count] = END; // terminate tokenised input
 	tokens = primary_tokenisation(words, tokens);
-	if (!grammar_check(words, tokens))
-		return (NULL); // need to free mem here
 	tokens = secondary_tokenisation(words, tokens);
 	return (tokens);
 }
