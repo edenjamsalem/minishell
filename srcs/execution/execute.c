@@ -25,8 +25,6 @@ void	execute_cmds(t_ctrl_seq* seq, t_dict *envp)
 {
 	int	i;
 
-//	dup2(seq->infile, STDIN_FILENO);
-//	dup2(seq->outfile, STDOUT_FILENO);
 	if (seq->cmds->count == 1)
 		ft_exec((char **)seq->cmds->content[0], envp); // handle command not found error
 	else
@@ -55,13 +53,11 @@ pid_t	ft_fork()
 	return (pid);
 }
 
-void	handle_redirections(t_ctrl_seq *seq, int *stdin_out)
+void	apply_redirections(t_ctrl_seq *seq, int *stdin_out)
 {
-//	ft_printf("infile = %d\n", seq->infile);
-//	ft_printf("outfile = %d\n", seq->outfile);
 	stdin_out[0] = dup(STDIN_FILENO);
-	dup2(seq->infile, STDIN_FILENO);
 	stdin_out[1] = dup(STDOUT_FILENO);
+	dup2(seq->infile, STDIN_FILENO);
 	dup2(seq->outfile, STDOUT_FILENO);
 }
 
@@ -81,8 +77,8 @@ void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
 	while (*ctrl_seq && ctrl_op_success(*ctrl_seq, exit_status))
 	{
 		exit_status = ft_atoi(get_dict_value("?", envp));
-		handle_redirections((*ctrl_seq), stdin_out);
-		if ((*ctrl_seq)->cmds->count < 2 && is_builtin((*ctrl_seq)->cmds->content[0])) // no pipes
+		apply_redirections((*ctrl_seq), stdin_out);
+		if ((*ctrl_seq)->cmds->count < 2 && is_builtin((*ctrl_seq)->cmds->content[0]))
 			exit_status = exec_builtin((*ctrl_seq)->cmds->content[0], envp, true);
 		else
 		{
