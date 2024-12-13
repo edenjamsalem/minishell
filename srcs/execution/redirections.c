@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:31:16 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/10 14:29:18 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/13 14:30:49 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,19 @@ bool	is_eof(char *input, char *eof)
 	return (false);
 }
 
-void	allocate_pipe_fd(t_ctrl_seq *seq, int size)
+void	setup_pipes(t_ctrl_seq *seq)
 {
 	int	i;
+	int	pipe_count;
 
-	if (size < 1)
+	pipe_count = seq->pipe_count;
+	if (pipe_count < 1)
 		return ;
-	seq->pipe_fd = malloc(sizeof(int *) * (size + 1));
+	seq->pipe_fd = malloc(sizeof(int *) * (pipe_count + 1));
 	if (!seq->pipe_fd)
 		return ;
 	i = 0;
-	while (i < size)
+	while (i < pipe_count)
 	{
 		seq->pipe_fd[i] = malloc(sizeof(int) * 2);
 		if (!seq->pipe_fd[i])
@@ -45,7 +47,7 @@ void	allocate_pipe_fd(t_ctrl_seq *seq, int size)
 		}
 		i++;
 	}
-	seq->pipe_fd[size] = NULL;
+	seq->pipe_fd[pipe_count] = NULL;
 }
 
 int	get_heredoc_input(char *eof, t_dict *envp)
@@ -78,28 +80,42 @@ int	get_heredoc_input(char *eof, t_dict *envp)
 	return (pipe_fd[0]);
 }
 
-void	redirect_fd(t_ctrl_seq *seq, char *operator, char *file, t_dict *envp)
+void	redirect_fd(char *operator, char *file, t_dict *envp)
 {
+	int	fd;
+	
 	if (ft_match(operator, ">"))
-		seq->outfile = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0643);
+	{
+		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0643);
+		dup2(fd, STDOUT_FILENO);
+	}
 	else if (ft_match(operator, ">>"))
-		seq->outfile = open(file, O_WRONLY | O_CREAT | O_APPEND, 0643);
+	{
+		fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0643);
+		dup2(fd, STDOUT_FILENO);
+	}
 	else if (ft_match(operator, "<"))
-		seq->infile = open(file, O_RDONLY);
+	{
+		fd = open(file, O_RDONLY);
+		dup2(fd, STDIN_FILENO);
+	}
 	else if (ft_match(operator, "<<"))
-		seq->infile = get_heredoc_input(file, envp);
+	{
+		fd = get_heredoc_input(file, envp);
+		dup2(fd, STDIN_FILENO);
+	}
 }
 
-void	assign_redirections(t_ctrl_seq *seq, void **input, t_token *tokens, t_dict *envp)
+void	assign_redirections(t_ctrl_seq *seq, t_dict *envp)
 {
 	// TESTED
 	int	i;
 
 	i = 0;
-	while (input[i] && tokens[i] != CTRL_OP)
+	while (seq->words->content[i])
 	{
-		if (tokens[i] == REDIRECT && tokens[i + 1] == FILE_)
-			redirect_fd(seq, (char *)input[i], (char *)input[i + 1], envp);
+		if (seq->tokens[i] == REDIRECT && seq->tokens[i + 1] == FILE_)
+			redirect_fd(seq->words->content[i], seq->words->content[i + 1], envp);
 		i++;
 	}
 }

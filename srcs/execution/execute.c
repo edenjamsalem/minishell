@@ -12,53 +12,38 @@
 
 #include "../../minishell.h"
 
-int	ctrl_op_success(t_ctrl_seq *seq, int exit_status)
+int	ctrl_op_failure(t_ctrl_seq *seq, int exit_status)
 {
 	if (seq->ctrl_op == AND && exit_status != EXIT_SUCCESS)
-		return (0); 
+		return (1); 
 	else if (seq->ctrl_op == OR && exit_status == EXIT_SUCCESS)
-		return (0);
-	return (1);	
+		return (1);
+	return (0);	
 }
 
 void	execute_cmds(t_ctrl_seq* seq, t_dict *envp)
 {
 	int	i;
 
-	if (seq->cmds->count == 1)
-		ft_exec((char **)seq->cmds->content[0], envp); // handle command not found error
+	if (seq->pipe_count == 0)
+		ft_exec((char **)seq->cmds[0], envp);
 	else
 	{
-		exec_infile_to_pipe(seq->pipe_fd[0], (char **)seq->cmds->content[0], envp);
+		exec_infile_to_pipe(seq->pipe_fd[0], seq->cmds[0], envp);
 		i = 1;
-		while (i < seq->cmds->count - 1)
+		while (i < seq->pipe_count)
 		{
-			exec_pipe_to_pipe(seq->pipe_fd, (char **)seq->cmds->content[i], i, envp);
+			exec_pipe_to_pipe(seq->pipe_fd, seq->cmds[i], i, envp);
 			i++;
 		}
-		exec_pipe_to_outfile(seq->pipe_fd[i - 1], (char **)seq->cmds->content[i], envp);
+		exec_pipe_to_outfile(seq->pipe_fd[i - 1], seq->cmds[i], envp);
 	}
 }
 
-pid_t	ft_fork()
-{
-	pid_t pid;
-
-	pid = fork();
-	if (pid < 0)
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
-	return (pid);
-}
-
-void	apply_redirections(t_ctrl_seq *seq, int *stdin_out)
+void	dup_stdin_out(int *stdin_out)
 {
 	stdin_out[0] = dup(STDIN_FILENO);
 	stdin_out[1] = dup(STDOUT_FILENO);
-	dup2(seq->infile, STDIN_FILENO);
-	dup2(seq->outfile, STDOUT_FILENO);
 }
 
 void	reset_stdin_out(int	*stdin_out)
@@ -69,22 +54,27 @@ void	reset_stdin_out(int	*stdin_out)
 
 void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
 {
-	pid_t	pid;
-	int		status;
-	int		exit_status;
-	int		stdin_out[2];
+	pid_t		pid;
+	int			status;
+	int			stdin_out[2];
+	int			exit_status = EXIT_SUCCESS;
 
-	while (*ctrl_seq && ctrl_op_success(*ctrl_seq, exit_status))
+	while (*ctrl_seq)
 	{
-		exit_status = ft_atoi(get_dict_value("?", envp));
-		apply_redirections((*ctrl_seq), stdin_out);
-		if ((*ctrl_seq)->cmds->count < 2 && is_builtin((*ctrl_seq)->cmds->content[0]))
-			exit_status = exec_builtin((*ctrl_seq)->cmds->content[0], envp, true);
+		if (ctrl_op_failure(*ctrl_seq, exit_status))
+		{
+			ctrl_seq++;
+			continue ;
+		}
+		dup_stdin_out(stdin_out);
+		init_ctrl_seq(*ctrl_seq, envp);
+		if ((*ctrl_seq)->pipe_count == 0 && is_builtin((*ctrl_seq)->cmds[0]))
+			exit_status = exec_builtin((*ctrl_seq)->cmds[0], envp, true);
 		else
 		{
 			pid = ft_fork();
 			if (CHILD_PROCESS)
-				execute_cmds((*ctrl_seq), envp);
+				execute_cmds(*ctrl_seq, envp);
 			wait(&status);
 			if (WIFEXITED(status))
 				exit_status = WEXITSTATUS(status);
@@ -92,7 +82,6 @@ void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
 				break ; // ???
 		}
 		reset_stdin_out(stdin_out);
-		set_dict_value("?", ft_itoa(exit_status), envp);
 		ctrl_seq++;
 	}
 }

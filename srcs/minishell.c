@@ -52,63 +52,6 @@ char	*read_input(void)
 	return (input);
 }
 
-int	input_unfinished(t_arrlst *input, t_token *tokens, t_dict *envp)
-{
-	int			bytes_read;
-	char		*buf;
-	t_arrlst	*rest_of_input;
-	int			i;
-	
-	if (tokens[input->count - 1] == CTRL_OP || tokens[input->count - 1] == PIPE)
-	{
-		buf = malloc(4096);
-		write(1, "> ", 2);
-		bytes_read = read(STDIN_FILENO, buf, 4096);
-		buf[bytes_read] = '\0';
-		rest_of_input = parse(buf, envp);
-		i = 0;
-		while (i < rest_of_input->count)
-		{
-			append_arrlst(input, rest_of_input->content[i]);
-			i++;
-		}
-		// check why double free for buf if I free here
-		return (1);
-	}
-	return (0);
-}
-
-// process input, generate ctrl seq and execute
-void	process(char *input, t_dict *envp)
-{
-	t_arrlst	*words;
-	t_token		*tokens;
-	t_ctrl_seq	**ctrl_seq;
-	
-	words = NULL;
-	words = parse(input, envp);
-	if (!words)
-	{
-		free_2darr(words->content, ft_2darr_len(words->content)), free(words);
-		return ;
-	}
-	tokens = tokenise(words);
-	if (!grammar_check(words, tokens))
-		return ; // need to free mem here
-	if (input_unfinished(words, tokens, envp))
-	{
-		free(tokens);
-		tokens = tokenise(words);
-		if (!grammar_check(words, tokens))
-			return ; // need to free mem here
-	}
-	quote_removal(words);
-	ctrl_seq = generate_ctrl_seq(words, tokens, envp);
-	execute(ctrl_seq, envp);
-	free_2darr(words->content, ft_2darr_len(words->content));
-	free(words);
-}
-
 // clean up function
 void	cleanup(t_dict *envp_dict)
 {
@@ -118,8 +61,9 @@ void	cleanup(t_dict *envp_dict)
 
 int	main(int argc, char **argv, char **envp)
 {
-	char	*input;
-	t_dict	*envp_dict;
+	char		*input;
+	t_dict		*envp_dict;
+	t_ctrl_seq	**ctrl_seq;
 
 	(void)argc;
 	(void)argv;
@@ -136,7 +80,8 @@ int	main(int argc, char **argv, char **envp)
 		input = read_input();
 		if (!input)
 			continue ;
-		process(input, envp_dict);
+		ctrl_seq = gen_ctrl_seq(input);
+		execute(ctrl_seq, envp_dict);
 	}
 	cleanup(envp_dict);
 }

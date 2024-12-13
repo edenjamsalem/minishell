@@ -1,34 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   split_input.c                                      :+:      :+:    :+:   */
+/*   gen_ctrl_seq.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 10:32:59 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/13 11:42:36 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/13 14:48:18 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-t_ctrl_seq	*init_seq()
-{
-	// TESTED
-	t_ctrl_seq *seq;
-
-	seq = malloc(sizeof(t_ctrl_seq));
-	if (!seq)
-		return (NULL);
-	seq->cmds = init_arrlst(2);
-	if (!seq->cmds)
-		return (NULL); // handle freeing properly
-	seq->pipe_fd = NULL;
-	seq->ctrl_op = NONE;
-	seq->infile = STDIN_FILENO;
-	seq->outfile = STDOUT_FILENO;
-	return (seq);
-}
 
 int ends_with_ctrl_op(char *input)
 {
@@ -50,7 +32,7 @@ int	syntax_error(char *text)
 		text++;
 	if (chrsetcmp(*text, "&|"))
 		return (1);
-	// check fully
+	// check fully, this only checks first char
 	return(0);
 }
 
@@ -106,13 +88,12 @@ t_ctrl_op assign_ctrl_op(char **input)
 		return (AND);
 	else if (ft_match(ctrl_op, "||"))
 		return (OR);
-	return (PIPE_);
+	return (NONE);
 }
 
 char	*copy_text(char **input)
 {
 	char	*start;
-	char	*completed;
 
 	start = *input;
 	while (**input)
@@ -126,7 +107,7 @@ char	*copy_text(char **input)
 	return (ft_strcut(start, *input));
 }
 
-t_ctrl_seq **split_ctrl_op(char *input)
+t_ctrl_seq **gen_ctrl_seq(char *input)
 {
 	t_ctrl_seq	**ctrl_seq;
 	int			i;
@@ -136,16 +117,17 @@ t_ctrl_seq **split_ctrl_op(char *input)
 	i = 0;
 	while (*input)
 	{
-		ctrl_seq[i] = init_seq();
+		ctrl_seq[i] = malloc(sizeof(t_ctrl_seq));
+		if (!ctrl_seq[i])
+			return (NULL);
 		ctrl_seq[i]->ctrl_op = assign_ctrl_op(&input);
 		ctrl_seq[i]->raw_input = copy_text(&input);
-		ft_printf("%s\n", ctrl_seq[i]->raw_input);
 		i++;
 	}
 	ctrl_seq[i] = NULL;
 	return (ctrl_seq);
 }
-
+/*
 int main(void)
 {
 	t_ctrl_seq **ctrl_seq;
@@ -157,3 +139,4 @@ int main(void)
 		ctrl_seq++;
 	}
 }
+*/

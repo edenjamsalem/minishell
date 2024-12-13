@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 14:33:13 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/06 12:19:16 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/13 14:53:44 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,19 @@ pid_t	pipe_fork(int pipe_fd[2])
 		perror("pipe");
 		exit(EXIT_FAILURE);
 	}
+	pid = fork();
+	if (pid < 0)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	return (pid);
+}
+
+pid_t	ft_fork()
+{
+	pid_t pid;
+
 	pid = fork();
 	if (pid < 0)
 	{

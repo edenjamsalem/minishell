@@ -40,7 +40,7 @@ typedef enum e_token
 	TEXT,
 	CMD,
 	FILE_,
-	CTRL_OP,
+	CTRL_OP, // no longer need this
 	REDIRECT,
 	PIPE,
 }	t_token;
@@ -50,7 +50,6 @@ typedef enum e_ctrl_op
 	NONE,
 	AND,
 	OR,
-	PIPE_, 
 }	t_ctrl_op;
 
 typedef enum e_error
@@ -63,11 +62,12 @@ typedef enum e_error
 typedef struct s_ctrl_seq // CONTROL SEQUENCE
 {
 	char		*raw_input;
-	t_arrlst	*cmds;    // list of 2d char arrays with command + flags + args
+	t_arrlst	*words;
+	t_token		*tokens;
+	char		***cmds;    // list of 2d char arrays with command + flags + args
 	t_ctrl_op	ctrl_op; // && or ||
 	int			**pipe_fd;   // dynamically allocated list of fd's for each pipe
-	int			infile;
-	int			outfile;
+	int			pipe_count;
 }								t_ctrl_seq;
 
 // SIGNALS
@@ -95,9 +95,11 @@ void	ft_exit(char **cmd_argv, bool inside_main_process);
 
 // PARSE FNS
 
+t_ctrl_seq		**gen_ctrl_seq(char *input);
+
 t_arrlst		*word_split(char *input);
 
-t_arrlst		*parse(char *input, t_dict *envp_dict);
+void			parse(t_ctrl_seq *seq, t_dict *envp_dict);
 
 int				skip_quotes(char **text);
 
@@ -127,7 +129,7 @@ void			copy_expanded_var(char **input, char **expanded, t_dict *envp_dict);
 
 t_dict			*init_envp_dict(char **envp);
 
-t_ctrl_seq		*init_seq();
+void			init_ctrl_seq(t_ctrl_seq *seq, t_dict *envp);
 
 
 // TOKENISER
@@ -171,9 +173,11 @@ int	skip_redirect(t_token *tokens, int index);
 
 void			execute(t_ctrl_seq **ctrl_seq, t_dict *envp);
 
-void			assign_redirections(t_ctrl_seq *seq, void **input, t_token *tokens, t_dict *envp);
+void			assign_redirections(t_ctrl_seq *seq, t_dict *envp);
 
 pid_t			pipe_fork(int pipe_fd[2]);
+
+pid_t			ft_fork();
 
 void			exec_infile_to_pipe(int pipe_fd[2], char **cmd, t_dict *envp);
 
@@ -183,15 +187,20 @@ void			exec_pipe_to_outfile(int pipe_fd[2], char **cmd, t_dict *envp);
 
 void			ft_exec(char **cmd, t_dict *envp);
 
-t_ctrl_seq		**generate_ctrl_seq(t_arrlst *input, t_token *tokens, t_dict *envp);
+t_ctrl_seq		**gen_ctrl_seq(char *input);
 
 int			exec_builtin(char **cmd, t_dict *envp, bool inside_main_process);
 
 int			is_builtin(char **cmd);
 
-void		allocate_pipe_fd(t_ctrl_seq *seq, int size);
+void		setup_pipes(t_ctrl_seq *seq);
 
 
+void		assign_pipe_count(t_ctrl_seq *seq);
+
+void		assign_cmds(t_ctrl_seq *seq);
+
+void		init_ctrl_seq(t_ctrl_seq *seq, t_dict *envp);
 
 // TEST FUNCTIONS; can remove those later
 
