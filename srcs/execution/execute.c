@@ -57,10 +57,11 @@ void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
 	pid_t		pid;
 	int			status;
 	int			stdin_out[2];
-	int			exit_status = EXIT_SUCCESS;
+	int			exit_status;
 
 	while (*ctrl_seq)
 	{
+		exit_status = ft_atoi(get_dict_value("?", envp));
 		if (ctrl_op_failure(*ctrl_seq, exit_status))
 		{
 			ctrl_seq++;
@@ -81,6 +82,7 @@ void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
 			else // process was interrupted by a signal
 				break ; // ???
 		}
+		set_dict_value("?", ft_itoa(exit_status), envp);
 		reset_stdin_out(stdin_out);
 		ctrl_seq++;
 	}
