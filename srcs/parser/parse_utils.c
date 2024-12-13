@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 11:56:09 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/10 17:08:36 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:49:39 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,18 +69,24 @@ void	copy_expanded_var(char **input, char **expanded, t_dict *envp_dict)
 {
 	char	*key;
 	char	*value;
+	int		value_len;
 
 	if (!(*input) || !(*expanded) || !(envp_dict))
 		return ;	
 	(*input)++;	
 	key = ft_strcut(*input, skip_to(input, IFS));
-	if (ft_strchrset(key, QUOTES))
+	if (ft_strchrset(key, QUOTES)) // check if i still need this 
 		remove_quotes(key);
 	value = get_dict_value(key, envp_dict);
+	value_len = ft_strlen(value);
 	if (value)
 	{
-		ft_strlcpy(*expanded, value, ft_strlen(value) + 1);	
-		skip_to(expanded, IFS);
+		ft_strlcpy(*expanded, value, value_len + 1);	
+		while (value_len > 0)
+		{
+			(*expanded)++;
+			value_len--;
+		}
 	}
 	free(key);
 }
