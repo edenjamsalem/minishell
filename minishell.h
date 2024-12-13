@@ -181,7 +181,7 @@ pid_t			ft_fork();
 
 void			exec_infile_to_pipe(int pipe_fd[2], char **cmd, t_dict *envp);
 
-void			exec_pipe_to_pipe(int **pipe_fd, char **cmd, int i, t_dict *envp);
+void			exec_pipe_to_pipe(int *prev_pipe_fd, int *pipe_fd, char **cmd, t_dict *envp);
 
 void			exec_pipe_to_outfile(int pipe_fd[2], char **cmd, t_dict *envp);
 
@@ -191,7 +191,7 @@ t_ctrl_seq		**gen_ctrl_seq(char *input);
 
 int			exec_builtin(char **cmd, t_dict *envp, bool inside_main_process);
 
-int			is_builtin(char **cmd);
+int			is_builtin(char *cmd);
 
 void		setup_pipes(t_ctrl_seq *seq);
 

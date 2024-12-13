@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 14:33:13 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/13 14:53:44 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:31:46 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,21 +59,21 @@ void	exec_infile_to_pipe(int pipe_fd[2], char **cmd, t_dict *envp)
 	close(pipe_fd[1]);
 }
 
-void	exec_pipe_to_pipe(int **pipe_fd, char **cmd, int i, t_dict *envp)
+void	exec_pipe_to_pipe(int *prev_pipe_fd, int *pipe_fd, char **cmd, t_dict *envp)
 {
 	pid_t	pid;
 	int		status;
 
-	pid = pipe_fork(pipe_fd[i]);
+	pid = pipe_fork(pipe_fd);
 	if (CHILD_PROCESS)
 	{
-		close(pipe_fd[i][0]);
-		dup2(pipe_fd[i - 1][0], STDIN_FILENO);
-		dup2(pipe_fd[i][1], STDOUT_FILENO);
+		close(pipe_fd[0]);
+		dup2(prev_pipe_fd[0], STDIN_FILENO);
+		dup2(pipe_fd[1], STDOUT_FILENO);
 		ft_exec(cmd, envp);
 	}
 	waitpid(pid, &status, 0);
-	close(pipe_fd[i][1]);
+	close(pipe_fd[1]);
 }
 
 void	exec_pipe_to_outfile(int pipe_fd[2], char **cmd, t_dict *envp)

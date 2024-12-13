@@ -33,7 +33,7 @@ void	execute_cmds(t_ctrl_seq* seq, t_dict *envp)
 		i = 1;
 		while (i < seq->pipe_count)
 		{
-			exec_pipe_to_pipe(seq->pipe_fd, seq->cmds[i], i, envp);
+			exec_pipe_to_pipe(seq->pipe_fd[i - 1], seq->pipe_fd[i], seq->cmds[i], envp);
 			i++;
 		}
 		exec_pipe_to_outfile(seq->pipe_fd[i - 1], seq->cmds[i], envp);
@@ -69,7 +69,7 @@ void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
 		}
 		dup_stdin_out(stdin_out);
 		init_ctrl_seq(*ctrl_seq, envp);
-		if ((*ctrl_seq)->pipe_count == 0 && is_builtin((*ctrl_seq)->cmds[0]))
+		if ((*ctrl_seq)->pipe_count == 0 && is_builtin((*ctrl_seq)->cmds[0][0]))
 			exit_status = exec_builtin((*ctrl_seq)->cmds[0], envp, true);
 		else
 		{

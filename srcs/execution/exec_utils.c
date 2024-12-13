@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/13 14:03:09 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:33:35 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,23 +37,23 @@ static char	*find_cmd_path(char *cmd, t_dict *envp)
 	return (NULL);
 }
 
-int	is_builtin(char **cmd)
+int	is_builtin(char *cmd)
 {
-	if (!cmd || !(*cmd))
+	if (!cmd)
 		return (0);
-	else if (ft_match(cmd[0], "env"))
+	else if (ft_match(cmd, "env"))
 		return (1);
-	else if (ft_match(cmd[0], "cd"))
+	else if (ft_match(cmd, "cd"))
 		return (1);
-	else if (ft_match(cmd[0], "echo"))
+	else if (ft_match(cmd, "echo"))
 		return (1);
-	else if (ft_match(cmd[0], "export"))
+	else if (ft_match(cmd, "export"))
 		return (1);
-	else if (ft_match(cmd[0], "pwd"))
+	else if (ft_match(cmd, "pwd"))
 		return (1);
-	else if (ft_match(cmd[0], "unset"))
+	else if (ft_match(cmd, "unset"))
 		return (1);
-	else if (ft_match(cmd[0], "exit"))
+	else if (ft_match(cmd, "exit"))
 		return (1);
 	return (0);
 }
@@ -85,8 +85,11 @@ void	ft_exec(char **cmd, t_dict *envp)
 
 	if (!cmd || !(*cmd))
 		exit(EXIT_SUCCESS);
-	if (exec_builtin(cmd, envp, false))
+	if (is_builtin(cmd[0]))
+	{
+		exec_builtin(cmd, envp, false);
 		exit(EXIT_SUCCESS);
+	}
 	cmd_path = find_cmd_path((char *)cmd[0], envp);
 	if (execve(cmd_path, cmd, dict_to_arr(envp)) == -1)
 	{
