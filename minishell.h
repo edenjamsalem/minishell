@@ -17,7 +17,7 @@
 #  define _DEFAULT_SOURCE
 # endif
 
-# include "./libft/libft.h"
+# include "../libft/libft.h"
 # include <dirent.h>
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -50,6 +50,7 @@ typedef enum e_ctrl_op
 	NONE,
 	AND,
 	OR,
+	PIPE_, 
 }	t_ctrl_op;
 
 typedef enum e_error
@@ -61,6 +62,7 @@ typedef enum e_error
 
 typedef struct s_ctrl_seq // CONTROL SEQUENCE
 {
+	char		*raw_input;
 	t_arrlst	*cmds;    // list of 2d char arrays with command + flags + args
 	t_ctrl_op	ctrl_op; // && or ||
 	int			**pipe_fd;   // dynamically allocated list of fd's for each pipe
@@ -121,9 +123,12 @@ void			copy_quoted_text(char **input, char **expanded);
 
 void			copy_expanded_var(char **input, char **expanded, t_dict *envp_dict);
 
-// ENVP FNS
+// INIT FNS
 
 t_dict			*init_envp_dict(char **envp);
+
+t_ctrl_seq		*init_seq();
+
 
 // TOKENISER
 
@@ -185,6 +190,8 @@ int			exec_builtin(char **cmd, t_dict *envp, bool inside_main_process);
 int			is_builtin(char **cmd);
 
 void		allocate_pipe_fd(t_ctrl_seq *seq, int size);
+
+
 
 // TEST FUNCTIONS; can remove those later
 
