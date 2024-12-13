@@ -109,6 +109,8 @@ char			*skip_set(char **text, char *set);
 
 char			*skip_to(char **text, char *set);
 
+char			*skip_len(char **text, int size);
+
 void			quote_removal(t_arrlst *input);
 
 // PARAM EXPANSION

@@ -36,6 +36,16 @@ char	*skip_while(char **text, int (*condition)(char))
 	return (*text);
 }
 
+char	*skip_len(char **text, int size)
+{
+	while (**text && size > 0)
+	{
+		(*text)++;
+		size--;
+	}
+	return (*text);
+}
+
 // This function skips to a closing quote if it exists, returns skipped len
 int	skip_quotes(char **text)
 {
