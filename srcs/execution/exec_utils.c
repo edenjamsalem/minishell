@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/13 15:33:35 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:35:00 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,5 +96,4 @@ void	ft_exec(char **cmd, t_dict *envp)
 		ft_fprintf(2, "%s: command not found\n", cmd[0]);	
 		exit(127);
 	}
-	
 }
