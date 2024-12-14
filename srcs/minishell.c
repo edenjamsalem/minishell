@@ -20,13 +20,8 @@
 // // set up control seq
 // // execute
 // free
-volatile sig_atomic_t	g_signal = 0; // store signal in global variable to avoid resetting by execve
 
-void print_arrlst(t_arrlst *list);
-void print_tokens(t_arrlst *words, t_token *tokens);
-void print_ctrl_seq(t_ctrl_seq **ctrl_seq);
-
-
+t_signal	g_signal = {0, 0}; // struct holding signals
 
 // read input, add history and handling signals
 char	*read_input(void)
@@ -34,9 +29,15 @@ char	*read_input(void)
 	char *input;
 	char prompt[100];
 
-	getcwd(prompt, sizeof(prompt));
-	ft_strlcat(prompt, " > ", 100);
-	input = readline(prompt);
+	if (!g_signal.prompt_printed)
+	{
+		getcwd(prompt, sizeof(prompt));
+		ft_strlcat(prompt, " > ", 100);
+		input = readline(prompt);
+		g_signal.prompt_printed = 0;
+	}
+	else
+		input = readline("");
 	if (!input) // handling EOF / ctrl + D
 	{
 		ft_printf("exit\n");
@@ -68,20 +69,21 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	envp_dict = init_envp_dict(envp);
-	setup_sig_handlers(); // initialise signal handlers first;
+	rl_catch_signals = 0;
+	setup_sig_handler(SIGINT); // initialise signal handlers first;
 	while (1)
 	{
-		if (g_signal) // means a message is being received
-		{	
-			g_signal = 0; // reset flag
-			//input = readline("minishell > "); // reset prompt | MAYBE DONT NEED ?
-			continue ;
-		}
+		if (g_signal.signal) // means a message is being received	
+		{
+			g_signal.signal = 0;
+			g_signal.prompt_printed = 1;
+		}	
 		input = read_input();
 		if (!input)
 			continue ;
 		ctrl_seq = gen_ctrl_seq(input);
 		execute(ctrl_seq, envp_dict);
+		free(input);
 	}
 	cleanup(envp_dict);
 }
