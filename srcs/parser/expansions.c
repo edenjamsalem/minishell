@@ -50,8 +50,6 @@ char	*expand_vars(char *input, t_dict *envp, bool inc_double, bool inc_single)
 	char	*expanded;
 	char	*ptr;
 
-	if (!ft_strchr(input, '$'))
-		return (input);
 	expanded = malloc((get_len(input, envp, inc_double, inc_single) + 2));
 	if (!expanded)
 		return (NULL);

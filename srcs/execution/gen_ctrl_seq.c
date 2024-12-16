@@ -12,6 +12,27 @@
 
 #include "../../minishell.h"
 
+void skip_braces(char **input)
+{
+	int		open_brace_count;
+	int		close_brace_count;
+	
+
+	(*input)++;
+	open_brace_count = 1;
+	close_brace_count = 0;
+	while(**input && open_brace_count > close_brace_count)
+	{
+		if (chrsetcmp(**input, QUOTES))
+			skip_quotes(input);
+		else if (**input == '(')
+			open_brace_count++;
+		else if (**input == ')')
+			close_brace_count++;
+		(*input)++;
+	}
+}
+
 int ends_with_ctrl_op(char *input)
 {
 	int	end;
@@ -43,7 +64,11 @@ int	get_seq_count(char *input)
 	count = 1;
 	while (*(input + 1))
 	{
-		if (chrsetcmp(*input, "&|") && *input == *(input + 1))
+		if (chrsetcmp(*input, QUOTES))
+			skip_quotes(&input);
+		else if (*input == '(')
+			skip_braces(&input);
+		else if (chrsetcmp(*input, "&|") && *input == *(input + 1))
 			count++;
 		input++; 
 	}
@@ -64,7 +89,7 @@ char	*complete_input(char *input)
 		tmp[bytes_read - 1] = '\0';
 		if (syntax_error(tmp))
 		{
-			ft_perror(SYNTAX, tmp); // need to cut just token not whole str
+		//	ft_perror(SYNTAX, tmp); // need to cut just token not whole str
 		//	free(input);
 			exit(2);
 		}
@@ -91,20 +116,29 @@ t_ctrl_op assign_ctrl_op(char **input)
 	return (NONE);
 }
 
+
 char	*copy_text(char **input)
 {
 	char	*start;
 
+	skip_set(input, IFS);
 	start = *input;
 	while (**input)
 	{
 		if (chrsetcmp(**input, QUOTES))
 			skip_quotes(input);
+		else if (**input == '(')
+			skip_braces(input);
 		else if (chrsetcmp(**input, "&|") && **input == *(*input + 1))
 			break ;
 		(*input)++;
 	}
 	return (ft_strcut(start, *input));
+}
+
+bool	check_braces(char *raw_input)
+{
+	return (*raw_input == '(');
 }
 
 t_ctrl_seq **gen_ctrl_seq(char *input)
@@ -122,6 +156,7 @@ t_ctrl_seq **gen_ctrl_seq(char *input)
 			return (NULL);
 		ctrl_seq[i]->ctrl_op = assign_ctrl_op(&input);
 		ctrl_seq[i]->raw_input = copy_text(&input);
+	//	ctrl_seq[i]->contains_braces = check_braces(ctrl_seq[i]->raw_input);
 		i++;
 	}
 	ctrl_seq[i] = NULL;
@@ -131,8 +166,11 @@ t_ctrl_seq **gen_ctrl_seq(char *input)
 int main(void)
 {
 	t_ctrl_seq **ctrl_seq;
+	char *input = "echo 1 && ((echo 2 || exit) && echo 3) && echo 4";
 	
-	ctrl_seq = split_ctrl_op("Hello \"&& my\" name || is  ede &&");
+	ctrl_seq = gen_ctrl_seq(input);
+
+//	ft_printf("%d\n", get_seq_count(input));
 	while (*ctrl_seq)
 	{
 		ft_printf("%s : %d\n", (*ctrl_seq)->raw_input, (*ctrl_seq)->ctrl_op);

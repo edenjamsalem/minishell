@@ -18,7 +18,7 @@ CFLAGS = -Wall -Werror -Wextra -g3
 OBJDIR = ./build
 OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
-LIBFTDIR = ./libft
+LIBFTDIR = ../libft
 LIBFT = $(LIBFTDIR)/libft.a
 LIBS = $(LIBFT) -lreadline
 
@@ -42,7 +42,7 @@ SRCS =	$(SRCDIR)/minishell.c \
 		$(EXECDIR)/execute.c \
 		$(EXECDIR)/exec_utils.c \
 		$(EXECDIR)/gen_ctrl_seq.c \
-		$(EXECDIR)/init_ctrl_seq.c \
+		$(EXECDIR)/init_command.c \
 		$(EXECDIR)/redirections.c \
 		$(EXECDIR)/pipe_fns.c \
 \

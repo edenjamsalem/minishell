@@ -17,7 +17,7 @@
 #  define _DEFAULT_SOURCE
 # endif
 
-# include "./libft/libft.h"
+# include "../libft/libft.h"
 # include <dirent.h>
 # include <errno.h>
 # include <readline/history.h>
@@ -66,16 +66,25 @@ typedef enum e_error
 	DIRECT,
 }								t_error;
 
+typedef struct s_command
+{
+	t_arrlst	*words;
+	t_token		*tokens;
+	char		***cmds;      // list of 2d char arrays with command + flags + args
+	int			**pipe_fd;     // dynamically allocated list of fd's for each pipe
+	int 		pipe_count;
+	int			infile;
+	int			outfile;
+} t_command;
+
 typedef struct s_ctrl_seq // CONTROL SEQUENCE
 {
-	char *raw_input;
-	t_arrlst *words;
-	t_token *tokens;
-	char ***cmds;      // list of 2d char arrays with command + flags + args
-	t_ctrl_op ctrl_op; // && or ||
-	int **pipe_fd;     // dynamically allocated list of fd's for each pipe
-	int pipe_count;
-}								t_ctrl_seq;
+	char 		*raw_input;
+	t_ctrl_op	ctrl_op;
+//	bool		contains_braces;
+	int			exit_status;
+
+}			t_ctrl_seq;
 
 // SIGNALS
 
@@ -112,12 +121,11 @@ t_ctrl_seq						**gen_ctrl_seq(char *input);
 
 t_arrlst						*word_split(char *input);
 
-void							parse(t_ctrl_seq *seq, t_dict *envp_dict);
+void							parse(char *input, t_command *command, t_dict *envp_dict);
 
 int								skip_quotes(char **text);
 
-char							*skip_while(char **text,
-									int (*condition)(char));
+char							*skip_while(char **text, int (*condition)(char));
 
 char							*skip_set(char **text, char *set);
 
@@ -135,34 +143,29 @@ char							*expand_vars(char *input, t_dict *envp,
 void							expand_vars_in_double_quotes(t_arrlst *input,
 									t_dict *envp_dict);
 
-void							copy_expanded_var(char **input, char **expanded,
-									t_dict *envp_dict);
+void							copy_expanded_var(char **input, char **expanded, t_dict *envp_dict);
 
 void							copy_quoted_text(char **input, char **expanded);
 
 void							copy_quoted_text(char **input, char **expanded);
 
-void							copy_expanded_var(char **input, char **expanded,
-									t_dict *envp_dict);
+void							copy_expanded_var(char **input, char **expanded, t_dict *envp_dict);
 
 // INIT FNS
 
 t_dict							*init_envp_dict(char **envp);
 
-void							init_ctrl_seq(t_ctrl_seq *seq, t_dict *envp);
+t_command						*init_command(char *input, t_dict *envp);
 
 // TOKENISER
 
-int								find_next_token(t_token *tokens,
-									enum e_token ref);
+int								find_next_token(t_token *tokens, enum e_token ref);
 
 t_token							get_prev_token(t_token *tokens, int index);
 
-t_token							*primary_tokenisation(t_arrlst *words,
-									t_token *tokens);
+t_token							*primary_tokenisation(t_arrlst *words, t_token *tokens);
 
-t_token							*secondary_tokenisation(t_arrlst *words,
-									t_token *tokens);
+t_token							*secondary_tokenisation(t_arrlst *words, t_token *tokens);
 
 t_token							*tokenise(t_arrlst *words);
 
@@ -196,8 +199,7 @@ int								skip_redirect(t_token *tokens, int index);
 
 void							execute(t_ctrl_seq **ctrl_seq, t_dict *envp);
 
-void							assign_redirections(t_ctrl_seq *seq,
-									t_dict *envp);
+void							assign_redirections(t_command *command, t_dict *envp);
 
 pid_t							pipe_fork(int pipe_fd[2]);
 
@@ -221,13 +223,11 @@ int								exec_builtin(char **cmd, t_dict *envp,
 
 int								is_builtin(char *cmd);
 
-void							setup_pipes(t_ctrl_seq *seq);
+void							setup_pipes(t_command *command);
 
-void							assign_pipe_count(t_ctrl_seq *seq);
+void							assign_pipe_count(t_command *command);
 
-void							assign_cmds(t_ctrl_seq *seq);
-
-void							init_ctrl_seq(t_ctrl_seq *seq, t_dict *envp);
+void							assign_cmds(t_command *command);
 
 // TEST FUNCTIONS; can remove those later
 

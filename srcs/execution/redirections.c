@@ -25,29 +25,29 @@ bool	is_eof(char *input, char *eof)
 	return (false);
 }
 
-void	setup_pipes(t_ctrl_seq *seq)
+void	setup_pipes(t_command *command)
 {
 	int	i;
 	int	pipe_count;
 
-	pipe_count = seq->pipe_count;
+	pipe_count = command->pipe_count;
 	if (pipe_count < 1)
 		return ;
-	seq->pipe_fd = malloc(sizeof(int *) * (pipe_count + 1));
-	if (!seq->pipe_fd)
+	command->pipe_fd = malloc(sizeof(int *) * (pipe_count + 1));
+	if (!command->pipe_fd)
 		return ;
 	i = 0;
 	while (i < pipe_count)
 	{
-		seq->pipe_fd[i] = malloc(sizeof(int) * 2);
-		if (!seq->pipe_fd[i])
+		command->pipe_fd[i] = malloc(sizeof(int) * 2);
+		if (!command->pipe_fd[i])
 		{
-			free_2darr((void *)seq->pipe_fd, i - 1);
+			free_2darr((void *)command->pipe_fd, i - 1);
 			return ;
 		}
 		i++;
 	}
-	seq->pipe_fd[pipe_count] = NULL;
+	command->pipe_fd[pipe_count] = NULL;
 }
 
 int	get_heredoc_input(char *eof, t_dict *envp)
@@ -89,42 +89,30 @@ int	get_heredoc_input(char *eof, t_dict *envp)
 	return (pipe_fd[0]);
 }
 
-void	redirect_fd(char *operator, char *file, t_dict *envp)
+void	redirect_fd(t_command *command, char *operator, char *file, t_dict *envp)
 {
-	int	fd;
-	
 	if (ft_match(operator, ">"))
-	{
-		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0643);
-		dup2(fd, STDOUT_FILENO);
-	}
+		command->outfile = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0643);
 	else if (ft_match(operator, ">>"))
-	{
-		fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0643);
-		dup2(fd, STDOUT_FILENO);
-	}
+		command->outfile = open(file, O_WRONLY | O_CREAT | O_APPEND, 0643);
 	else if (ft_match(operator, "<"))
-	{
-		fd = open(file, O_RDONLY);
-		dup2(fd, STDIN_FILENO);
-	}
+		command->infile = open(file, O_RDONLY);
 	else if (ft_match(operator, "<<"))
-	{
-		fd = get_heredoc_input(file, envp);
-		dup2(fd, STDIN_FILENO);
-	}
+		command->infile = get_heredoc_input(file, envp);
 }
 
-void	assign_redirections(t_ctrl_seq *seq, t_dict *envp)
+void	assign_redirections(t_command *command, t_dict *envp)
 {
 	// TESTED
 	int	i;
 
+	command->infile = STDIN_FILENO;
+	command->outfile = STDOUT_FILENO;
 	i = 0;
-	while (seq->words->content[i])
+	while (command->words->content[i])
 	{
-		if (seq->tokens[i] == REDIRECT && seq->tokens[i + 1] == FILE_)
-			redirect_fd(seq->words->content[i], seq->words->content[i + 1], envp);
+		if (command->tokens[i] == REDIRECT && command->tokens[i + 1] == FILE_)
+			redirect_fd(command, command->words->content[i], command->words->content[i + 1], envp);
 		i++;
 	}
 }

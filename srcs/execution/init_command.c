@@ -12,20 +12,20 @@
 
 #include "../../minishell.h"
 
-void	assign_pipe_count(t_ctrl_seq *seq)
+void	assign_pipe_count(t_command *command)
 {
 	int	i;
 	int	count;
 
 	i = 0;
 	count = 0;
-	while (seq->tokens[i] != END)
+	while (command->tokens[i] != END)
 	{
-		if (seq->tokens[i] == PIPE)
+		if (command->tokens[i] == PIPE)
 			count++;
 		i++;
 	}
-	seq->pipe_count = count;
+	command->pipe_count = count;
 }
 
 
@@ -45,42 +45,48 @@ static int get_cmd_len(t_token *tokens)
 	return (len);
 }
 
-void	assign_cmds(t_ctrl_seq *seq)
+void	assign_cmds(t_command *command)
 {
 	int		i;
 	int		j;
 	int		k;
 
-	seq->cmds = malloc(sizeof(char **) * (seq->pipe_count + 2));
-	if (!seq->cmds)
+	command->cmds = malloc(sizeof(char **) * (command->pipe_count + 2));
+	if (!command->cmds)
 		return ;
 	i = 0;
 	k = 0;
-	while (i < seq->pipe_count + 1)
+	while (i < command->pipe_count + 1)
 	{
-		seq->cmds[i] = malloc(sizeof(char *) * (get_cmd_len(seq->tokens) + 1));
-		if (!seq->cmds[i])
+		command->cmds[i] = malloc(sizeof(char *) * (get_cmd_len(command->tokens) + 1));
+		if (!command->cmds[i])
 			return ;
 		j = 0;
-		while (seq->tokens[k] != END && seq->tokens[k] != PIPE)
+		while (command->tokens[k] != END && command->tokens[k] != PIPE)
 		{
-			if (seq->tokens[k] == CMD || seq->tokens[k] == TEXT)
-				seq->cmds[i][j++] = ft_strdup(seq->words->content[k]);
+			if (command->tokens[k] == CMD || command->tokens[k] == TEXT)
+				command->cmds[i][j++] = ft_strdup(command->words->content[k]);
 			k++;
 		}
-		seq->cmds[i][j] = NULL;
-		if (seq->tokens[k] == PIPE)
+		command->cmds[i][j] = NULL;
+		if (command->tokens[k] == PIPE)
 			k++;
 		i++;
 	}
-	seq->cmds[i] = NULL;
+	command->cmds[i] = NULL;
 }
 
-void	init_ctrl_seq(t_ctrl_seq *seq, t_dict *envp)
+t_command	*init_command(char *input, t_dict *envp)
 {
-	parse(seq, envp);
-	assign_redirections(seq, envp);
-	assign_pipe_count(seq);
-	setup_pipes(seq);
-	assign_cmds(seq);
+	t_command *command;
+
+	command = malloc(sizeof(t_command));
+	if (!command)
+		return (NULL);
+	parse(input, command, envp);
+	assign_redirections(command, envp);
+	assign_pipe_count(command);
+	setup_pipes(command);
+	assign_cmds(command);
+	return (command);
 }

@@ -14,21 +14,21 @@
 
 
 
-void	parse(t_ctrl_seq *seq, t_dict *envp_dict)
+void	parse(char *input, t_command *command, t_dict *envp_dict)
 {
 	char		*expanded_input;
 
-	expanded_input = expand_vars(seq->raw_input, envp_dict, false, false);
-	seq->words = word_split(expanded_input);
+	expanded_input = expand_vars(input, envp_dict, false, false);
+	command->words = word_split(expanded_input);
 	free(expanded_input);
-	expand_vars_in_double_quotes(seq->words, envp_dict);
-	seq->tokens = tokenise(seq->words);
-	if (!grammar_check(seq->words, seq->tokens))
+	expand_vars_in_double_quotes(command->words, envp_dict);
+	command->tokens = tokenise(command->words);
+	if (!grammar_check(command->words, command->tokens))
 	{
 	//	set_dict_value("?", ft_itoa(2), envp);
 	//	free_mem();
 	}
-	quote_removal(seq->words);
+	quote_removal(command->words);
 }
 /*
 int	main(int argc, char **argv, char **envp)
