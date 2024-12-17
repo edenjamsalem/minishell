@@ -31,8 +31,11 @@ void skip_braces(char **input)
 			close_brace_count++;
 		(*input)++;
 	}
-//	if (open_brace_count > close_brace_count)
-//		ft_perror(SYNTAX, "Unclosed braces");
+	if (open_brace_count > close_brace_count)
+	{
+		perror("Syntax Error: Unclosed braces");
+		exit(2);
+	}
 }
 
 int ends_with_ctrl_op(char *input)
@@ -91,8 +94,8 @@ char	*complete_input(char *input)
 		tmp[bytes_read - 1] = '\0';
 		if (syntax_error(tmp))
 		{
-		//	ft_perror(SYNTAX, tmp); // need to cut just token not whole str
-		//	free(input);
+			ft_perror(SYNTAX, tmp); // need to cut just token not whole str
+			free(input);
 			exit(2);
 		}
 		ft_strlcat(buf, tmp, 4096);

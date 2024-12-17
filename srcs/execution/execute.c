@@ -58,7 +58,7 @@ void	apply_redirections(t_cmd_seq *command)
 	dup2(command->outfile, STDOUT_FILENO);
 }
 
-int	exec_command(t_cmd_seq *command, t_dict* envp)
+int	exec_command(t_cmd_seq *command, t_dict* envp, bool inside_main_process)
 {
 	int			stdin_out[2];
 	int			status;
@@ -68,7 +68,7 @@ int	exec_command(t_cmd_seq *command, t_dict* envp)
 	dup_stdin_out(stdin_out);
 	apply_redirections(command);
 	if (command->pipe_count == 0 && is_builtin(command->cmds[0][0]))
-		exit_status = exec_builtin(command->cmds[0], envp, true);
+		exit_status = exec_builtin(command->cmds[0], envp, inside_main_process);
 	else
 	{
 		pid = ft_fork();
@@ -115,12 +115,7 @@ int	handle_braces(t_ctrl_seq *seq, t_dict *envp)
 	pid = ft_fork();
 	if (CHILD_PROCESS)
 	{
-		if (contains_braces(seq->raw_input))
-		{
-			nested_ctrl_seq = gen_ctrl_seq(seq->raw_input);
-			exit_status = execute(nested_ctrl_seq, envp);
-		}
-		else if (contains_ctrl_op(seq->raw_input))
+		if (contains_braces(seq->raw_input) || contains_ctrl_op(seq->raw_input))
 		{
 			nested_ctrl_seq = gen_ctrl_seq(seq->raw_input);
 			exit_status = execute(nested_ctrl_seq, envp);
@@ -128,7 +123,7 @@ int	handle_braces(t_ctrl_seq *seq, t_dict *envp)
 		else
 		{
 			cmd_seq = gen_cmd_seq(seq->raw_input, envp);
-			exit_status = exec_command(cmd_seq, envp);
+			exit_status = exec_command(cmd_seq, envp, false);
 		}
 		exit(exit_status);
 	}
@@ -156,7 +151,7 @@ int	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
 		else
 		{
 			cmd_seq = gen_cmd_seq((*ctrl_seq)->raw_input, envp);
-			exit_status = exec_command(cmd_seq, envp);
+			exit_status = exec_command(cmd_seq, envp, true);
 		}
 		set_dict_value("?", ft_itoa(exit_status), envp);
 		ctrl_seq++;
