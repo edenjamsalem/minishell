@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/13 15:35:00 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/17 18:42:44 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,25 @@
 static char	*find_cmd_path(char *cmd, t_dict *envp)
 {
 	char	**file_paths;
-	char	*cmd_path;
-	char	*tmp;
+	char	cmd_path[4096];
 	int		i;
 
 	file_paths = ft_split(get_dict_value("PATH", envp), ':');
 	i = 0;
 	while (file_paths[i])
 	{
-		tmp = ft_strjoin(file_paths[i++], "/");
-		cmd_path = ft_strjoin(tmp, cmd);
-		free (tmp);
+		cmd_path[0] = '\0';
+		ft_strlcat(cmd_path, file_paths[i], 4096);
+		ft_strlcat(cmd_path, "/", 4096);
+		ft_strlcat(cmd_path, cmd, 4096);
 		if (access(cmd_path, F_OK) != -1)
 		{
-			FREE_2DARR(file_paths);
-			return (cmd_path);
+			free_2darr((void **)file_paths, ft_2darr_len((void **)file_paths));
+			return (ft_strdup(cmd_path));
 		}
-		free(cmd_path);
+		i++;
 	}
-	FREE_2DARR(file_paths);
+	free_2darr((void **)file_paths, ft_2darr_len((void **)file_paths));
 	return (NULL);
 }
 
