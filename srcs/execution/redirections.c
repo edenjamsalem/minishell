@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:31:16 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/14 03:47:12 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/17 18:46:42 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,21 +89,10 @@ int	get_heredoc_input(char *eof, t_dict *envp)
 	return (pipe_fd[0]);
 }
 
-void	redirect_fd(t_cmd_seq *command, char *operator, char *file, t_dict *envp)
-{
-	if (ft_match(operator, ">"))
-		command->outfile = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0643);
-	else if (ft_match(operator, ">>"))
-		command->outfile = open(file, O_WRONLY | O_CREAT | O_APPEND, 0643);
-	else if (ft_match(operator, "<"))
-		command->infile = open(file, O_RDONLY);
-	else if (ft_match(operator, "<<"))
-		command->infile = get_heredoc_input(file, envp);
-}
-
 void	assign_redirections(t_cmd_seq *command, t_dict *envp)
 {
-	// TESTED
+	char *operator;
+	char *file;
 	int	i;
 
 	command->infile = STDIN_FILENO;
@@ -112,7 +101,18 @@ void	assign_redirections(t_cmd_seq *command, t_dict *envp)
 	while (command->words->content[i])
 	{
 		if (command->tokens[i] == REDIRECT && command->tokens[i + 1] == FILE_)
-			redirect_fd(command, command->words->content[i], command->words->content[i + 1], envp);
+		{
+			operator = command->words->content[i];
+			file = command->words->content[i + 1];
+			if (ft_match(operator, ">"))
+				command->outfile = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0643);
+			else if (ft_match(operator, ">>"))
+				command->outfile = open(file, O_WRONLY | O_CREAT | O_APPEND, 0643);
+			else if (ft_match(operator, "<"))
+				command->infile = open(file, O_RDONLY);
+			else if (ft_match(operator, "<<"))
+				command->infile = get_heredoc_input(file, envp);
+		}
 		i++;
 	}
 }
