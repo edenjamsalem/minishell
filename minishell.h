@@ -66,7 +66,7 @@ typedef enum e_error
 	DIRECT,
 }								t_error;
 
-typedef struct s_command
+typedef struct s_cmd_seq
 {
 	t_arrlst	*words;
 	t_token		*tokens;
@@ -75,13 +75,13 @@ typedef struct s_command
 	int 		pipe_count;
 	int			infile;
 	int			outfile;
-} t_command;
+} t_cmd_seq;
 
 typedef struct s_ctrl_seq // CONTROL SEQUENCE
 {
 	char 		*raw_input;
 	t_ctrl_op	ctrl_op;
-//	bool		contains_braces;
+	bool		inside_braces;
 	int			exit_status;
 
 }			t_ctrl_seq;
@@ -121,7 +121,7 @@ t_ctrl_seq						**gen_ctrl_seq(char *input);
 
 t_arrlst						*word_split(char *input);
 
-void							parse(char *input, t_command *command, t_dict *envp_dict);
+void							parse(char *input, t_cmd_seq *command, t_dict *envp_dict);
 
 int								skip_quotes(char **text);
 
@@ -134,6 +134,12 @@ char							*skip_to(char **text, char *set);
 char							*skip_len(char **text, int size);
 
 void							quote_removal(t_arrlst *input);
+
+bool			contains_ctrl_op(char *content);
+
+
+void	del_char(char *text);
+
 
 // PARAM EXPANSION
 
@@ -155,7 +161,7 @@ void							copy_expanded_var(char **input, char **expanded, t_dict *envp_dict);
 
 t_dict							*init_envp_dict(char **envp);
 
-t_command						*init_command(char *input, t_dict *envp);
+t_cmd_seq						*gen_cmd_seq(char *input, t_dict *envp);
 
 // TOKENISER
 
@@ -197,9 +203,9 @@ int								skip_redirect(t_token *tokens, int index);
 
 // EXECUTION
 
-void							execute(t_ctrl_seq **ctrl_seq, t_dict *envp);
+int							execute(t_ctrl_seq **ctrl_seq, t_dict *envp);
 
-void							assign_redirections(t_command *command, t_dict *envp);
+void							assign_redirections(t_cmd_seq *command, t_dict *envp);
 
 pid_t							pipe_fork(int pipe_fd[2]);
 
@@ -223,11 +229,11 @@ int								exec_builtin(char **cmd, t_dict *envp,
 
 int								is_builtin(char *cmd);
 
-void							setup_pipes(t_command *command);
+void							setup_pipes(t_cmd_seq *command);
 
-void							assign_pipe_count(t_command *command);
+void							assign_pipe_count(t_cmd_seq *command);
 
-void							assign_cmds(t_command *command);
+void							assign_cmds(t_cmd_seq *command);
 
 // TEST FUNCTIONS; can remove those later
 

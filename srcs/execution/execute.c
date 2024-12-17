@@ -21,7 +21,7 @@ int	ctrl_op_failure(t_ctrl_seq *seq, int exit_status)
 	return (0);	
 }
 
-void	execute_cmds(t_command* command, t_dict *envp)
+void	execute_cmds(t_cmd_seq* command, t_dict *envp)
 {
 	int	i;
 
@@ -52,13 +52,13 @@ void	reset_stdin_out(int	*stdin_out)
 	dup2(stdin_out[1], STDOUT_FILENO);
 }
 
-void	apply_redirections(t_command *command)
+void	apply_redirections(t_cmd_seq *command)
 {
 	dup2(command->infile, STDIN_FILENO);
 	dup2(command->outfile, STDOUT_FILENO);
 }
 
-int	exec_command(t_command *command, t_dict* envp)
+int	exec_command(t_cmd_seq *command, t_dict* envp)
 {
 	int			stdin_out[2];
 	int			status;
@@ -84,12 +84,64 @@ int	exec_command(t_command *command, t_dict* envp)
 	return (exit_status);
 }
 
-void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
+static bool	contains_braces(char *input)
 {
-//	pid_t		pid;
+	char		*open_brace;
+	char		*first_quote;
+	char		*second_quote;
+
+	open_brace = (char *)ft_strchr(input, '(');
+	if (!open_brace)
+		return (false);
+	first_quote = ft_strchrset(input, QUOTES);
+	if (!first_quote)
+		return (true);
+	second_quote = ft_strchrset(first_quote + 1, QUOTES);
+	if(!second_quote)
+		return (true);
+	if (open_brace > first_quote && open_brace < second_quote)
+		return (false);
+	return (true);
+}
+
+int	handle_braces(t_ctrl_seq *seq, t_dict *envp)
+{
+	pid_t		pid;
+	t_ctrl_seq	**nested_ctrl_seq;
+	t_cmd_seq	*cmd_seq;
+	int			status;
 	int			exit_status;
-//	t_ctrl_seq	*new_seq;
-	t_command	*command;
+
+	pid = ft_fork();
+	if (CHILD_PROCESS)
+	{
+		if (contains_braces(seq->raw_input))
+		{
+			nested_ctrl_seq = gen_ctrl_seq(seq->raw_input);
+			exit_status = execute(nested_ctrl_seq, envp);
+		}
+		else if (contains_ctrl_op(seq->raw_input))
+		{
+			nested_ctrl_seq = gen_ctrl_seq(seq->raw_input);
+			exit_status = execute(nested_ctrl_seq, envp);
+		}
+		else
+		{
+			cmd_seq = gen_cmd_seq(seq->raw_input, envp);
+			exit_status = exec_command(cmd_seq, envp);
+		}
+		exit(exit_status);
+	}
+	wait(&status);
+	if (WIFEXITED(status))
+		exit_status = WEXITSTATUS(status);
+	return (exit_status);
+}
+
+int	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
+{
+	int			exit_status;
+	t_cmd_seq	*cmd_seq;
 
 	while (*ctrl_seq)
 	{
@@ -99,23 +151,17 @@ void	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
 			ctrl_seq++;
 			continue ;
 		}
-	/*	if ((*ctrl_seq)->contains_braces)
+		if ((*ctrl_seq)->inside_braces)
+			exit_status = handle_braces(*ctrl_seq, envp);
+		else
 		{
-			pid = ft_fork();
-			if (CHILD_PROCESS)
-			{
-				if (needs_further_parsing((*ctrl_seq)->raw_input))
-				{
-					new_seq = gen_ctrl_seq((*ctrl_seq)->raw_input);
-					execute(new_seq, envp);
-				}
-			}
-		}*/
-		command = init_command((*ctrl_seq)->raw_input, envp);
-		exit_status = exec_command(command, envp);
+			cmd_seq = gen_cmd_seq((*ctrl_seq)->raw_input, envp);
+			exit_status = exec_command(cmd_seq, envp);
+		}
 		set_dict_value("?", ft_itoa(exit_status), envp);
 		ctrl_seq++;
 	}
+	return (exit_status);
 }
 
 /*

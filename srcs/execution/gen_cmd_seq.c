@@ -12,7 +12,7 @@
 
 #include "../../minishell.h"
 
-void	assign_pipe_count(t_command *command)
+void	assign_pipe_count(t_cmd_seq *command)
 {
 	int	i;
 	int	count;
@@ -45,7 +45,7 @@ static int get_cmd_len(t_token *tokens)
 	return (len);
 }
 
-void	assign_cmds(t_command *command)
+void	assign_cmds(t_cmd_seq *command)
 {
 	int		i;
 	int		j;
@@ -76,11 +76,11 @@ void	assign_cmds(t_command *command)
 	command->cmds[i] = NULL;
 }
 
-t_command	*init_command(char *input, t_dict *envp)
+t_cmd_seq	*gen_cmd_seq(char *input, t_dict *envp)
 {
-	t_command *command;
+	t_cmd_seq *command;
 
-	command = malloc(sizeof(t_command));
+	command = malloc(sizeof(t_cmd_seq));
 	if (!command)
 		return (NULL);
 	parse(input, command, envp);

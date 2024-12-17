@@ -25,7 +25,7 @@ bool	is_eof(char *input, char *eof)
 	return (false);
 }
 
-void	setup_pipes(t_command *command)
+void	setup_pipes(t_cmd_seq *command)
 {
 	int	i;
 	int	pipe_count;
@@ -89,7 +89,7 @@ int	get_heredoc_input(char *eof, t_dict *envp)
 	return (pipe_fd[0]);
 }
 
-void	redirect_fd(t_command *command, char *operator, char *file, t_dict *envp)
+void	redirect_fd(t_cmd_seq *command, char *operator, char *file, t_dict *envp)
 {
 	if (ft_match(operator, ">"))
 		command->outfile = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0643);
@@ -101,7 +101,7 @@ void	redirect_fd(t_command *command, char *operator, char *file, t_dict *envp)
 		command->infile = get_heredoc_input(file, envp);
 }
 
-void	assign_redirections(t_command *command, t_dict *envp)
+void	assign_redirections(t_cmd_seq *command, t_dict *envp)
 {
 	// TESTED
 	int	i;

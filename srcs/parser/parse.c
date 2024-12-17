@@ -14,7 +14,7 @@
 
 
 
-void	parse(char *input, t_command *command, t_dict *envp_dict)
+void	parse(char *input, t_cmd_seq *command, t_dict *envp_dict)
 {
 	char		*expanded_input;
 

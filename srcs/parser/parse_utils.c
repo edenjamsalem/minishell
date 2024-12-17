@@ -12,24 +12,28 @@
 
 #include "../../minishell.h"
 
+void	del_char(char *text)
+{
+	int	i;
+		
+	i = 0;
+	while (text[i + 1])
+	{
+		text[i] = text[i + 1];
+		i++;
+	}
+	text[i] = '\0';
+}
+
 static void	remove_quotes(char *text)
 {
 	char	quote_to_del;
-	int		i;
 
 	quote_to_del = *(ft_strchrset(text, QUOTES));
 	while (*text)
 	{
 		if (*text == quote_to_del)
-		{
-			i = 0;
-			while (text[i + 1])
-			{
-				text[i] = text[i + 1];
-				i++;
-			}
-			text[i] = '\0';
-		}
+			del_char(text);	
 		else
 			text++;
 	}

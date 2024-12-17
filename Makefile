@@ -42,7 +42,7 @@ SRCS =	$(SRCDIR)/minishell.c \
 		$(EXECDIR)/execute.c \
 		$(EXECDIR)/exec_utils.c \
 		$(EXECDIR)/gen_ctrl_seq.c \
-		$(EXECDIR)/init_command.c \
+		$(EXECDIR)/gen_cmd_seq.c \
 		$(EXECDIR)/redirections.c \
 		$(EXECDIR)/pipe_fns.c \
 \

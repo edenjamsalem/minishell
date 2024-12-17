@@ -31,6 +31,8 @@ void skip_braces(char **input)
 			close_brace_count++;
 		(*input)++;
 	}
+//	if (open_brace_count > close_brace_count)
+//		ft_perror(SYNTAX, "Unclosed braces");
 }
 
 int ends_with_ctrl_op(char *input)
@@ -136,7 +138,35 @@ char	*copy_text(char **input)
 	return (ft_strcut(start, *input));
 }
 
-bool	check_braces(char *raw_input)
+void	remove_braces(char *input)
+{
+	char	*start;
+	char	*end;
+
+	start = input;
+	end = input + ft_strlen(input) - 1;
+	while (start)
+	{
+		if (*start == '(')
+		{
+			del_char(start);
+			break ;
+		}
+		start++;
+	}
+	while (end)
+	{
+		if (*end == ')')
+		{
+			del_char(end);
+			break ;
+		}
+		end--;
+	}
+
+}
+
+bool	inside_braces(char *raw_input)
 {
 	return (*raw_input == '(');
 }
@@ -146,7 +176,8 @@ t_ctrl_seq **gen_ctrl_seq(char *input)
 	t_ctrl_seq	**ctrl_seq;
 	int			i;
 
-	input = complete_input(input);
+	if (ends_with_ctrl_op(input))
+		input = complete_input(input);
 	ctrl_seq = malloc(sizeof(t_ctrl_seq *) * (get_seq_count(input) + 1));
 	i = 0;
 	while (*input)
@@ -156,7 +187,11 @@ t_ctrl_seq **gen_ctrl_seq(char *input)
 			return (NULL);
 		ctrl_seq[i]->ctrl_op = assign_ctrl_op(&input);
 		ctrl_seq[i]->raw_input = copy_text(&input);
-	//	ctrl_seq[i]->contains_braces = check_braces(ctrl_seq[i]->raw_input);
+		if (inside_braces(ctrl_seq[i]->raw_input))
+		{
+			ctrl_seq[i]->inside_braces = true;
+			remove_braces(ctrl_seq[i]->raw_input);
+		}
 		i++;
 	}
 	ctrl_seq[i] = NULL;
@@ -166,7 +201,7 @@ t_ctrl_seq **gen_ctrl_seq(char *input)
 int main(void)
 {
 	t_ctrl_seq **ctrl_seq;
-	char *input = "echo 1 && ((echo 2 || exit) && echo 3) && echo 4";
+	char *input = "echo 1 && ((echo 2 || exit) && echo 3)";
 	
 	ctrl_seq = gen_ctrl_seq(input);
 

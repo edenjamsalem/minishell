@@ -56,7 +56,7 @@ static void	split_ctrl_ops(t_arrlst *list, char *content)
 	free(ptr);
 }
 
-static bool	check_for_ctrl_op(char *content)
+bool	contains_ctrl_op(char *content)
 {
 	char		*op;
 	char		*first_quote;
@@ -102,7 +102,7 @@ t_arrlst	*word_split(char *input)
 	while (*input)
 	{
 		content = get_word(&input);
-		if (check_for_ctrl_op(content)) // also need to split ctrl ops
+		if (contains_ctrl_op(content)) // also need to split ctrl ops
 			split_ctrl_ops(list, content); // split any bunched up redirection
 		else
 			append_arrlst(list, content);
