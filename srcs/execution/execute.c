@@ -40,22 +40,24 @@ void	execute_cmds(t_cmd_seq* command, t_dict *envp)
 	}
 }
 
-void	dup_stdin_out(int *stdin_out)
-{
-	stdin_out[0] = dup(STDIN_FILENO);
-	stdin_out[1] = dup(STDOUT_FILENO);
-}
-
 void	reset_stdin_out(int	*stdin_out)
 {
 	dup2(stdin_out[0], STDIN_FILENO);
 	dup2(stdin_out[1], STDOUT_FILENO);
 }
 
-void	apply_redirections(t_cmd_seq *command)
+void	apply_redirections(t_cmd_seq *cmd_seq, int *stdin_out)
 {
-	dup2(command->infile, STDIN_FILENO);
-	dup2(command->outfile, STDOUT_FILENO);
+	if (cmd_seq->infile != STDIN_FILENO)
+	{
+		stdin_out[0] = dup(STDIN_FILENO);
+		dup2(cmd_seq->infile, STDIN_FILENO);
+	}
+	if (cmd_seq->outfile != STDOUT_FILENO)
+	{
+		stdin_out[1] = dup(STDOUT_FILENO);
+		dup2(cmd_seq->outfile, STDOUT_FILENO);
+	}	
 }
 
 int	exec_command(t_cmd_seq *command, t_dict* envp, bool inside_main_process)
@@ -65,8 +67,8 @@ int	exec_command(t_cmd_seq *command, t_dict* envp, bool inside_main_process)
 	int			exit_status;
 	pid_t		pid;
 
-	dup_stdin_out(stdin_out);
-	apply_redirections(command);
+	exit_status = EXIT_SUCCESS;
+	apply_redirections(command, stdin_out);
 	if (command->pipe_count == 0 && is_builtin(command->cmds[0][0]))
 		exit_status = exec_builtin(command->cmds[0], envp, inside_main_process);
 	else
@@ -84,7 +86,7 @@ int	exec_command(t_cmd_seq *command, t_dict* envp, bool inside_main_process)
 	return (exit_status);
 }
 
-static bool	contains_braces(char *input)
+bool	contains_braces(char *input)
 {
 	char		*open_brace;
 	char		*first_quote;
@@ -112,6 +114,7 @@ int	handle_braces(t_ctrl_seq *seq, t_dict *envp)
 	int			status;
 	int			exit_status;
 
+	exit_status = EXIT_SUCCESS;
 	pid = ft_fork();
 	if (CHILD_PROCESS)
 	{
@@ -130,6 +133,7 @@ int	handle_braces(t_ctrl_seq *seq, t_dict *envp)
 	wait(&status);
 	if (WIFEXITED(status))
 		exit_status = WEXITSTATUS(status);
+	//handle else case
 	return (exit_status);
 }
 

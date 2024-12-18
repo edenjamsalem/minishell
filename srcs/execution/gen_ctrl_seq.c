@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 10:32:59 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/13 14:48:18 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/18 15:14:59 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,6 @@ void skip_braces(char **input)
 		else if (**input == ')')
 			close_brace_count++;
 		(*input)++;
-	}
-	if (open_brace_count > close_brace_count)
-	{
-		perror("Syntax Error: Unclosed braces");
-		exit(2);
 	}
 }
 
@@ -148,30 +143,14 @@ void	remove_braces(char *input)
 
 	start = input;
 	end = input + ft_strlen(input) - 1;
-	while (start)
-	{
-		if (*start == '(')
-		{
-			del_char(start);
-			break ;
-		}
+	while (*start && *start != '(')
 		start++;
-	}
-	while (end)
-	{
-		if (*end == ')')
-		{
-			del_char(end);
-			break ;
-		}
+	while (end > input && *end != ')')
 		end--;
-	}
-
-}
-
-bool	inside_braces(char *raw_input)
-{
-	return (*raw_input == '(');
+	if (*end == ')')
+		del_char(end);
+	if (*start == '(')
+		del_char(start);
 }
 
 t_ctrl_seq **gen_ctrl_seq(char *input)
@@ -190,7 +169,7 @@ t_ctrl_seq **gen_ctrl_seq(char *input)
 			return (NULL);
 		ctrl_seq[i]->ctrl_op = assign_ctrl_op(&input);
 		ctrl_seq[i]->raw_input = copy_text(&input);
-		if (inside_braces(ctrl_seq[i]->raw_input))
+		if (*(ctrl_seq[i]->raw_input) == '(')
 		{
 			ctrl_seq[i]->inside_braces = true;
 			remove_braces(ctrl_seq[i]->raw_input);

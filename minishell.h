@@ -136,6 +136,7 @@ char							*skip_len(char **text, int size);
 void							quote_removal(t_arrlst *input);
 
 bool			contains_ctrl_op(char *content);
+bool			contains_braces(char *input);
 
 
 void	del_char(char *text);

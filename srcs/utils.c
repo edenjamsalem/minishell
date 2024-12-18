@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:05:51 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/10 16:32:34 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/18 14:31:45 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ int    ft_perror(t_error type, char *error_msg)
     }
     else if (type == CMD_)
     {
-        ft_fprintf(2, "`%s': command not found\n", error_msg);
+        ft_fprintf(2, "'%s': command not found\n", error_msg);
         return (0);
     }
     else if (type == DIRECT)
     {
-        ft_fprintf(2, "`%s': No such file or directory\n", error_msg); 
+        ft_fprintf(2, "'%s': No such file or directory\n", error_msg); 
         return (0);
     }
     return (1);

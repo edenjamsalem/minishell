@@ -6,12 +6,12 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 00:43:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/04 15:06:59 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/18 15:23:20 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-/*
+
 // 1st half of pattern matching
 int	check_pattern(const char **pattern, const char *str, const char **wildcard,
 		const char **index)
@@ -73,14 +73,14 @@ t_arrlst	*expand_wildcards(const char *pattern)
 	while (entry)
 	{
 		if (match_pattern(pattern, entry->d_name))
-			append_arrlst(&matches, (void *)entry->d_name);
+			append_arrlst(matches, (void *)entry->d_name);
 		entry = readdir(dir);
 	}
 	closedir(dir);
 	return (matches);
 }
 
-
+/*
 int	main(void)
 {
 	t_list	*matches;

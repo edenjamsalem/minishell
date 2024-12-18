@@ -60,6 +60,65 @@ void	cleanup(t_dict *envp_dict)
 	dict_clear(&envp_dict);
 }
 
+int	brace_count_same(char *input)
+{
+	int		open_brace_count;
+	int		close_brace_count;
+
+	open_brace_count = 0;
+	close_brace_count = 0;
+	while (*input)
+	{
+		if (chrsetcmp(*input, QUOTES))
+			skip_quotes(&input);
+		else if (*input == '(')
+			open_brace_count++;
+		else if (*input == ')')
+			close_brace_count++;
+		input++;
+	}
+	if (open_brace_count == close_brace_count)
+		return (1);
+	ft_fprintf(2, "bash: syntax error: incorrect braces\n");
+	return (0);
+}
+
+int	braces_next_to_ctrl_ops(char *input)
+{
+	char *next_word;
+
+	while (*input)
+	{
+		if (chrsetcmp(*input, QUOTES))
+			skip_quotes(&input);
+		else if (*input == ')' && *(++input) && *input != ')')
+		{
+			skip_set(&input, IFS);
+			if (!chrsetcmp(*input, "<>&|"))
+			{
+				next_word = ft_strcut(input, skip_to(&input, IFS));
+				ft_perror(SYNTAX, next_word);
+				free(next_word);
+				return (0);
+			}
+		}
+		else
+			input++;
+	}
+	return (1);
+}
+
+int	brace_syntax_okay(char *input)
+{
+	if (!contains_braces(input))
+		return (1);
+	if (!brace_count_same(input))
+		return (0);
+	if (!braces_next_to_ctrl_ops(input))
+		return (0);
+	return (1);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
@@ -81,8 +140,11 @@ int	main(int argc, char **argv, char **envp)
 		input = read_input();
 		if (!input)
 			continue ;
-		ctrl_seq = gen_ctrl_seq(input);
-		execute(ctrl_seq, envp_dict);
+		if (brace_syntax_okay(input))
+		{
+			ctrl_seq = gen_ctrl_seq(input);
+			execute(ctrl_seq, envp_dict);
+		}
 		free(input);
 	}
 	cleanup(envp_dict);

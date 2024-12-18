@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:31:16 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/17 18:46:42 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/18 14:00:17 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ bool	is_eof(char *input, char *eof)
 {
 	if (ft_strncmp(input, eof, ft_strlen(eof)) == 0)
 	{
+		// -1 for newline
 		if (ft_strlen(input) - 1 == ft_strlen(eof))
 			return (true);
 	}
