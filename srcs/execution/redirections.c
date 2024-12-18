@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:31:16 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/18 16:39:06 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/18 23:46:30 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,11 @@ int	get_heredoc_input(char *eof, t_dict *envp)
 	char	*expanded;
 	static int	line_count;  // to count lines of here_doc for bash error message
 	
+	signal(SIGINT, SIG_IGN);
 	pid = pipe_fork(pipe_fd);
 	if (!pid)
 	{
+		signal(SIGINT, handle_ctrl_c_child);
 		close(pipe_fd[0]);
 		while (1)
 		{
@@ -69,11 +71,7 @@ int	get_heredoc_input(char *eof, t_dict *envp)
 			bytes_read = read(STDIN_FILENO, input, 4096);
 			line_count++; 
 			if (bytes_read == -1)
-			{
-				if (errno == EINTR)
-					continue ;
 				exit(EXIT_FAILURE);
-			}
 			if (bytes_read == 0)
 				handle_ctrl_d(bytes_read, line_count, eof);
 			input[bytes_read] = '\0';
@@ -84,8 +82,12 @@ int	get_heredoc_input(char *eof, t_dict *envp)
 			free(expanded);
 		}
 	}
-	close(pipe_fd[1]);
-	wait(0);
+	else
+	{
+		close(pipe_fd[1]);
+		wait(0);
+		setup_sig_handler(SIGINT);
+	}
 	return (pipe_fd[0]);
 }
 

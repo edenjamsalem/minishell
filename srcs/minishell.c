@@ -21,23 +21,15 @@
 // // execute
 // free
 
-t_signal	g_signal = {0, 0}; // struct holding signals
-
 // read input, add history and handling signals
 char	*read_input(void)
 {
 	char *input;
 	char prompt[100];
 
-	if (!g_signal.prompt_printed)
-	{
-		getcwd(prompt, sizeof(prompt));
-		ft_strlcat(prompt, " > ", 100);
-		input = readline(prompt);
-		g_signal.prompt_printed = 0;
-	}
-	else
-		input = readline("");
+	getcwd(prompt, sizeof(prompt));
+	ft_strlcat(prompt, " > ", 100);
+	input = readline(prompt);
 	if (!input) // handling EOF / ctrl + D
 	{
 		ft_printf("exit\n");
@@ -157,11 +149,7 @@ int	main(int argc, char **argv, char **envp)
 	setup_sig_handler(SIGINT); // initialise signal handlers first;
 	while (1)
 	{
-		if (g_signal.signal) // means a message is being received	
-		{
-			g_signal.signal = 0;
-			g_signal.prompt_printed = 1;
-		}	
+		//setup_sig_handler(SIGINT);
 		input = read_input();
 		if (!input)
 			continue ;
