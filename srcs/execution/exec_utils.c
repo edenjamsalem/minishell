@@ -6,18 +6,20 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/17 18:42:44 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/18 17:41:11 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-static char	*find_cmd_path(char *cmd, t_dict *envp)
+static char	*get_cmd_path(char *cmd, t_dict *envp)
 {
 	char	**file_paths;
 	char	cmd_path[4096];
 	int		i;
 
+	if (access(cmd, F_OK) == 0)
+		return (cmd);
 	file_paths = ft_split(get_dict_value("PATH", envp), ':');
 	i = 0;
 	while (file_paths[i])
@@ -90,7 +92,7 @@ void	ft_exec(char **cmd, t_dict *envp)
 		exec_builtin(cmd, envp, false);
 		exit(EXIT_SUCCESS);
 	}
-	cmd_path = find_cmd_path((char *)cmd[0], envp);
+	cmd_path = get_cmd_path((char *)cmd[0], envp);
 	if (execve(cmd_path, cmd, dict_to_arr(envp)) == -1)
 	{
 		ft_fprintf(2, "%s: command not found\n", cmd[0]);	

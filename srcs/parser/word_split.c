@@ -12,24 +12,24 @@
 
 #include "../../minishell.h"
 
-static void append_redirection(t_arrlst *list, char **content)
+static void append_redirection(t_arrlst *words, char **content)
 {
 	while (chrsetcmp(**content, "<>"))
 	{
 		if (**content == *(*content + 1))
 		{
-			append_arrlst(list, ft_strcut((*content), (*content + 2)));
+			append_arrlst(words, ft_strcut((*content), (*content + 2)));
 			*content += 2;
 		}
 		else 
 		{
-			append_arrlst(list, ft_strcut(*content, *content + 1));
+			append_arrlst(words, ft_strcut(*content, *content + 1));
 			(*content)++;
 		}
 	}
 }
 
-static void	split_redirections(t_arrlst *list, char *content)
+static void	split_redirections(t_arrlst *words, char *content)
 {
 	//char	*op;
 	char	*text;
@@ -40,18 +40,18 @@ static void	split_redirections(t_arrlst *list, char *content)
 	if (!chrsetcmp(*content, "<>"))
 	{
 		text = ft_strcut(content, skip_to(&content, "<>"));
-		append_arrlst(list, text);
+		append_arrlst(words, text);
 	}
-	append_redirection(list, &content);
+	append_redirection(words, &content);
 	if (*content)
 	{
 		file = ft_strcut(content, skip_to(&content, IFS));
 		if (ft_strchrset(file, "<>"))
 		{
-			split_redirections(list, file); // see if causes mem leak
+			split_redirections(words, file); // see if causes mem leak
 			return ;
 		}
-		append_arrlst(list, file);
+		append_arrlst(words, file);
 	}
 	free(ptr);
 }
