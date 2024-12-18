@@ -12,6 +12,8 @@
 
 #include "../../minishell.h"
 
+
+
 int	calculate_diff(char *key, t_dict *envp)
 {
 	return (ft_strlen(get_dict_value(key, envp)) - (ft_strlen(key) + 1));
