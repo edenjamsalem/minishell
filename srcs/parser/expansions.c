@@ -12,41 +12,6 @@
 
 #include "../../minishell.h"
 
-// NOT WORKING
-
-int	calculate_diff(char *key, t_dict *envp)
-{
-	return (ft_strlen(get_dict_value(key, envp)) - (ft_strlen(key) + 1));
-}
-/*
-// This function calculates the expanded len of the input
-static int	get_len(char *input, t_dict *envp_dict, bool inc_double, bool inc_single)
-{
-	int		input_len;
-	int		diff;
-	char	*var;
-	
-	diff = 0;
-	input_len = ft_strlen(input);
-	while (*input)
-	{
-		if (*input == '\'' && !inc_single)
-			skip_quotes(&input);// handles unclosed quotes
-		else if (*input == '\"' && !inc_double)
-			skip_quotes(&input);
-		else if (*input == '$' && !chrsetcmp(*(input + 1), IFS))
-		{
-			input++;
-			var = ft_strcut(input, skip_to(&input, IFS));
-			diff += calculate_diff(var, envp_dict);
-			free(var);
-		}
-		else
-			input++;
-	}
-	return (input_len + diff);
-}
-*/
 char	*expand_vars(char *input, t_dict *envp, bool inc_double, bool inc_single)
 {
 	char	expanded[2048];
