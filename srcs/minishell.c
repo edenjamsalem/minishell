@@ -108,13 +108,38 @@ int	braces_next_to_ctrl_ops(char *input)
 	return (1);
 }
 
-int	brace_syntax_okay(char *input)
+int	ctrl_ops_okay(char *input)
 {
-	if (!contains(input, "("))
-		return (1);
+	char *next_word;
+
+	while (*input)
+	{
+		if (chrsetcmp(*input, QUOTES))
+			skip_quotes(&input);
+		else if (chrsetcmp(*input, "&|") && *input == *(input + 1))
+		{
+			input += 2;
+			skip_set(&input, IFS);
+			if (chrsetcmp(*input, "|&"))
+			{
+				next_word = ft_strcut(input, skip_to(&input, IFS));
+				ft_perror(SYNTAX, next_word);
+				free(next_word);
+				return (0);
+			}	
+		}
+		input++;
+	}
+	return (1);
+}
+
+int	ctrl_syntax_okay(char *input)
+{
 	if (!brace_count_same(input))
 		return (0);
 	if (!braces_next_to_ctrl_ops(input))
+		return (0);
+	if (!ctrl_ops_okay(input))
 		return (0);
 	return (1);
 }
@@ -140,7 +165,7 @@ int	main(int argc, char **argv, char **envp)
 		input = read_input();
 		if (!input)
 			continue ;
-		if (brace_syntax_okay(input))
+		if (ctrl_syntax_okay(input))
 		{
 			ctrl_seq = gen_ctrl_seq(input);
 			execute(ctrl_seq, envp_dict);

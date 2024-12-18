@@ -11,10 +11,10 @@
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-/*
-static void append_ctrl_op(t_arrlst *list, char **content)
+
+static void append_redirection(t_arrlst *list, char **content)
 {
-	while (chrsetcmp(**content, "<>|&"))
+	while (chrsetcmp(**content, "<>"))
 	{
 		if (**content == *(*content + 1))
 		{
@@ -29,7 +29,7 @@ static void append_ctrl_op(t_arrlst *list, char **content)
 	}
 }
 
-static void	split_ctrl_ops(t_arrlst *list, char *content)
+static void	split_redirections(t_arrlst *list, char *content)
 {
 	//char	*op;
 	char	*text;
@@ -37,25 +37,25 @@ static void	split_ctrl_ops(t_arrlst *list, char *content)
 	char	*ptr;
 
 	ptr = content;
-	if (!chrsetcmp(*content, "<>|&"))
+	if (!chrsetcmp(*content, "<>"))
 	{
-		text = ft_strcut(content, skip_to(&content, "<>|&"));
+		text = ft_strcut(content, skip_to(&content, "<>"));
 		append_arrlst(list, text);
 	}
-	append_ctrl_op(list, &content);
+	append_redirection(list, &content);
 	if (*content)
 	{
 		file = ft_strcut(content, skip_to(&content, IFS));
-		if (ft_strchrset(file, "<>|&"))
+		if (ft_strchrset(file, "<>"))
 		{
-			split_ctrl_ops(list, file); // see if causes mem leak
+			split_redirections(list, file); // see if causes mem leak
 			return ;
 		}
 		append_arrlst(list, file);
 	}
 	free(ptr);
 }
-*/
+
 static char	*get_word(char **input)
 {
 	char	*start;
@@ -84,6 +84,8 @@ t_arrlst	*word_split(char *input)
 		word = get_word(&input);
 		if (contains(word, "*"))
 			expand_wildcard(list, word);
+		else if (contains(word, "<>"))
+			split_redirections(list, word);
 		else
 			append_arrlst(list, word);
 		skip_set(&input, IFS);
