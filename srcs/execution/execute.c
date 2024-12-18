@@ -86,26 +86,6 @@ int	exec_command(t_cmd_seq *command, t_dict* envp, bool inside_main_process)
 	return (exit_status);
 }
 
-bool	contains_braces(char *input)
-{
-	char		*open_brace;
-	char		*first_quote;
-	char		*second_quote;
-
-	open_brace = (char *)ft_strchr(input, '(');
-	if (!open_brace)
-		return (false);
-	first_quote = ft_strchrset(input, QUOTES);
-	if (!first_quote)
-		return (true);
-	second_quote = ft_strchrset(first_quote + 1, QUOTES);
-	if(!second_quote)
-		return (true);
-	if (open_brace > first_quote && open_brace < second_quote)
-		return (false);
-	return (true);
-}
-
 int	handle_braces(t_ctrl_seq *seq, t_dict *envp)
 {
 	pid_t		pid;
@@ -118,7 +98,7 @@ int	handle_braces(t_ctrl_seq *seq, t_dict *envp)
 	pid = ft_fork();
 	if (CHILD_PROCESS)
 	{
-		if (contains_braces(seq->raw_input) || contains_ctrl_op(seq->raw_input))
+		if (contains(seq->raw_input, "(") || contains(seq->raw_input, "<>|&"))
 		{
 			nested_ctrl_seq = gen_ctrl_seq(seq->raw_input);
 			exit_status = execute(nested_ctrl_seq, envp);

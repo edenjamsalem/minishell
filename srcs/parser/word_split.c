@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
+/*
 static void append_ctrl_op(t_arrlst *list, char **content)
 {
 	while (chrsetcmp(**content, "<>|&"))
@@ -55,27 +55,7 @@ static void	split_ctrl_ops(t_arrlst *list, char *content)
 	}
 	free(ptr);
 }
-
-bool	contains_ctrl_op(char *content)
-{
-	char		*op;
-	char		*first_quote;
-	char		*second_quote;
-
-	op = ft_strchrset(content, "<>|&");
-	if (!op)
-		return (false);
-	first_quote = ft_strchrset(content, QUOTES);
-	if (!first_quote)
-		return (true);
-	second_quote = ft_strchrset(first_quote + 1, QUOTES);
-	if(!second_quote)
-		return (true);
-	if (op > first_quote && op < second_quote)
-		return (false);
-	return (true);
-}
-
+*/
 static char	*get_word(char **input)
 {
 	char	*start;
@@ -94,18 +74,18 @@ static char	*get_word(char **input)
 t_arrlst	*word_split(char *input)
 {
 	t_arrlst	*list;
-	char		*content;
+	char		*word;
 	
 	list = init_arrlst(8);
 		// handle malloc error
 	skip_set(&input, IFS);
 	while (*input)
 	{
-		content = get_word(&input);
-		if (contains_ctrl_op(content)) // also need to split ctrl ops
-			split_ctrl_ops(list, content); // split any bunched up redirection
+		word = get_word(&input);
+		if (contains(word, "*"))
+			expand_wildcard(list, word);
 		else
-			append_arrlst(list, content);
+			append_arrlst(list, word);
 		skip_set(&input, IFS);
 	}
 	return (list);

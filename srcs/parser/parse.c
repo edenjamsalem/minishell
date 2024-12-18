@@ -6,13 +6,11 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 11:16:25 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/13 14:27:44 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/18 15:41:23 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-
 
 void	parse(char *input, t_cmd_seq *command, t_dict *envp_dict)
 {

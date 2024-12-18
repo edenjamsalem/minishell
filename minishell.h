@@ -135,8 +135,7 @@ char							*skip_len(char **text, int size);
 
 void							quote_removal(t_arrlst *input);
 
-bool			contains_ctrl_op(char *content);
-bool			contains_braces(char *input);
+bool			contains(char *word, char *set);
 
 
 void	del_char(char *text);
@@ -157,6 +156,8 @@ void							copy_quoted_text(char **input, char **expanded);
 void							copy_quoted_text(char **input, char **expanded);
 
 void							copy_expanded_var(char **input, char **expanded, t_dict *envp_dict);
+
+void	expand_wildcard(t_arrlst *words, const char *pattern);
 
 // INIT FNS
 

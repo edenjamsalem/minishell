@@ -110,7 +110,7 @@ int	braces_next_to_ctrl_ops(char *input)
 
 int	brace_syntax_okay(char *input)
 {
-	if (!contains_braces(input))
+	if (!contains(input, "("))
 		return (1);
 	if (!brace_count_same(input))
 		return (0);

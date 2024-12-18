@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 00:43:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/18 15:23:20 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/18 15:54:53 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,25 +59,22 @@ int	match_pattern(const char *pattern, const char *str)
 }
 
 // expansion of wildcard ; not sure if we need to handle the ? wildcard
-t_arrlst	*expand_wildcards(const char *pattern)
+void	expand_wildcard(t_arrlst *words, const char *pattern)
 {
 	DIR				*dir;
 	struct dirent	*entry;
-	t_arrlst			*matches;
 
 	dir = opendir(".");
 	if (!dir)
-		return (NULL);
+		return ;
 	entry = readdir(dir);
-	matches = NULL;
 	while (entry)
 	{
 		if (match_pattern(pattern, entry->d_name))
-			append_arrlst(matches, (void *)entry->d_name);
+			append_arrlst(words, (void *)entry->d_name);
 		entry = readdir(dir);
 	}
 	closedir(dir);
-	return (matches);
 }
 
 /*
