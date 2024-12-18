@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 11:56:09 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/13 15:54:32 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/18 18:52:00 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	del_char(char *text)
 	text[i] = '\0';
 }
 
-static void	remove_quotes(char *text)
+void	remove_quotes(char *text)
 {
 	char	quote_to_del;
 
@@ -78,9 +78,7 @@ void	copy_expanded_var(char **input, char **expanded, t_dict *envp_dict)
 	if (!(*input) || !(*expanded) || !(envp_dict))
 		return ;	
 	(*input)++;	
-	key = ft_strcut(*input, skip_to(input, IFS));
-	if (ft_strchrset(key, QUOTES)) // check if i still need this 
-		remove_quotes(key);
+	key = ft_strcut(*input, skip_to(input, QUOTES));
 	value = get_dict_value(key, envp_dict);
 	value_len = ft_strlen(value);
 	if (value)

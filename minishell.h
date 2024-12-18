@@ -137,6 +137,8 @@ void							quote_removal(t_arrlst *input);
 
 bool			contains(char *word, char *set);
 
+void			remove_quotes(char *text);
+
 
 void	del_char(char *text);
 

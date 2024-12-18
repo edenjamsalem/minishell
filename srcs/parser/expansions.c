@@ -12,13 +12,13 @@
 
 #include "../../minishell.h"
 
-
+// NOT WORKING
 
 int	calculate_diff(char *key, t_dict *envp)
 {
 	return (ft_strlen(get_dict_value(key, envp)) - (ft_strlen(key) + 1));
 }
-
+/*
 // This function calculates the expanded len of the input
 static int	get_len(char *input, t_dict *envp_dict, bool inc_double, bool inc_single)
 {
@@ -37,7 +37,7 @@ static int	get_len(char *input, t_dict *envp_dict, bool inc_double, bool inc_sin
 		else if (*input == '$' && !chrsetcmp(*(input + 1), IFS))
 		{
 			input++;
-			var = ft_strcut(input, skip_while(&input, ft_isalnum));
+			var = ft_strcut(input, skip_to(&input, IFS));
 			diff += calculate_diff(var, envp_dict);
 			free(var);
 		}
@@ -46,29 +46,28 @@ static int	get_len(char *input, t_dict *envp_dict, bool inc_double, bool inc_sin
 	}
 	return (input_len + diff);
 }
-
+*/
 char	*expand_vars(char *input, t_dict *envp, bool inc_double, bool inc_single)
 {
-	char	*expanded;
+	char	expanded[2048];
 	char	*ptr;
 
-	expanded = malloc((get_len(input, envp, inc_double, inc_single) + 2));
-	if (!expanded)
-		return (NULL);
+	if (ft_strchr(input, '"') < ft_strchr(input, '\''))
+		inc_single = true;
 	ptr = expanded;
 	while (*input)
 	{
 		if (*input == '\'' && !inc_single)
-			copy_quoted_text(&input, &expanded);
+			copy_quoted_text(&input, &ptr);
 		else if (*input == '\"' && !inc_double)
-			copy_quoted_text(&input, &expanded);
+			copy_quoted_text(&input, &ptr);
 		else if (*input == '$' && *(input + 1) && !chrsetcmp(*(input + 1), IFS))
-			copy_expanded_var(&input, &expanded, envp);
+			copy_expanded_var(&input, &ptr, envp);
 		else
-			*expanded++ = *input++;
+			*ptr++ = *input++;
 	}
-	*expanded = '\0';
-	return (ptr);
+	*ptr = '\0';
+	return (ft_strdup(expanded));
 }
 
 void	expand_vars_in_double_quotes(t_arrlst *input, t_dict *envp_dict)
