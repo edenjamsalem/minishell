@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/19 14:18:30 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/19 15:50:33 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static char	*get_cmd_path(char *cmd, t_dict *envp)
 		return (cmd);
 	file_paths = ft_split(get_dict_value("PATH", envp), ':');
 	i = 0;
-	while (file_paths[i])
+	while (file_paths && file_paths[i])
 	{
 		cmd_path[0] = '\0';
 		ft_strlcat(cmd_path, file_paths[i], 4096);
@@ -35,6 +35,7 @@ static char	*get_cmd_path(char *cmd, t_dict *envp)
 		}
 		i++;
 	}
+	ft_fprintf(2, "bash: %s: No such file or directory\n", cmd);
 	free_2darr((void **)file_paths, ft_2darr_len((void **)file_paths));
 	return (NULL);
 }
@@ -93,6 +94,8 @@ void	ft_exec(char **cmd, t_dict *envp)
 		exit(EXIT_SUCCESS);
 	}
 	cmd_path = get_cmd_path((char *)cmd[0], envp);
+	if (!cmd_path)
+		exit(2);
 	if (execve(cmd_path, cmd, dict_to_arr(envp)) == -1)
 	{
 		ft_fprintf(2, "%s: command not found\n", cmd[0]);	
