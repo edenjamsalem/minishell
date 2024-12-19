@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 19:00:09 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/14 04:17:48 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/18 23:34:34 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,18 @@ void	handle_ctrl_c()
 	rl_redisplay();
 }
 
+void handle_ctrl_c_child(int signum)
+{
+    (void)signum;
+	write(STDOUT_FILENO, "\n", 1);
+    exit(EXIT_FAILURE);
+}
+
 void	handle_signal(int signum, siginfo_t *info, void *context)
 {
 	(void)info;
 	(void)context;
-	g_signal.signal = signum;
-	if (g_signal.signal == SIGINT)
+	if (signum == SIGINT)
 		handle_ctrl_c(); // execve handles cat special case
 }
 
@@ -47,6 +53,7 @@ void	setup_sig_handler(int signum)
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
 	act.sa_sigaction = handle_signal;
 	sigemptyset(&act.sa_mask);
+	signal(SIGQUIT, SIG_IGN);
 	if (sigaction(signum, &act, NULL) == -1)
 	{
 		perror("Error: Signal Handler\n");
