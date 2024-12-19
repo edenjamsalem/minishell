@@ -47,7 +47,6 @@ typedef enum e_token
 	TEXT,
 	CMD,
 	FILE_,
-	CTRL_OP, // no longer need this
 	REDIRECT,
 	PIPE,
 }								t_token;
@@ -148,8 +147,7 @@ void	del_char(char *text);
 char							*expand_vars(char *input, t_dict *envp,
 									bool ign_double, bool ign_single);
 
-void							expand_vars_in_double_quotes(t_arrlst *input,
-									t_dict *envp_dict);
+void							expand_vars_in_double_quotes(void **input, t_dict *envp_dict);
 
 void							copy_expanded_var(char **input, char **expanded, t_dict *envp_dict);
 

@@ -49,8 +49,6 @@ t_token	*primary_tokenisation(t_arrlst *words, t_token *tokens)
 	{
 		if (is_redirect(words->content[i]))
 			tokens[i] = REDIRECT;
-		else if (is_control(words->content[i]))
-			tokens[i] = CTRL_OP;
 		else if (is_pipe(words->content[i]))
 			tokens[i] = PIPE;
 		else

@@ -26,7 +26,7 @@ char	*expand_vars(char *input, t_dict *envp, bool inc_double, bool inc_single)
 			copy_quoted_text(&input, &ptr);
 		else if (*input == '\"' && !inc_double)
 			copy_quoted_text(&input, &ptr);
-		else if (*input == '$' && *(input + 1) && !chrsetcmp(*(input + 1), IFS))
+		else if (*input == '$' && *(++input) && !chrsetcmp(*input, IFS))
 			copy_expanded_var(&input, &ptr, envp);
 		else
 			*ptr++ = *input++;
@@ -35,19 +35,19 @@ char	*expand_vars(char *input, t_dict *envp, bool inc_double, bool inc_single)
 	return (ft_strdup(expanded));
 }
 
-void	expand_vars_in_double_quotes(t_arrlst *input, t_dict *envp_dict)
+void	expand_vars_in_double_quotes(void **input, t_dict *envp_dict)
 {
 	char	*expanded;
 	int		i;
 
 	i = 0;
-	while (i < input->count)
+	while (input[i])
 	{
-		if (ft_strchr(input->content[i], '$') && ft_strchr(input->content[i], '"'))
+		if (ft_strchr(input[i], '$') && ft_strchr(input[i], '"'))
 		{
-			expanded = expand_vars(input->content[i], envp_dict, true, false);
-			free(input->content[i]);
-			input->content[i] = expanded;
+			expanded = expand_vars(input[i], envp_dict, true, false);
+			free(input[i]);
+			input[i] = expanded;
 		}
 		i++;
 	}

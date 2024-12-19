@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 09:09:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/06 18:59:52 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/18 19:22:52 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,6 @@ bool	is_command(int index, t_token *tokens)
 	if (index == 0 && tokens[0] != REDIRECT)
 		return (true);
 	else if (get_prev_token(tokens, index) == FILE_)
-		return (true);
-	else if (get_prev_token(tokens, index) == CTRL_OP)
 		return (true);
 	else if (get_prev_token(tokens, index) == PIPE)
 		return (true);

@@ -106,7 +106,10 @@ int	handle_braces(t_ctrl_seq *seq, t_dict *envp)
 		else
 		{
 			cmd_seq = gen_cmd_seq(seq->raw_input, envp);
-			exit_status = exec_command(cmd_seq, envp, false);
+			if (!cmd_seq)
+				exit_status = 2;
+			else
+				exit_status = exec_command(cmd_seq, envp, false);
 		}
 		exit(exit_status);
 	}
@@ -135,7 +138,10 @@ int	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
 		else
 		{
 			cmd_seq = gen_cmd_seq((*ctrl_seq)->raw_input, envp);
-			exit_status = exec_command(cmd_seq, envp, true);
+			if (!cmd_seq)
+				exit_status = 2;
+			else
+				exit_status = exec_command(cmd_seq, envp, true);
 		}
 		set_dict_value("?", ft_itoa(exit_status), envp);
 		ctrl_seq++;

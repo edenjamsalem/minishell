@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_ctrl_seq.c                                    :+:      :+:    :+:   */
+/*   gen_cmd_seq.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 14:52:24 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/13 14:53:05 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/18 19:31:47 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,15 +78,18 @@ void	assign_cmds(t_cmd_seq *command)
 
 t_cmd_seq	*gen_cmd_seq(char *input, t_dict *envp)
 {
-	t_cmd_seq *command;
+	t_cmd_seq *cmd_seq;
 
-	command = malloc(sizeof(t_cmd_seq));
-	if (!command)
+	cmd_seq = malloc(sizeof(t_cmd_seq));
+	if (!cmd_seq)
 		return (NULL);
-	parse(input, command, envp);
-	assign_redirections(command, envp);
-	assign_pipe_count(command);
-	setup_pipes(command);
-	assign_cmds(command);
-	return (command);
+	parse(input, cmd_seq, envp);
+	if (!grammar_check(cmd_seq->words, cmd_seq->tokens))
+		return (NULL);
+	quote_removal(cmd_seq->words);
+	assign_redirections(cmd_seq, envp);
+	assign_pipe_count(cmd_seq);
+	setup_pipes(cmd_seq);
+	assign_cmds(cmd_seq);
+	return (cmd_seq);
 }

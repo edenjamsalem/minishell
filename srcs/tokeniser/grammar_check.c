@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 21:24:14 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/09 14:53:18 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/18 19:23:32 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ bool    is_repeat(t_token *tokens, int *index)
     i = 0;
     while (tokens[i] != END)
     {
-        if (tokens[i] == CTRL_OP || tokens[i] == PIPE)
+        if (tokens[i] == PIPE)
         {
             if (i == 0)
             {
                 *index = 0;
                 return (is_start(tokens, index));
             }
-            else if (get_prev_token(tokens, i) == CTRL_OP || get_prev_token(tokens, i) == PIPE)
+            else if (get_prev_token(tokens, i) == PIPE)
             {
                 *index = i;
                 return (true);
@@ -62,7 +62,7 @@ bool    is_file_name(t_arrlst *words, t_token *tokens, int *index)
 // check if input is starting on PIPE and CTRL OP
 bool    is_start(t_token *tokens, int *index)
 {
-    if (tokens[0] == CTRL_OP || tokens[0] == PIPE)
+    if (tokens[0] == PIPE)
     {
         *index = 0;
         return (false);
