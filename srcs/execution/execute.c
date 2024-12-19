@@ -111,9 +111,8 @@ int	handle_braces(t_ctrl_seq *seq, t_dict *envp)
 		{
 			cmd_seq = gen_cmd_seq(seq->raw_input, envp);
 			if (!cmd_seq)
-				exit_status = 2;
-			else
-				exit_status = exec_command(cmd_seq, envp, false);
+				exit(2);
+			exit_status = exec_command(cmd_seq, envp, false);
 		}
 		exit(exit_status);
 	}
