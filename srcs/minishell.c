@@ -45,14 +45,6 @@ char	*read_input(void)
 	return (input);
 }
 
-// clean up function
-void	cleanup(t_dict *envp_dict)
-{
-	rl_clear_history();
-	dict_clear(&envp_dict);
-	free(envp_dict);
-}
-
 int	brace_count_same(char *input)
 {
 	int		open_brace_count;
@@ -140,17 +132,39 @@ int	ctrl_syntax_okay(char *input)
 	return (1);
 }
 
+t_shell	*init_shell(char **envp)
+{
+	t_shell	*mini;
+
+	setup_sig_handler(SIGINT); // initialise signal handlers first;
+	mini = malloc(sizeof(t_shell));
+	if (!mini)
+		return (NULL);
+	mini->envp = init_envp_dict(envp);
+	mini->ctrl_seq = NULL;
+	mini->cmd_seq = NULL;
+	return (mini);
+}
+
+void	free_shell(t_shell *mini)
+{
+	rl_clear_history();
+	free_dict(mini->envp);
+	free_ctrl_seq(mini->ctrl_seq);
+	free_cmd_seq(mini->cmd_seq);
+	free(mini);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
-	t_dict		*envp_dict;
-	t_ctrl_seq	**ctrl_seq;
+	t_shell		*mini;
 
 	(void)argc;
 	(void)argv;
-	envp_dict = init_envp_dict(envp);
-	rl_catch_signals = 0;
-	setup_sig_handler(SIGINT); // initialise signal handlers first;
+	mini = init_shell(envp);
+	if (!mini)
+		exit(2);
 	while (1)
 	{
 		setup_sig_handler(SIGINT);
@@ -159,10 +173,10 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		if (ctrl_syntax_okay(input))
 		{
-			ctrl_seq = gen_ctrl_seq(input);
-			execute(ctrl_seq, envp_dict);
+			gen_ctrl_seq(mini, input);
+			execute(mini);
 		}
 		free(input);
 	}
-	cleanup(envp_dict);
+	free_shell(mini);
 }

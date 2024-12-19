@@ -12,6 +12,41 @@
 
 #include "../../minishell.h"
 
+void	free_cmd_seq(t_cmd_seq *cmd_seq)
+{
+	int		i;
+	char	**cmds;
+
+	if (!cmd_seq)
+		return ;
+	i = 0;
+	while (cmd_seq->cmds[i])
+	{
+		cmds = cmd_seq->cmds[i];
+		free_2darr((void **)cmds, ft_2darr_len((void **)cmds));
+		i++;
+	}
+	free(cmd_seq->cmds);
+	free_2darr((void **)cmd_seq->pipe_fd, ft_2darr_len((void**)cmd_seq->pipe_fd));
+	free_arrlst(cmd_seq->words, free);
+	free(cmd_seq->tokens);
+	free(cmd_seq);
+}
+
+void	free_ctrl_seq(t_ctrl_seq **ctrl_seq)
+{
+	int	i;
+
+	i = 0;
+	while (ctrl_seq[i])
+	{
+		free(ctrl_seq[i]->raw_input);
+		free(ctrl_seq[i]);
+		i++;
+	}
+	free(ctrl_seq);
+}
+
 int	ctrl_op_failure(t_ctrl_seq *seq, int exit_status)
 {
 	if (seq->ctrl_op == AND && exit_status != EXIT_SUCCESS)
@@ -64,7 +99,12 @@ void	apply_redirections(t_cmd_seq *cmd_seq, int *stdin_out)
 	}	
 }
 
-int	exec_command(t_cmd_seq *cmd_seq, t_dict* envp, bool inside_main_process)
+int	exit_called(t_cmd_seq *cmd_seq)
+{
+	return (cmd_seq->pipe_count == 0 && ft_match(cmd_seq->cmds[0][0], "exit"));
+}
+
+int	exec_command(t_shell *mini, bool in_main)
 {
 	int			stdin_out[2];
 	int			status;
@@ -72,31 +112,30 @@ int	exec_command(t_cmd_seq *cmd_seq, t_dict* envp, bool inside_main_process)
 	pid_t		pid;
 
 	exit_status = EXIT_SUCCESS;
-	apply_redirections(cmd_seq, stdin_out);
-	if (cmd_seq->pipe_count == 0 && is_builtin(cmd_seq->cmds[0][0]))
-		exit_status = exec_builtin(cmd_seq->cmds[0], envp, inside_main_process);
+	apply_redirections(mini->cmd_seq, stdin_out);
+	if (exit_called(mini->cmd_seq))
+		ft_exit(mini, mini->cmd_seq->cmds[0], true);
+	if (mini->cmd_seq->pipe_count == 0 && is_builtin(mini->cmd_seq->cmds[0][0]))
+		exit_status = exec_builtin(mini, mini->cmd_seq->cmds[0], in_main);
 	else
 	{
 		pid = ft_fork();
 		if (CHILD_PROCESS)
-			execute_cmds(cmd_seq, envp);
+			execute_cmds(mini->cmd_seq, mini->envp);
 		wait(&status);
 		if (WIFEXITED(status))
 			exit_status = WEXITSTATUS(status);
-		//else // process was interrupted by a signal
-		//	break ; // ???
 	}
 	reset_stdin_out(stdin_out);
 	return (exit_status);
 }
 
-int	handle_braces(t_ctrl_seq *seq, t_dict *envp)
+int	handle_braces(t_shell *mini, t_ctrl_seq *seq, t_dict *envp)
 {
 	pid_t		pid;
-	t_ctrl_seq	**nested_ctrl_seq;
-	t_cmd_seq	*cmd_seq;
 	int			status;
 	int			exit_status;
+	char		*parent_input;
 
 	exit_status = EXIT_SUCCESS;
 	pid = ft_fork();
@@ -104,88 +143,60 @@ int	handle_braces(t_ctrl_seq *seq, t_dict *envp)
 	{
 		if (contains(seq->raw_input, "(<>|&"))
 		{
-			nested_ctrl_seq = gen_ctrl_seq(seq->raw_input);
-			exit_status = execute(nested_ctrl_seq, envp);
+			parent_input = ft_strdup(seq->raw_input);
+			free_ctrl_seq(mini->ctrl_seq);
+			gen_ctrl_seq(mini, parent_input);
+			free(parent_input);
+			exit_status = execute(mini);
 		}
 		else
 		{
-			cmd_seq = gen_cmd_seq(seq->raw_input, envp);
-			if (!cmd_seq)
+			mini->cmd_seq = gen_cmd_seq(seq->raw_input, envp);
+			if (!mini->cmd_seq)
+			{
+				free_shell(mini);
 				exit(2);
-			exit_status = exec_command(cmd_seq, envp, false);
+			}
+			exit_status = exec_command(mini, false);
 		}
 		exit(exit_status);
 	}
 	wait(&status);
 	if (WIFEXITED(status))
 		exit_status = WEXITSTATUS(status);
-	//handle else case
 	return (exit_status);
 }
 
-void	free_cmd_seq(t_cmd_seq *cmd_seq)
-{
-	int		i;
-	char	**cmds;
 
-	i = 0;
-	while (cmd_seq->cmds[i])
-	{
-		cmds = cmd_seq->cmds[i];
-		free_2darr((void **)cmds, ft_2darr_len((void **)cmds));
-		i++;
-	}
-	free(cmd_seq->cmds);
-	free_2darr((void **)cmd_seq->pipe_fd, ft_2darr_len((void**)cmd_seq->pipe_fd));
-	free_arrlst(cmd_seq->words, free);
-	free(cmd_seq->tokens);
-	free(cmd_seq);
-}
-
-void	free_ctrl_seq(t_ctrl_seq **ctrl_seq)
-{
-	int	i;
-
-	i = 0;
-	while (ctrl_seq[i])
-	{
-		free(ctrl_seq[i]->raw_input);
-		free(ctrl_seq[i]);
-		i++;
-	}
-	free(ctrl_seq);
-}
-
-int	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
+int	execute(t_shell *mini)
 {
 	int			exit_status;
-	t_cmd_seq	*cmd_seq;
 	int			i;
 
 	i = 0;
-	while (ctrl_seq[i])
+	while (mini->ctrl_seq[i])
 	{
-		exit_status = ft_atoi(get_dict_value("?", envp));
-		if (ctrl_op_failure(ctrl_seq[i], exit_status))
+		exit_status = ft_atoi(get_dict_value("?", mini->envp));
+		if (ctrl_op_failure(mini->ctrl_seq[i], exit_status))
 		{
 			i++;
 			continue ;
 		}
-		if (ctrl_seq[i]->inside_braces)
-			exit_status = handle_braces(ctrl_seq[i], envp);
+		if (mini->ctrl_seq[i]->inside_braces)
+			exit_status = handle_braces(mini, mini->ctrl_seq[i], mini->envp);
 		else
 		{
-			cmd_seq = gen_cmd_seq(ctrl_seq[i]->raw_input, envp);
-			if (!cmd_seq)
+			mini->cmd_seq = gen_cmd_seq(mini->ctrl_seq[i]->raw_input, mini->envp);
+			if (!mini->cmd_seq)
 				exit_status = 2;
 			else
-				exit_status = exec_command(cmd_seq, envp, true);
+				exit_status = exec_command(mini, true);
 		}
-		set_dict_value("?", ft_itoa(exit_status), envp);
-//		free_cmd_seq(cmd_seq);
+		set_dict_value("?", ft_itoa(exit_status), mini->envp);
+		free_cmd_seq(mini->cmd_seq);
 		i++;
 	}
-//	free_ctrl_seq(ctrl_seq);
+	free_ctrl_seq(mini->ctrl_seq);
 	return (exit_status);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/19 16:20:52 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/19 17:41:47 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,28 +61,28 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-int	exec_builtin(char **cmd, t_dict *envp, bool inside_main_process)
+int	exec_builtin(t_shell *mini, char **cmd, bool in_main)
 {
 	if (!cmd || !(*cmd))
 		return (0);
 	else if (ft_match(cmd[0], "env"))
-		return (ft_env(envp));
+		return (ft_env(mini->envp));
 	else if (ft_match(cmd[0], "cd"))
 		return (ft_cd(cmd));
 	else if (ft_match(cmd[0], "echo"))
 		return (ft_echo(cmd));
 	else if (ft_match(cmd[0], "export"))
-		return (ft_export(cmd, envp));
+		return (ft_export(cmd, mini->envp));
 	else if (ft_match(cmd[0], "pwd"))
 		return (ft_pwd());
 	else if (ft_match(cmd[0], "unset"))
-		return (ft_unset(cmd, envp));
+		return (ft_unset(cmd, mini->envp));
 	else if (ft_match(cmd[0], "exit"))
-		ft_exit(cmd, inside_main_process);
+		ft_exit(mini, cmd, in_main);
 	return (0);
 }
 
-void	ft_exec(char **cmd, t_dict *envp)
+void	ft_exec(t_shell *mini, char **cmd)
 {
 	char	*cmd_path;
 
@@ -90,15 +90,15 @@ void	ft_exec(char **cmd, t_dict *envp)
 		exit(EXIT_SUCCESS);
 	if (is_builtin(cmd[0]))
 	{
-		exec_builtin(cmd, envp, false);
+		exec_builtin(mini, cmd, false);
 		exit(EXIT_SUCCESS);
 	}
-	cmd_path = get_cmd_path((char *)cmd[0], envp);
+	cmd_path = get_cmd_path((char *)cmd[0], mini->envp);
 	if (!cmd_path)
 		exit(2);
 	signal(SIGINT, handle_ctrl_c_child);
 	signal(SIGQUIT, handle_ctrl_c_child);
-	if (execve(cmd_path, cmd, dict_to_arr(envp)) == -1)
+	if (execve(cmd_path, cmd, dict_to_arr(mini->envp)) == -1)
 	{
 		ft_fprintf(2, "%s: command not found\n", cmd[0]);	
 		exit(127);

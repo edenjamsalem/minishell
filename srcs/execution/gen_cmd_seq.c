@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 14:52:24 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/19 13:10:58 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/19 17:21:18 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,35 +45,35 @@ static int get_cmd_len(t_token *tokens)
 	return (len);
 }
 
-void	assign_cmds(t_cmd_seq *command)
+void	assign_cmds(t_cmd_seq *cmd_seq)
 {
 	int		i;
 	int		j;
 	int		k;
 
-	command->cmds = malloc(sizeof(char **) * (command->pipe_count + 2));
-	if (!command->cmds)
+	cmd_seq->cmds = malloc(sizeof(char **) * (cmd_seq->pipe_count + 2));
+	if (!cmd_seq->cmds)
 		return ;
 	i = 0;
 	k = 0;
-	while (i < command->pipe_count + 1)
+	while (i < cmd_seq->pipe_count + 1)
 	{
-		command->cmds[i] = malloc(sizeof(char *) * (get_cmd_len(command->tokens) + 1));
-		if (!command->cmds[i])
+		cmd_seq->cmds[i] = malloc(sizeof(char *) * (get_cmd_len(cmd_seq->tokens) + 1));
+		if (!cmd_seq->cmds[i])
 			return ;
 		j = 0;
-		while (command->tokens[k] != END && command->tokens[k] != PIPE)
+		while (cmd_seq->tokens[k] != END && cmd_seq->tokens[k] != PIPE)
 		{
-			if (command->tokens[k] == CMD || command->tokens[k] == TEXT)
-				command->cmds[i][j++] = ft_strdup(command->words->content[k]);
+			if (cmd_seq->tokens[k] == CMD || cmd_seq->tokens[k] == TEXT)
+				cmd_seq->cmds[i][j++] = ft_strdup(cmd_seq->words->content[k]);
 			k++;
 		}
-		command->cmds[i][j] = NULL;
-		if (command->tokens[k] == PIPE)
+		cmd_seq->cmds[i][j] = NULL;
+		if (cmd_seq->tokens[k] == PIPE)
 			k++;
 		i++;
 	}
-	command->cmds[i] = NULL;
+	cmd_seq->cmds[i] = NULL;
 }
 
 t_cmd_seq	*gen_cmd_seq(char *input, t_dict *envp)

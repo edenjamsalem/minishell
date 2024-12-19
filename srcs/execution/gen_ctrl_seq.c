@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 10:32:59 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/19 12:47:20 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/19 17:14:17 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,34 +153,32 @@ void	remove_braces(char *input)
 		del_char(start);
 }
 
-t_ctrl_seq **gen_ctrl_seq(char *input)
+void	gen_ctrl_seq(t_shell *mini, char *input)
 {
-	t_ctrl_seq	**ctrl_seq;
 	int			seq_count;
 	int			i;
 
 	if (ends_with_ctrl_op(input))
 		input = complete_input(input);
 	seq_count = get_seq_count(input);
-	ctrl_seq = malloc(sizeof(t_ctrl_seq *) * (seq_count + 1));
+	mini->ctrl_seq = malloc(sizeof(t_ctrl_seq *) * (seq_count + 1));
 	i = 0;
 	while (i < seq_count)
 	{
-		ctrl_seq[i] = malloc(sizeof(t_ctrl_seq));
-		if (!ctrl_seq[i])
-			return (NULL);
-		ctrl_seq[i]->ctrl_op = assign_ctrl_op(&input);
-		ctrl_seq[i]->raw_input = copy_text(&input);
-		ctrl_seq[i]->inside_braces = false;
-		if (*(ctrl_seq[i]->raw_input) == '(')
+		mini->ctrl_seq[i] = malloc(sizeof(t_ctrl_seq));
+		if (!mini->ctrl_seq[i])
+			return ;
+		mini->ctrl_seq[i]->ctrl_op = assign_ctrl_op(&input);
+		mini->ctrl_seq[i]->raw_input = copy_text(&input);
+		mini->ctrl_seq[i]->inside_braces = false;
+		if (*(mini->ctrl_seq[i]->raw_input) == '(')
 		{
-			ctrl_seq[i]->inside_braces = true;
-			remove_braces(ctrl_seq[i]->raw_input);
+			mini->ctrl_seq[i]->inside_braces = true;
+			remove_braces(mini->ctrl_seq[i]->raw_input);
 		}
 		i++;
 	}
-	ctrl_seq[i] = NULL;
-	return (ctrl_seq);
+	mini->ctrl_seq[i] = NULL;
 }
 /*
 int main(void)

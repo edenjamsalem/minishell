@@ -17,7 +17,7 @@
 #  define _DEFAULT_SOURCE
 # endif
 
-# include "./libft/libft.h"
+# include "../libft/libft.h"
 # include <dirent.h>
 # include <errno.h>
 # include <readline/history.h>
@@ -76,6 +76,13 @@ typedef struct s_ctrl_seq // CONTROL SEQUENCE
 
 }				t_ctrl_seq;
 
+typedef struct s_shell
+{
+	t_ctrl_seq	**ctrl_seq;
+	t_cmd_seq	*cmd_seq;
+	t_dict		*envp;
+}				t_shell;
+
 // SIGNALS
 
 void			handle_signal(int signum, siginfo_t *info, void *context);
@@ -102,11 +109,11 @@ int				ft_cd(char **cmd);
 
 int				ft_echo(char **cmd);
 
-void			ft_exit(char **cmd_argv, bool inside_main_process);
+void			ft_exit(t_shell *mini, char **cmd_argv, bool in_main);
 
 // PARSE FNS
 
-t_ctrl_seq		**gen_ctrl_seq(char *input);
+void			gen_ctrl_seq(t_shell *mini, char *input);
 
 t_arrlst		*word_split(char *input);
 
@@ -193,7 +200,7 @@ int				skip_redirect(t_token *tokens, int index);
 
 // EXECUTION
 
-int				execute(t_ctrl_seq **ctrl_seq, t_dict *envp);
+int				execute(t_shell *mini);
 
 void			assign_redirections(t_cmd_seq *command, t_dict *envp);
 
@@ -208,12 +215,9 @@ void			exec_pipe_to_pipe(int *prev_pipe_fd, int *pipe_fd, char **cmd,
 
 void			exec_pipe_to_outfile(int pipe_fd[2], char **cmd, t_dict *envp);
 
-void			ft_exec(char **cmd, t_dict *envp);
+void			ft_exec(t_shell *mini, char **cmd);
 
-t_ctrl_seq		**gen_ctrl_seq(char *input);
-
-int				exec_builtin(char **cmd, t_dict *envp,
-					bool inside_main_process);
+int				exec_builtin(t_shell *mini, char **cmd, bool inside_main_process);
 
 int				is_builtin(char *cmd);
 
@@ -223,14 +227,12 @@ void			assign_pipe_count(t_cmd_seq *command);
 
 void			assign_cmds(t_cmd_seq *command);
 
-// TEST FUNCTIONS; can remove those later
+// CLEANUP
 
-void			print_arrlst(t_arrlst *list);
+void	free_cmd_seq(t_cmd_seq *cmd_seq);
 
-char			*token_to_string(t_token token);
+void	free_ctrl_seq(t_ctrl_seq **ctrl_seq);
 
-void			print_tokens(t_arrlst *words, t_token *tokens);
-
-void			print_ctrl_seq(t_ctrl_seq **ctrl_seq);
+void	free_shell(t_shell *mini);
 
 #endif
