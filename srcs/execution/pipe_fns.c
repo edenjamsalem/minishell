@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_fns.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/24 14:33:13 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/19 14:15:41 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/19 16:23:01 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ pid_t	ft_fork()
 {
 	pid_t pid;
 
+	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	if (pid < 0)
 	{
@@ -43,7 +44,10 @@ pid_t	ft_fork()
 		exit(EXIT_FAILURE);
 	}
 	if (pid == 0) // reset signal handle for child process
-		signal(SIGINT, SIG_DFL);
+	{
+		signal(SIGINT, handle_ctrl_c_child);
+		signal(SIGQUIT, handle_ctrl_c_child);
+	}	
 	return (pid);
 }
 

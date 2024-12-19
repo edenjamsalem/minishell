@@ -17,7 +17,7 @@
 #  define _DEFAULT_SOURCE
 # endif
 
-# include "../libft/libft.h"
+# include "./libft/libft.h"
 # include <dirent.h>
 # include <errno.h>
 # include <readline/history.h>

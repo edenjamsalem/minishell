@@ -153,6 +153,7 @@ int	main(int argc, char **argv, char **envp)
 	setup_sig_handler(SIGINT); // initialise signal handlers first;
 	while (1)
 	{
+		setup_sig_handler(SIGINT);
 		input = read_input();
 		if (!input)
 			continue ;
