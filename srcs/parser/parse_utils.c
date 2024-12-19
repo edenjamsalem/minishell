@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 11:56:09 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/19 10:20:17 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/19 12:13:57 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,24 @@ void	del_char(char *text)
 
 void	remove_quotes(char *text)
 {
+	char	*open_quote;
 	char	quote_to_del;
 
-	quote_to_del = *(ft_strchrset(text, QUOTES));
 	while (*text)
 	{
-		if (*text == quote_to_del)
-			del_char(text);	
-		else
-			text++;
+		open_quote = ft_strchrset(text, QUOTES);		
+		quote_to_del = *(open_quote);
+		del_char(open_quote);
+		while (*text)
+		{
+			if (*text == quote_to_del)
+			{
+				del_char(text);
+				break ;
+			}
+			else
+				text++;
+		}
 	}
 }
 

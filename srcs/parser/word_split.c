@@ -95,15 +95,14 @@ t_arrlst	*word_split(char *input)
 /*
 int main(void)
 {
-	t_arrlst *list = word_split(" This is my \"$PATH\" what>>&|&||\'isyours? $");
-	int	i = 0;
+	char *input = "'hello''123''435'";
+	t_arrlst *list = init_arrlst(4);
 
-	while (i < list->count)
-	{
-		ft_printf("%s\n", list->content[i]);
-		i++;
-	}
-	free_arrlst(list, free);
-	free(list);
+	if (contains_multiple_quotes(input))
+		split_quotes(list, input);
+
+	int	i = 0;
+	while(list->content[i])
+		ft_printf("%s\n", list->content[i++]);
 }
 */

@@ -12,12 +12,30 @@
 
 #include "../../minishell.h"
 
+int	single_quotes_inside_double(char *input)
+{
+	char	*open_double;
+	char	*close_double;
+	char	*open_single;
+	char	*close_single;
+
+	open_single = (char *)ft_strchr(input, '\'');
+	open_double = (char *)ft_strchr(input, '"');
+	if (!open_single || !open_double)
+		return (0);
+	close_single = (char *)ft_strchr(open_double + 1, '\'');
+	close_double = (char *)ft_strchr(open_double + 1, '"');
+	if (open_double < open_single && close_double > close_single)
+		return (1);
+	return (0);
+}
+
 char	*expand_vars(char *input, t_dict *envp, bool inc_double, bool inc_single)
 {
 	char	expanded[2048];
 	char	*ptr;
 
-	if (ft_strchr(input, '"') < ft_strchr(input, '\''))
+	if (single_quotes_inside_double(input))
 		inc_single = true;
 	ptr = expanded;
 	while (*input)
