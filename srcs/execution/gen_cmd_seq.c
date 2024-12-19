@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 14:52:24 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/18 19:31:47 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/19 13:10:58 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,11 @@ t_cmd_seq	*gen_cmd_seq(char *input, t_dict *envp)
 		return (NULL);
 	parse(input, cmd_seq, envp);
 	if (!grammar_check(cmd_seq->words, cmd_seq->tokens))
+	{
+		free_arrlst(cmd_seq->words, free);
+		free(cmd_seq->tokens);
 		return (NULL);
+	}
 	quote_removal(cmd_seq->words);
 	assign_redirections(cmd_seq, envp);
 	assign_pipe_count(cmd_seq);

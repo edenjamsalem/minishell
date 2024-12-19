@@ -60,8 +60,8 @@ typedef struct s_cmd_seq
 {
 	t_arrlst	*words;
 	t_token		*tokens;
-	char ***cmds;  // list of 2d char arrays with command + flags + args
-	int **pipe_fd; // dynamically allocated list of fd's for each pipe
+	char		***cmds;
+	int			**pipe_fd;
 	int			pipe_count;
 	int			infile;
 	int			outfile;

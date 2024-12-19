@@ -50,6 +50,7 @@ void	cleanup(t_dict *envp_dict)
 {
 	rl_clear_history();
 	dict_clear(&envp_dict);
+	free(envp_dict);
 }
 
 int	brace_count_same(char *input)
@@ -62,7 +63,10 @@ int	brace_count_same(char *input)
 	while (*input)
 	{
 		if (chrsetcmp(*input, QUOTES))
+		{
 			skip_quotes(&input);
+			continue;
+		}
 		else if (*input == '(')
 			open_brace_count++;
 		else if (*input == ')')
@@ -71,7 +75,7 @@ int	brace_count_same(char *input)
 	}
 	if (open_brace_count == close_brace_count)
 		return (1);
-	ft_fprintf(2, "bash: syntax error: incorrect braces\n");
+	ft_fprintf(2, "bash: syntax error: incorrect parentheses\n");
 	return (0);
 }
 
@@ -149,7 +153,6 @@ int	main(int argc, char **argv, char **envp)
 	setup_sig_handler(SIGINT); // initialise signal handlers first;
 	while (1)
 	{
-		//setup_sig_handler(SIGINT);
 		input = read_input();
 		if (!input)
 			continue ;

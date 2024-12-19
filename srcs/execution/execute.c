@@ -42,12 +42,16 @@ void	execute_cmds(t_cmd_seq* command, t_dict *envp)
 
 void	reset_stdin_out(int	*stdin_out)
 {
-	dup2(stdin_out[0], STDIN_FILENO);
-	dup2(stdin_out[1], STDOUT_FILENO);
+	if (stdin_out[0] != STDIN_FILENO)
+		dup2(stdin_out[0], STDIN_FILENO);
+	if (stdin_out[1] != STDOUT_FILENO)
+		dup2(stdin_out[1], STDOUT_FILENO);
 }
 
 void	apply_redirections(t_cmd_seq *cmd_seq, int *stdin_out)
 {
+	stdin_out[0] = STDIN_FILENO;
+	stdin_out[1] = STDOUT_FILENO;
 	if (cmd_seq->infile != STDIN_FILENO)
 	{
 		stdin_out[0] = dup(STDIN_FILENO);
@@ -60,7 +64,7 @@ void	apply_redirections(t_cmd_seq *cmd_seq, int *stdin_out)
 	}	
 }
 
-int	exec_command(t_cmd_seq *command, t_dict* envp, bool inside_main_process)
+int	exec_command(t_cmd_seq *cmd_seq, t_dict* envp, bool inside_main_process)
 {
 	int			stdin_out[2];
 	int			status;
@@ -68,14 +72,14 @@ int	exec_command(t_cmd_seq *command, t_dict* envp, bool inside_main_process)
 	pid_t		pid;
 
 	exit_status = EXIT_SUCCESS;
-	apply_redirections(command, stdin_out);
-	if (command->pipe_count == 0 && is_builtin(command->cmds[0][0]))
-		exit_status = exec_builtin(command->cmds[0], envp, inside_main_process);
+	apply_redirections(cmd_seq, stdin_out);
+	if (cmd_seq->pipe_count == 0 && is_builtin(cmd_seq->cmds[0][0]))
+		exit_status = exec_builtin(cmd_seq->cmds[0], envp, inside_main_process);
 	else
 	{
 		pid = ft_fork();
 		if (CHILD_PROCESS)
-			execute_cmds(command, envp);
+			execute_cmds(cmd_seq, envp);
 		wait(&status);
 		if (WIFEXITED(status))
 			exit_status = WEXITSTATUS(status);
@@ -98,7 +102,7 @@ int	handle_braces(t_ctrl_seq *seq, t_dict *envp)
 	pid = ft_fork();
 	if (CHILD_PROCESS)
 	{
-		if (contains(seq->raw_input, "(") || contains(seq->raw_input, "<>|&"))
+		if (contains(seq->raw_input, "(<>|&"))
 		{
 			nested_ctrl_seq = gen_ctrl_seq(seq->raw_input);
 			exit_status = execute(nested_ctrl_seq, envp);
@@ -120,32 +124,69 @@ int	handle_braces(t_ctrl_seq *seq, t_dict *envp)
 	return (exit_status);
 }
 
+void	free_cmd_seq(t_cmd_seq *cmd_seq)
+{
+	int		i;
+	char	**cmds;
+
+	i = 0;
+	while (cmd_seq->cmds[i])
+	{
+		cmds = cmd_seq->cmds[i];
+		free_2darr((void **)cmds, ft_2darr_len((void **)cmds));
+		i++;
+	}
+	free(cmd_seq->cmds);
+	free_2darr((void **)cmd_seq->pipe_fd, ft_2darr_len((void**)cmd_seq->pipe_fd));
+	free_arrlst(cmd_seq->words, free);
+	free(cmd_seq->tokens);
+	free(cmd_seq);
+}
+
+void	free_ctrl_seq(t_ctrl_seq **ctrl_seq)
+{
+	int	i;
+
+	i = 0;
+	while (ctrl_seq[i])
+	{
+		free(ctrl_seq[i]->raw_input);
+		free(ctrl_seq[i]);
+		i++;
+	}
+	free(ctrl_seq);
+}
+
 int	execute(t_ctrl_seq **ctrl_seq, t_dict *envp)
 {
 	int			exit_status;
 	t_cmd_seq	*cmd_seq;
+	int			i;
 
-	while (*ctrl_seq)
+	i = 0;
+	while (ctrl_seq[i])
 	{
 		exit_status = ft_atoi(get_dict_value("?", envp));
-		if (ctrl_op_failure(*ctrl_seq, exit_status))
+		if (ctrl_op_failure(ctrl_seq[i], exit_status))
 		{
-			ctrl_seq++;
+			i++;
 			continue ;
 		}
-		if ((*ctrl_seq)->inside_braces)
-			exit_status = handle_braces(*ctrl_seq, envp);
+		if (ctrl_seq[i]->inside_braces)
+			exit_status = handle_braces(ctrl_seq[i], envp);
 		else
 		{
-			cmd_seq = gen_cmd_seq((*ctrl_seq)->raw_input, envp);
+			cmd_seq = gen_cmd_seq(ctrl_seq[i]->raw_input, envp);
 			if (!cmd_seq)
 				exit_status = 2;
 			else
 				exit_status = exec_command(cmd_seq, envp, true);
 		}
 		set_dict_value("?", ft_itoa(exit_status), envp);
-		ctrl_seq++;
+//		free_cmd_seq(cmd_seq);
+		i++;
 	}
+//	free_ctrl_seq(ctrl_seq);
 	return (exit_status);
 }
 

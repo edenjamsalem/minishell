@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 17:31:16 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/18 23:46:30 by mganchev         ###   ########.fr       */
+/*   Updated: 2024/12/19 13:06:55 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,29 +25,32 @@ bool	is_eof(char *input, char *eof)
 	return (false);
 }
 
-void	setup_pipes(t_cmd_seq *command)
+void	setup_pipes(t_cmd_seq *cmd_seq)
 {
 	int	i;
 	int	pipe_count;
 
-	pipe_count = command->pipe_count;
-	if (pipe_count < 1)
+	pipe_count = cmd_seq->pipe_count;
+	if (pipe_count == 0)
+	{
+		cmd_seq->pipe_fd = NULL;
 		return ;
-	command->pipe_fd = malloc(sizeof(int *) * (pipe_count + 1));
-	if (!command->pipe_fd)
+	}
+	cmd_seq->pipe_fd = malloc(sizeof(int *) * (pipe_count + 1));
+	if (!cmd_seq->pipe_fd)
 		return ;
 	i = 0;
 	while (i < pipe_count)
 	{
-		command->pipe_fd[i] = malloc(sizeof(int) * 2);
-		if (!command->pipe_fd[i])
+		cmd_seq->pipe_fd[i] = malloc(sizeof(int) * 2);
+		if (!cmd_seq->pipe_fd[i])
 		{
-			free_2darr((void *)command->pipe_fd, i - 1);
+			free_2darr((void *)cmd_seq->pipe_fd, i - 1);
 			return ;
 		}
 		i++;
 	}
-	command->pipe_fd[pipe_count] = NULL;
+	cmd_seq->pipe_fd[pipe_count] = NULL;
 }
 
 int	get_heredoc_input(char *eof, t_dict *envp)

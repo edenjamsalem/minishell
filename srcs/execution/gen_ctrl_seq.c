@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 10:32:59 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/18 15:14:59 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/19 12:47:20 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,24 +78,24 @@ int	get_seq_count(char *input)
 char	*complete_input(char *input)
 {
 	char	buf[4096];
-	char	tmp[1024];
+	char	line[1024];
 	int		bytes_read;
 	
 	ft_strlcpy(buf, input, 4096);
 	while (ends_with_ctrl_op(buf))
 	{
 		write(1, "> ", 2);
-		bytes_read = read(STDIN_FILENO, tmp, 1024);
-		tmp[bytes_read - 1] = '\0';
-		if (syntax_error(tmp))
+		bytes_read = read(STDIN_FILENO, line, 1024);
+		line[bytes_read - 1] = '\0';
+		if (syntax_error(line))
 		{
-			ft_perror(SYNTAX, tmp); // need to cut just token not whole str
+			ft_perror(SYNTAX, line); // need to cut just token not whole str
 			free(input);
 			exit(2);
 		}
-		ft_strlcat(buf, tmp, 4096);
+		ft_strlcat(buf, line, 4096);
 	}
-//	free(input);
+	free(input);
 	return (ft_strdup(buf));
 }
 
@@ -156,19 +156,22 @@ void	remove_braces(char *input)
 t_ctrl_seq **gen_ctrl_seq(char *input)
 {
 	t_ctrl_seq	**ctrl_seq;
+	int			seq_count;
 	int			i;
 
 	if (ends_with_ctrl_op(input))
 		input = complete_input(input);
-	ctrl_seq = malloc(sizeof(t_ctrl_seq *) * (get_seq_count(input) + 1));
+	seq_count = get_seq_count(input);
+	ctrl_seq = malloc(sizeof(t_ctrl_seq *) * (seq_count + 1));
 	i = 0;
-	while (*input)
+	while (i < seq_count)
 	{
 		ctrl_seq[i] = malloc(sizeof(t_ctrl_seq));
 		if (!ctrl_seq[i])
 			return (NULL);
 		ctrl_seq[i]->ctrl_op = assign_ctrl_op(&input);
 		ctrl_seq[i]->raw_input = copy_text(&input);
+		ctrl_seq[i]->inside_braces = false;
 		if (*(ctrl_seq[i]->raw_input) == '(')
 		{
 			ctrl_seq[i]->inside_braces = true;

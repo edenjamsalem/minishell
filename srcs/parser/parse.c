@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 11:16:25 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/18 19:28:50 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/19 13:10:03 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	parse(char *input, t_cmd_seq *cmd_seq, t_dict *envp)
 	free(expanded_input);
 	expand_vars_in_double_quotes(cmd_seq->words->content, envp);
 	cmd_seq->tokens = tokenise(cmd_seq->words);
-	
 }
 /*
 int	main(int argc, char **argv, char **envp)
