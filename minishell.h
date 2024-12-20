@@ -118,8 +118,6 @@ t_arrlst		*word_split(char *input);
 
 void			parse(char *input, t_cmd_seq *command, t_dict *envp_dict);
 
-int				skip_quotes(char **text);
-
 void			quote_removal(t_arrlst *input);
 
 bool			contains(char *word, char *set);
@@ -139,6 +137,8 @@ char			*skip_to(char **text, char *set);
 char			*skip_len(char **text, int size);
 
 void 			skip_braces(char **input);
+
+int				skip_quotes(char **text);
 
 // PARAM EXPANSION
 

@@ -6,7 +6,7 @@
 #    By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 14:01:35 by eamsalem          #+#    #+#              #
-#    Updated: 2024/12/20 19:06:19 by eamsalem         ###   ########.fr        #
+#    Updated: 2024/12/20 19:10:35 by eamsalem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,6 @@ BUILTINDIR = $(SRCDIR)/builtins
 SRCS =	$(SRCDIR)/minishell.c \
 		$(SRCDIR)/signals.c \
 		$(SRCDIR)/cleanup.c \
-		$(SRCDIR)/utils.c \
 \
 		$(PARSEDIR)/expansions.c \
 		$(PARSEDIR)/parse.c \
@@ -50,7 +49,7 @@ SRCS =	$(SRCDIR)/minishell.c \
 		$(EXECDIR)/exec_ctrl_seq.c \
 		$(EXECDIR)/exec_cmd_seq.c \
 		$(EXECDIR)/exec_utils.c \
-		$(EXECDIR)/pipe_fns.c \
+		$(EXECDIR)/exec_pipe.c \
 \
 		$(TOKENDIR)/grammar_check.c \
 		$(TOKENDIR)/tokenisation.c \

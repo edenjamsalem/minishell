@@ -6,11 +6,50 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/20 16:50:52 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/20 19:09:00 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
+
+pid_t	pipe_fork(int pipe_fd[2])
+{
+	pid_t	pid;
+
+	if (pipe(pipe_fd) == -1)
+	{
+		perror("pipe");
+		exit(EXIT_FAILURE);
+	}
+	pid = fork();
+	if (pid < 0)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	if (pid == 0) // reset signal handler for child process
+		signal(SIGINT, SIG_DFL);
+	return (pid);
+}
+
+pid_t	ft_fork()
+{
+	pid_t pid;
+
+	signal(SIGINT, SIG_IGN);
+	pid = fork();
+	if (pid < 0)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	if (pid == 0) // reset signal handle for child process
+	{
+		signal(SIGINT, handle_ctrl_c_child);
+		signal(SIGQUIT, handle_ctrl_c_child);
+	}	
+	return (pid);
+}
 
 static char	*get_cmd_path(char *cmd, t_dict *envp)
 {
@@ -58,27 +97,6 @@ int	is_builtin(char *cmd)
 		return (1);
 	else if (ft_match(cmd, "exit"))
 		return (1);
-	return (0);
-}
-
-int	exec_builtin(t_shell *mini, char **cmd, bool in_main)
-{
-	if (!cmd || !(*cmd))
-		return (0);
-	else if (ft_match(cmd[0], "env"))
-		return (ft_env(mini->envp));
-	else if (ft_match(cmd[0], "cd"))
-		return (ft_cd(cmd));
-	else if (ft_match(cmd[0], "echo"))
-		return (ft_echo(cmd));
-	else if (ft_match(cmd[0], "export"))
-		return (ft_export(cmd, mini->envp));
-	else if (ft_match(cmd[0], "pwd"))
-		return (ft_pwd());
-	else if (ft_match(cmd[0], "unset"))
-		return (ft_unset(cmd, mini->envp));
-	else if (ft_match(cmd[0], "exit"))
-		ft_exit(mini, cmd, in_main);
 	return (0);
 }
 

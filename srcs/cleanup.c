@@ -6,11 +6,31 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:52:01 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/20 16:46:22 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/20 19:09:54 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+int    ft_perror(t_error type, char *error_msg)
+{
+    if (type == SYNTAX)
+    {
+        ft_fprintf(2, "syntax error near unexpected token '%s'\n", error_msg);
+        return (0);
+    }
+    else if (type == CMD_)
+    {
+        ft_fprintf(2, "'%s': command not found\n", error_msg);
+        return (0);
+    }
+    else if (type == DIRECT)
+    {
+        ft_fprintf(2, "'%s': No such file or directory\n", error_msg); 
+        return (0);
+    }
+    return (1);
+}
 
 void	close_open_fds(int *open_fds, int fd_count)
 {

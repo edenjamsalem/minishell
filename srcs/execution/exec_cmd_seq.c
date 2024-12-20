@@ -6,30 +6,11 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 16:22:13 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/20 18:55:03 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/20 19:16:46 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-void	execute_cmds(t_shell *mini, t_cmd_seq* cmd_seq)
-{
-	int	i;
-
-	if (cmd_seq->pipe_count == 0)
-		ft_exec(mini, (char **)cmd_seq->cmds[0]); // function takes different args
-	else
-	{
-		exec_infile_to_pipe(mini, cmd_seq->pipe_fd[0], cmd_seq->cmds[0]);
-		i = 1;
-		while (i < cmd_seq->pipe_count)
-		{
-			exec_pipe_to_pipe(mini, cmd_seq->pipe_fd[i - 1], cmd_seq->pipe_fd[i], cmd_seq->cmds[i]);
-			i++;
-		}
-		exec_pipe_to_outfile(mini, cmd_seq->pipe_fd[i - 1], cmd_seq->cmds[i]);
-	}
-}
 
 void	reset_stdin_out(int	*stdin_out)
 {
@@ -53,6 +34,46 @@ void	apply_redirections(t_cmd_seq *cmd_seq, int *stdin_out)
 		stdin_out[1] = dup(STDOUT_FILENO);
 		dup2(cmd_seq->outfile, STDOUT_FILENO);
 	}	
+}
+
+int	exec_builtin(t_shell *mini, char **cmd, bool in_main)
+{
+	if (!cmd || !(*cmd))
+		return (0);
+	else if (ft_match(cmd[0], "env"))
+		return (ft_env(mini->envp));
+	else if (ft_match(cmd[0], "cd"))
+		return (ft_cd(cmd));
+	else if (ft_match(cmd[0], "echo"))
+		return (ft_echo(cmd));
+	else if (ft_match(cmd[0], "export"))
+		return (ft_export(cmd, mini->envp));
+	else if (ft_match(cmd[0], "pwd"))
+		return (ft_pwd());
+	else if (ft_match(cmd[0], "unset"))
+		return (ft_unset(cmd, mini->envp));
+	else if (ft_match(cmd[0], "exit"))
+		ft_exit(mini, cmd, in_main);
+	return (0);
+}
+
+void	execute_cmds(t_shell *mini, t_cmd_seq* cmd_seq)
+{
+	int	i;
+
+	if (cmd_seq->pipe_count == 0)
+		ft_exec(mini, (char **)cmd_seq->cmds[0]); // function takes different args
+	else
+	{
+		exec_infile_to_pipe(mini, cmd_seq->pipe_fd[0], cmd_seq->cmds[0]);
+		i = 1;
+		while (i < cmd_seq->pipe_count)
+		{
+			exec_pipe_to_pipe(mini, cmd_seq->pipe_fd[i - 1], cmd_seq->pipe_fd[i], cmd_seq->cmds[i]);
+			i++;
+		}
+		exec_pipe_to_outfile(mini, cmd_seq->pipe_fd[i - 1], cmd_seq->cmds[i]);
+	}
 }
 
 int	exec_cmd_seq(t_cmd_seq *cmd_seq, t_shell *mini, bool in_main)
