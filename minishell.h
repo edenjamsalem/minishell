@@ -156,6 +156,8 @@ void			init_ctrl_seq(t_shell *mini, char *input);
 
 void			init_cmd_seq(t_ctrl_seq *ctrl_seq, t_dict *envp);
 
+t_shell			*init_shell(char **envp);
+
 void			assign_redirections(t_cmd_seq *cmd_seq, t_dict *envp);
 
 // TOKENISER

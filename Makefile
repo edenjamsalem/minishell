@@ -6,7 +6,7 @@
 #    By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 14:01:35 by eamsalem          #+#    #+#              #
-#    Updated: 2024/12/20 18:55:38 by eamsalem         ###   ########.fr        #
+#    Updated: 2024/12/20 19:03:37 by eamsalem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,6 +44,7 @@ SRCS =	$(SRCDIR)/minishell.c \
 \
 		$(INITDIR)/init_ctrl_seq.c \
 		$(INITDIR)/init_cmd_seq.c \
+		$(INITDIR)/init_shell.c \
 		$(INITDIR)/init_utils.c \
 		$(INITDIR)/redirections.c \
 \

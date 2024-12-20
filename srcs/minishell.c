@@ -132,19 +132,6 @@ int	ctrl_syntax_okay(char *input)
 	return (1);
 }
 
-t_shell	*init_shell(char **envp)
-{
-	t_shell	*mini;
-
-	setup_sig_handler(SIGINT); // initialise signal handlers first;
-	mini = malloc(sizeof(t_shell));
-	if (!mini)
-		return (NULL);
-	mini->envp = init_envp_dict(envp);
-	mini->ctrl_seq = NULL;
-	return (mini);
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
