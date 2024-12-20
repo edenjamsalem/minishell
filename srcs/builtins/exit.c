@@ -26,7 +26,7 @@ void	ft_exit(t_shell *mini, char **cmd_argv, bool inside_main_process)
 	int	exit_status;
 
 	if (!cmd_argv || !(*cmd_argv))
-		return ;
+		return (free_shell(mini));
 	len = ft_2darr_len((void **)cmd_argv);
 	if (len > 2)
 		perror("bash: exit: too many arguments");

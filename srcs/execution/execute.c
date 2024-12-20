@@ -56,22 +56,22 @@ int	ctrl_op_failure(t_ctrl_seq *seq, int exit_status)
 	return (0);	
 }
 
-void	execute_cmds(t_cmd_seq* command, t_dict *envp)
+void	execute_cmds(t_shell *mini, t_cmd_seq* command)
 {
 	int	i;
 
 	if (command->pipe_count == 0)
-		ft_exec((char **)command->cmds[0], envp);
+		ft_exec(mini, (char **)command->cmds[0]); // function takes different args
 	else
 	{
-		exec_infile_to_pipe(command->pipe_fd[0], command->cmds[0], envp);
+		exec_infile_to_pipe(mini, command->pipe_fd[0], command->cmds[0]);
 		i = 1;
 		while (i < command->pipe_count)
 		{
-			exec_pipe_to_pipe(command->pipe_fd[i - 1], command->pipe_fd[i], command->cmds[i], envp);
+			exec_pipe_to_pipe(mini, command->pipe_fd[i - 1], command->pipe_fd[i], command->cmds[i]);
 			i++;
 		}
-		exec_pipe_to_outfile(command->pipe_fd[i - 1], command->cmds[i], envp);
+		exec_pipe_to_outfile(mini, command->pipe_fd[i - 1], command->cmds[i]);
 	}
 }
 
@@ -121,7 +121,7 @@ int	exec_command(t_shell *mini, bool in_main)
 	{
 		pid = ft_fork();
 		if (CHILD_PROCESS)
-			execute_cmds(mini->cmd_seq, mini->envp);
+			execute_cmds(mini, mini->cmd_seq);
 		wait(&status);
 		if (WIFEXITED(status))
 			exit_status = WEXITSTATUS(status);

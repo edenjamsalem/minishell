@@ -17,7 +17,7 @@
 #  define _DEFAULT_SOURCE
 # endif
 
-# include "../libft/libft.h"
+# include "./libft/libft.h"
 # include <dirent.h>
 # include <errno.h>
 # include <readline/history.h>
@@ -208,12 +208,11 @@ pid_t			pipe_fork(int pipe_fd[2]);
 
 pid_t			ft_fork(void);
 
-void			exec_infile_to_pipe(int pipe_fd[2], char **cmd, t_dict *envp);
+void			exec_infile_to_pipe(t_shell *mini, int pipe_fd[2], char **cmd);
 
-void			exec_pipe_to_pipe(int *prev_pipe_fd, int *pipe_fd, char **cmd,
-					t_dict *envp);
+void			exec_pipe_to_pipe(t_shell *mini, int *prev_pipe_fd, int *pipe_fd, char **cmd);
 
-void			exec_pipe_to_outfile(int pipe_fd[2], char **cmd, t_dict *envp);
+void			exec_pipe_to_outfile(t_shell *mini, int pipe_fd[2], char **cmd);
 
 void			ft_exec(t_shell *mini, char **cmd);
 

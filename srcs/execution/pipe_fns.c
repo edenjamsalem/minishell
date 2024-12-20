@@ -51,7 +51,7 @@ pid_t	ft_fork()
 	return (pid);
 }
 
-void	exec_infile_to_pipe(int pipe_fd[2], char **cmd, t_dict *envp)
+void	exec_infile_to_pipe(t_shell *mini, int pipe_fd[2], char **cmd)
 {
 	pid_t	pid;
 	int		status;
@@ -61,13 +61,13 @@ void	exec_infile_to_pipe(int pipe_fd[2], char **cmd, t_dict *envp)
 	{
 		close(pipe_fd[0]);
 		dup2(pipe_fd[1], STDOUT_FILENO);
-		ft_exec(cmd, envp);
+		ft_exec(mini, cmd);
 	}
 	waitpid(pid, &status, 0);
 	close(pipe_fd[1]);
 }
 
-void	exec_pipe_to_pipe(int *prev_pipe_fd, int *pipe_fd, char **cmd, t_dict *envp)
+void	exec_pipe_to_pipe(t_shell *mini, int *prev_pipe_fd, int *pipe_fd, char **cmd)
 {
 	pid_t	pid;
 	int		status;
@@ -78,15 +78,15 @@ void	exec_pipe_to_pipe(int *prev_pipe_fd, int *pipe_fd, char **cmd, t_dict *envp
 		close(pipe_fd[0]);
 		dup2(prev_pipe_fd[0], STDIN_FILENO);
 		dup2(pipe_fd[1], STDOUT_FILENO);
-		ft_exec(cmd, envp);
+		ft_exec(mini, cmd);
 	}
 	waitpid(pid, &status, 0);
 	close(pipe_fd[1]);
 }
 
-void	exec_pipe_to_outfile(int pipe_fd[2], char **cmd, t_dict *envp)
+void	exec_pipe_to_outfile(t_shell *mini, int pipe_fd[2], char **cmd)
 {
 	dup2(pipe_fd[0], STDIN_FILENO);
 	close(pipe_fd[0]);
-	ft_exec(cmd, envp);
+	ft_exec(mini, cmd);
 }
