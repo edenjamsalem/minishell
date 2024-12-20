@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 14:52:24 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/19 17:21:18 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/20 15:26:59 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,24 +76,25 @@ void	assign_cmds(t_cmd_seq *cmd_seq)
 	cmd_seq->cmds[i] = NULL;
 }
 
-t_cmd_seq	*gen_cmd_seq(char *input, t_dict *envp)
+void	gen_cmd_seq(t_ctrl_seq *ctrl_seq, t_dict *envp)
 {
 	t_cmd_seq *cmd_seq;
 
+	ctrl_seq->cmd_seq = NULL;
 	cmd_seq = malloc(sizeof(t_cmd_seq));
 	if (!cmd_seq)
-		return (NULL);
-	parse(input, cmd_seq, envp);
+		return ;
+	parse(ctrl_seq->raw_input, cmd_seq, envp);
 	if (!grammar_check(cmd_seq->words, cmd_seq->tokens))
 	{
 		free_arrlst(cmd_seq->words, free);
 		free(cmd_seq->tokens);
-		return (NULL);
+		return ;
 	}
 	quote_removal(cmd_seq->words);
 	assign_redirections(cmd_seq, envp);
 	assign_pipe_count(cmd_seq);
 	setup_pipes(cmd_seq);
 	assign_cmds(cmd_seq);
-	return (cmd_seq);
+	ctrl_seq->cmd_seq = cmd_seq;
 }

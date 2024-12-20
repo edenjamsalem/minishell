@@ -112,21 +112,11 @@ void			ft_exit(t_shell *mini, char **cmd_argv, bool in_main);
 
 // PARSE FNS
 
-void			gen_ctrl_seq(t_shell *mini, char *input);
-
 t_arrlst		*word_split(char *input);
 
 void			parse(char *input, t_cmd_seq *command, t_dict *envp_dict);
 
 int				skip_quotes(char **text);
-
-char			*skip_while(char **text, int (*condition)(char));
-
-char			*skip_set(char **text, char *set);
-
-char			*skip_to(char **text, char *set);
-
-char			*skip_len(char **text, int size);
 
 void			quote_removal(t_arrlst *input);
 
@@ -136,22 +126,27 @@ void			remove_quotes(char *text);
 
 void			del_char(char *text);
 
+char			*skip_while(char **text, int (*condition)(char));
+
+char			*skip_set(char **text, char *set);
+
+char			*skip_to(char **text, char *set);
+
+char			*skip_len(char **text, int size);
+
 // PARAM EXPANSION
 
-char			*expand_vars(char *input, t_dict *envp, bool ign_double,
-					bool ign_single);
+char			*expand_vars(char *input, t_dict *envp, bool ign_double, bool ign_single);
 
-void							expand_vars_in_double_quotes(void **input, t_dict *envp_dict);
+void			expand_vars_in_double_quotes(void **input, t_dict *envp_dict);
 
-void			copy_expanded_var(char **input, char **expanded,
-					t_dict *envp_dict);
+void			copy_expanded_var(char **input, char **expanded, t_dict *envp_dict);
 
 void			copy_quoted_text(char **input, char **expanded);
 
 void			copy_quoted_text(char **input, char **expanded);
 
-void			copy_expanded_var(char **input, char **expanded,
-					t_dict *envp_dict);
+void			copy_expanded_var(char **input, char **expanded, t_dict *envp_dict);
 
 void			expand_wildcard(t_arrlst *words, const char *pattern);
 
@@ -159,7 +154,9 @@ void			expand_wildcard(t_arrlst *words, const char *pattern);
 
 t_dict			*init_envp_dict(char **envp);
 
-t_cmd_seq		*gen_cmd_seq(char *input, t_dict *envp);
+void			gen_ctrl_seq(t_shell *mini, char *input);
+
+void			gen_cmd_seq(t_ctrl_seq *ctrl_seq, t_dict *envp);
 
 // TOKENISER
 
@@ -201,23 +198,23 @@ int				skip_redirect(t_token *tokens, int index);
 
 int				execute(t_shell *mini);
 
-void			assign_redirections(t_cmd_seq *command, t_dict *envp);
-
-pid_t			pipe_fork(int pipe_fd[2]);
-
-pid_t			ft_fork(void);
-
 void			exec_infile_to_pipe(t_shell *mini, int pipe_fd[2], char **cmd);
 
 void			exec_pipe_to_pipe(t_shell *mini, int *prev_pipe_fd, int *pipe_fd, char **cmd);
 
 void			exec_pipe_to_outfile(t_shell *mini, int pipe_fd[2], char **cmd);
 
-void			ft_exec(t_shell *mini, char **cmd);
-
 int				exec_builtin(t_shell *mini, char **cmd, bool inside_main_process);
 
 int				is_builtin(char *cmd);
+
+void			assign_redirections(t_cmd_seq *command, t_dict *envp);
+
+pid_t			pipe_fork(int pipe_fd[2]);
+
+pid_t			ft_fork(void);
+
+void			ft_exec(t_shell *mini, char **cmd);
 
 void			setup_pipes(t_cmd_seq *command);
 
@@ -225,12 +222,13 @@ void			assign_pipe_count(t_cmd_seq *command);
 
 void			assign_cmds(t_cmd_seq *command);
 
+
 // CLEANUP
 
-void	free_cmd_seq(t_cmd_seq *cmd_seq);
+void			free_cmd_seq(t_cmd_seq *cmd_seq);
 
-void	free_ctrl_seq(t_ctrl_seq **ctrl_seq);
+void			free_ctrl_seq(t_ctrl_seq **ctrl_seq);
 
-void	free_shell(t_shell *mini);
+void			free_shell(t_shell *mini);
 
 #endif

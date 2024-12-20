@@ -145,14 +145,6 @@ t_shell	*init_shell(char **envp)
 	return (mini);
 }
 
-void	free_shell(t_shell *mini)
-{
-	rl_clear_history();
-	free_dict(mini->envp);
-	free_ctrl_seq(mini->ctrl_seq);
-	free(mini);
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	char		*input;

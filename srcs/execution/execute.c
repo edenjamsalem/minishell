@@ -12,42 +12,6 @@
 
 #include "../../minishell.h"
 
-void	free_cmd_seq(t_cmd_seq *cmd_seq)
-{
-	int		i;
-	char	**cmds;
-
-	if (!cmd_seq)
-		return ;
-	i = 0;
-	while (cmd_seq->cmds[i])
-	{
-		cmds = cmd_seq->cmds[i];
-		free_2darr((void **)cmds, ft_2darr_len((void **)cmds));
-		i++;
-	}
-	free(cmd_seq->cmds);
-	free_2darr((void **)cmd_seq->pipe_fd, ft_2darr_len((void**)cmd_seq->pipe_fd));
-	free_arrlst(cmd_seq->words, free);
-	free(cmd_seq->tokens);
-	free(cmd_seq);
-}
-
-void	free_ctrl_seq(t_ctrl_seq **ctrl_seq)
-{
-	int	i;
-
-	i = 0;
-	while (ctrl_seq[i])
-	{
-		free(ctrl_seq[i]->raw_input);
-		free_cmd_seq(ctrl_seq[i]->cmd_seq);
-		free(ctrl_seq[i]);
-		i++;
-	}
-	free(ctrl_seq);
-}
-
 int	ctrl_op_failure(t_ctrl_seq *seq, int exit_status)
 {
 	if (seq->ctrl_op == AND && exit_status != EXIT_SUCCESS)
@@ -146,8 +110,8 @@ int	handle_braces(t_shell *mini, t_ctrl_seq *ctrl_seq, t_dict *envp)
 		}
 		else
 		{
-			ctrl_seq->cmd_seq = gen_cmd_seq(ctrl_seq->raw_input, envp);
-			if (ctrl_seq->cmd_seq)
+			gen_cmd_seq(ctrl_seq, envp);
+			if (!ctrl_seq->cmd_seq)
 				exit(2);
 			exit_status = exec_cmd_seq(ctrl_seq->cmd_seq, mini, false);
 		}
@@ -178,7 +142,7 @@ int	execute(t_shell *mini)
 			exit_status = handle_braces(mini, mini->ctrl_seq[i], mini->envp);
 		else
 		{
-			mini->ctrl_seq[i]->cmd_seq = gen_cmd_seq(mini->ctrl_seq[i]->raw_input, mini->envp);
+			gen_cmd_seq(mini->ctrl_seq[i], mini->envp);
 			if (!mini->ctrl_seq[i]->cmd_seq)
 				exit_status = 2;
 			else
