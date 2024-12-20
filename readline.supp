@@ -1,3 +1,14 @@
+#    HOW TO USE:
+#        1. run valgrind with option --suppresions=readline.supp
+#        2. if you need to add rule to supp file add option --gen-suppressions=all,
+#            then copy the suppresion rule into file 
+#            (REMOVE match-leak-kinds line so it matches every leak type)
+#        3. function/object names have to be spelled exactly the same 
+#        4. add ... (wildcard) as last line of rule to avoid missing leaks
+#        5. commented out lines/comments that mention diff versions
+#              should be swapped out for correct paths depending on stack
+#        6. don't delete commented out stuff, might need it later :D
+
 {
     readline_memory_leak_definite
     Memcheck:Leak
