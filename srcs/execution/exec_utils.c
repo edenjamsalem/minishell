@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/20 15:01:39 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/20 16:50:52 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static char	*get_cmd_path(char *cmd, t_dict *envp)
 		ft_strlcat(cmd_path, cmd, 4096);
 		if (access(cmd_path, F_OK) != -1)
 		{
-			free_2darr((void **)file_paths, ft_2darr_len((void **)file_paths));
+			free_2darr((void **)file_paths, i - 1);
 			return (ft_strdup(cmd_path));
 		}
 		i++;

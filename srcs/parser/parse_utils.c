@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 11:56:09 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/19 16:11:30 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/20 17:08:28 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,19 +80,25 @@ void	copy_quoted_text(char **input, char **expanded)
 		*(*expanded)++ = *(*input)++;
 }
 
-void	copy_expanded_var(char **input, char **expanded, t_dict *envp_dict)
+void	copy_expanded_var(char **input, char **expanded, t_dict *envp)
 {
 	char	*key;
 	char	*value;
-	int		value_len;
 
-	key = ft_strcut(*input, skip_while(input, ft_isalnum));
-	value = get_dict_value(key, envp_dict);
-	value_len = ft_strlen(value);
+	if (**input == '?')
+	{
+		value = get_dict_value("?", envp);
+		(*input)++;
+	}
+	else
+	{
+		key = ft_strcut(*input, skip_while(input, ft_isalnum));
+		value = get_dict_value(key, envp);
+		free(key);
+	}
 	if (value)
 	{
-		ft_strlcpy(*expanded, value, value_len + 1);	
-		skip_len(expanded, value_len);
+		ft_strlcpy(*expanded, value, ft_strlen(value) + 1);	
+		skip_len(expanded, ft_strlen(value));
 	}
-	free(key);
 }

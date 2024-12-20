@@ -136,6 +136,8 @@ char			*skip_to(char **text, char *set);
 
 char			*skip_len(char **text, int size);
 
+void 			skip_braces(char **input);
+
 // PARAM EXPANSION
 
 char			*expand_vars(char *input, t_dict *envp, bool ign_double, bool ign_single);
@@ -156,9 +158,9 @@ void			expand_wildcard(t_arrlst *words, const char *pattern);
 
 t_dict			*init_envp_dict(char **envp);
 
-void			gen_ctrl_seq(t_shell *mini, char *input);
+void			init_ctrl_seq(t_shell *mini, char *input);
 
-void			gen_cmd_seq(t_ctrl_seq *ctrl_seq, t_dict *envp);
+void			init_cmd_seq(t_ctrl_seq *ctrl_seq, t_dict *envp);
 
 void			assign_redirections(t_cmd_seq *cmd_seq, t_dict *envp);
 

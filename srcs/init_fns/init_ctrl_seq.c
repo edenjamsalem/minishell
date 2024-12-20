@@ -1,37 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gen_ctrl_seq.c                                     :+:      :+:    :+:   */
+/*   init_ctrl_seq.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 10:32:59 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/20 16:38:33 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/20 16:54:56 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-void skip_braces(char **input)
-{
-	int		open_brace_count;
-	int		close_brace_count;
-	
-
-	(*input)++;
-	open_brace_count = 1;
-	close_brace_count = 0;
-	while(**input && open_brace_count > close_brace_count)
-	{
-		if (chrsetcmp(**input, QUOTES))
-			skip_quotes(input);
-		else if (**input == '(')
-			open_brace_count++;
-		else if (**input == ')')
-			close_brace_count++;
-		(*input)++;
-	}
-}
 
 int ends_with_ctrl_op(char *input)
 {
@@ -163,7 +142,7 @@ bool	check_braces(char *raw_input)
 	return (false);
 }
 
-void	gen_ctrl_seq(t_shell *mini, char *input)
+void	init_ctrl_seq(t_shell *mini, char *input)
 {
 	int			seq_count;
 	int			i;

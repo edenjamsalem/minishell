@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gen_cmd_seq.c                                      :+:      :+:    :+:   */
+/*   init_cmd_seq.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 14:52:24 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/20 15:29:40 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/20 16:53:36 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	assign_cmds(t_cmd_seq *cmd_seq)
 	cmd_seq->cmds[i] = NULL;
 }
 
-void	gen_cmd_seq(t_ctrl_seq *ctrl_seq, t_dict *envp)
+void	init_cmd_seq(t_ctrl_seq *ctrl_seq, t_dict *envp)
 {
 	t_cmd_seq *cmd_seq;
 

@@ -33,12 +33,12 @@ int	handle_braces(t_shell *mini, t_ctrl_seq *ctrl_seq, t_dict *envp)
 	{
 		if (contains(ctrl_seq->raw_input, "(<>|&"))
 		{
-			gen_ctrl_seq(mini, ctrl_seq->raw_input);
+			init_ctrl_seq(mini, ctrl_seq->raw_input);
 			exit_status = exec_ctrl_seq(mini);
 		}
 		else
 		{
-			gen_cmd_seq(ctrl_seq, envp);
+			init_cmd_seq(ctrl_seq, envp);
 			if (!ctrl_seq->cmd_seq)
 				exit(2);
 			exit_status = exec_cmd_seq(ctrl_seq->cmd_seq, mini, false);
@@ -69,7 +69,7 @@ int	exec_ctrl_seq(t_shell *mini)
 			exit_status = handle_braces(mini, mini->ctrl_seq[i], mini->envp);
 		else
 		{
-			gen_cmd_seq(mini->ctrl_seq[i], mini->envp);
+			init_cmd_seq(mini->ctrl_seq[i], mini->envp);
 			if (!mini->ctrl_seq[i]->cmd_seq)
 				exit_status = 2;
 			else

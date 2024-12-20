@@ -6,7 +6,7 @@
 #    By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 14:01:35 by eamsalem          #+#    #+#              #
-#    Updated: 2024/12/20 16:23:13 by eamsalem         ###   ########.fr        #
+#    Updated: 2024/12/20 16:59:16 by eamsalem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ LIBS = $(LIBFT) -lreadline
 
 SRCDIR = srcs
 PARSEDIR = $(SRCDIR)/parser
+INITDIR = $(SRCDIR)/init_fns
 EXECDIR	= $(SRCDIR)/execution
 TOKENDIR = $(SRCDIR)/tokeniser
 BUILTINDIR = $(SRCDIR)/builtins
@@ -41,12 +42,13 @@ SRCS =	$(SRCDIR)/minishell.c \
 		$(PARSEDIR)/wildcard.c \
 		$(PARSEDIR)/word_split.c \
 \
+		$(INITDIR)/init_ctrl_seq.c \
+		$(INITDIR)/init_cmd_seq.c \
+		$(INITDIR)/redirections.c \
+\
 		$(EXECDIR)/exec_ctrl_seq.c \
 		$(EXECDIR)/exec_cmd_seq.c \
 		$(EXECDIR)/exec_utils.c \
-		$(EXECDIR)/gen_ctrl_seq.c \
-		$(EXECDIR)/gen_cmd_seq.c \
-		$(EXECDIR)/redirections.c \
 		$(EXECDIR)/pipe_fns.c \
 \
 		$(TOKENDIR)/grammar_check.c \

@@ -60,3 +60,24 @@ int	skip_quotes(char **text)
 		(*text)++;
 	return (*text - start);
 }
+
+void skip_braces(char **input)
+{
+	int		open_brace_count;
+	int		close_brace_count;
+	
+
+	(*input)++;
+	open_brace_count = 1;
+	close_brace_count = 0;
+	while(**input && open_brace_count > close_brace_count)
+	{
+		if (chrsetcmp(**input, QUOTES))
+			skip_quotes(input);
+		else if (**input == '(')
+			open_brace_count++;
+		else if (**input == ')')
+			close_brace_count++;
+		(*input)++;
+	}
+}

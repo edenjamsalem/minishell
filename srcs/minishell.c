@@ -163,7 +163,7 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		if (ctrl_syntax_okay(input))
 		{
-			gen_ctrl_seq(mini, input);
+			init_ctrl_seq(mini, input);
 			exec_ctrl_seq(mini);
 		}
 		free(input);
