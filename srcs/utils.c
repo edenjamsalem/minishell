@@ -6,19 +6,11 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:05:51 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/20 19:03:19 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/20 19:04:42 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-// returns previous token in array, mainly for code readability
-t_token	get_prev_token(t_token *tokens, int index)
-{
-	if (index == 0)
-        return (END);
-    return (tokens[index - 1]);
-}
 
 int    ft_perror(t_error type, char *error_msg)
 {

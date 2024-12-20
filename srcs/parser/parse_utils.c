@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 11:56:09 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/20 19:01:09 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/20 19:06:00 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,3 +80,21 @@ void	quote_removal(t_arrlst *input)
 	}
 }
 
+bool	contains(char *word, char *set)
+{
+	char		*first_quote;
+	char		*second_quote;
+
+	set = ft_strchrset(word, set);
+	if (!set)
+		return (false);
+	first_quote = ft_strchrset(word, QUOTES);
+	if (!first_quote)
+		return (true);
+	second_quote = ft_strchrset(first_quote + 1, QUOTES);
+	if(!second_quote)
+		return (true);
+	if (set > first_quote && set < second_quote)
+		return (false);
+	return (true);
+}

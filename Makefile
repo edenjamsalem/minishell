@@ -6,7 +6,7 @@
 #    By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 14:01:35 by eamsalem          #+#    #+#              #
-#    Updated: 2024/12/20 19:03:37 by eamsalem         ###   ########.fr        #
+#    Updated: 2024/12/20 19:06:19 by eamsalem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,7 +36,6 @@ SRCS =	$(SRCDIR)/minishell.c \
 \
 		$(PARSEDIR)/expansions.c \
 		$(PARSEDIR)/parse.c \
-		$(PARSEDIR)/check_fns.c \
 		$(PARSEDIR)/parse_utils.c \
 		$(PARSEDIR)/skip_fns.c \
 		$(PARSEDIR)/wildcard.c \

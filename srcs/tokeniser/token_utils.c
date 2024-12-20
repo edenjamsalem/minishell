@@ -6,13 +6,19 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 09:09:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/18 19:22:52 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/20 19:05:03 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-// instead of quotes do a check for FILE after REDIRECT	(grammar check)
+// returns previous token in array, mainly for code readability
+t_token	get_prev_token(t_token *tokens, int index)
+{
+	if (index == 0)
+        return (END);
+    return (tokens[index - 1]);
+}
 
 // finds both types of redirection
 bool	is_redirect(void *word)
@@ -45,7 +51,7 @@ bool	is_command(int index, t_token *tokens)
 		return (true);
 	return (false);
 }
-
+/*
 // finds and tokenises control ops
 // check if prev token is CONTROL OP then it's error (grammar check)
 bool	is_control(void *word)
@@ -56,7 +62,7 @@ bool	is_control(void *word)
 		return (true);
 	return (false);
 }
-
+*/
 // finds and tokenises pipes
 // check if prev token is PIPE then it's error (grammar check)
 bool	is_pipe(void *word)
