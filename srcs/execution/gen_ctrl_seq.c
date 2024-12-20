@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 10:32:59 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/19 17:14:17 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:41:03 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,16 @@ void	remove_braces(char *input)
 		del_char(start);
 }
 
+bool	check_braces(char *raw_input)
+{
+	if (*raw_input == '(')
+	{
+		remove_braces(raw_input);
+		return (true);
+	}
+	return (false);
+}
+
 void	gen_ctrl_seq(t_shell *mini, char *input)
 {
 	int			seq_count;
@@ -170,12 +180,8 @@ void	gen_ctrl_seq(t_shell *mini, char *input)
 			return ;
 		mini->ctrl_seq[i]->ctrl_op = assign_ctrl_op(&input);
 		mini->ctrl_seq[i]->raw_input = copy_text(&input);
-		mini->ctrl_seq[i]->inside_braces = false;
-		if (*(mini->ctrl_seq[i]->raw_input) == '(')
-		{
-			mini->ctrl_seq[i]->inside_braces = true;
-			remove_braces(mini->ctrl_seq[i]->raw_input);
-		}
+		mini->ctrl_seq[i]->inside_braces = check_braces(mini->ctrl_seq[i]->raw_input);
+		mini->ctrl_seq[i]->cmd_seq = NULL;
 		i++;
 	}
 	mini->ctrl_seq[i] = NULL;

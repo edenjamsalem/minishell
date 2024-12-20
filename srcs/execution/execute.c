@@ -41,6 +41,7 @@ void	free_ctrl_seq(t_ctrl_seq **ctrl_seq)
 	while (ctrl_seq[i])
 	{
 		free(ctrl_seq[i]->raw_input);
+		free_cmd_seq(ctrl_seq[i]->cmd_seq);
 		free(ctrl_seq[i]);
 		i++;
 	}
@@ -104,7 +105,7 @@ int	exit_called(t_cmd_seq *cmd_seq)
 	return (cmd_seq->pipe_count == 0 && ft_match(cmd_seq->cmds[0][0], "exit"));
 }
 
-int	exec_command(t_shell *mini, bool in_main)
+int	exec_cmd_seq(t_cmd_seq *cmd_seq, t_shell *mini, bool in_main)
 {
 	int			stdin_out[2];
 	int			status;
@@ -112,16 +113,14 @@ int	exec_command(t_shell *mini, bool in_main)
 	pid_t		pid;
 
 	exit_status = EXIT_SUCCESS;
-	apply_redirections(mini->cmd_seq, stdin_out);
-	if (exit_called(mini->cmd_seq))
-		ft_exit(mini, mini->cmd_seq->cmds[0], true);
-	if (mini->cmd_seq->pipe_count == 0 && is_builtin(mini->cmd_seq->cmds[0][0]))
-		exit_status = exec_builtin(mini, mini->cmd_seq->cmds[0], in_main);
+	apply_redirections(cmd_seq, stdin_out);
+	if (cmd_seq->pipe_count == 0 && is_builtin(cmd_seq->cmds[0][0]))
+		exit_status = exec_builtin(mini, cmd_seq->cmds[0], in_main);
 	else
 	{
 		pid = ft_fork();
 		if (CHILD_PROCESS)
-			execute_cmds(mini, mini->cmd_seq);
+			execute_cmds(mini, cmd_seq);
 		wait(&status);
 		if (WIFEXITED(status))
 			exit_status = WEXITSTATUS(status);
@@ -130,34 +129,27 @@ int	exec_command(t_shell *mini, bool in_main)
 	return (exit_status);
 }
 
-int	handle_braces(t_shell *mini, t_ctrl_seq *seq, t_dict *envp)
+int	handle_braces(t_shell *mini, t_ctrl_seq *ctrl_seq, t_dict *envp)
 {
 	pid_t		pid;
 	int			status;
 	int			exit_status;
-	char		*parent_input;
 
 	exit_status = EXIT_SUCCESS;
 	pid = ft_fork();
 	if (CHILD_PROCESS)
 	{
-		if (contains(seq->raw_input, "(<>|&"))
+		if (contains(ctrl_seq->raw_input, "(<>|&"))
 		{
-			parent_input = ft_strdup(seq->raw_input);
-			free_ctrl_seq(mini->ctrl_seq);
-			gen_ctrl_seq(mini, parent_input);
-			free(parent_input);
+			gen_ctrl_seq(mini, ctrl_seq->raw_input);
 			exit_status = execute(mini);
 		}
 		else
 		{
-			mini->cmd_seq = gen_cmd_seq(seq->raw_input, envp);
-			if (!mini->cmd_seq)
-			{
-				free_shell(mini);
+			ctrl_seq->cmd_seq = gen_cmd_seq(ctrl_seq->raw_input, envp);
+			if (ctrl_seq->cmd_seq)
 				exit(2);
-			}
-			exit_status = exec_command(mini, false);
+			exit_status = exec_cmd_seq(ctrl_seq->cmd_seq, mini, false);
 		}
 		exit(exit_status);
 	}
@@ -186,14 +178,13 @@ int	execute(t_shell *mini)
 			exit_status = handle_braces(mini, mini->ctrl_seq[i], mini->envp);
 		else
 		{
-			mini->cmd_seq = gen_cmd_seq(mini->ctrl_seq[i]->raw_input, mini->envp);
-			if (!mini->cmd_seq)
+			mini->ctrl_seq[i]->cmd_seq = gen_cmd_seq(mini->ctrl_seq[i]->raw_input, mini->envp);
+			if (!mini->ctrl_seq[i]->cmd_seq)
 				exit_status = 2;
 			else
-				exit_status = exec_command(mini, true);
+				exit_status = exec_cmd_seq(mini->ctrl_seq[i]->cmd_seq, mini, true);
 		}
 		set_dict_value("?", ft_itoa(exit_status), mini->envp);
-		free_cmd_seq(mini->cmd_seq);
 		i++;
 	}
 	free_ctrl_seq(mini->ctrl_seq);

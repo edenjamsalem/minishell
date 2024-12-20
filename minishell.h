@@ -17,7 +17,7 @@
 #  define _DEFAULT_SOURCE
 # endif
 
-# include "./libft/libft.h"
+# include "../libft/libft.h"
 # include <dirent.h>
 # include <errno.h>
 # include <readline/history.h>
@@ -69,17 +69,16 @@ typedef struct s_cmd_seq
 
 typedef struct s_ctrl_seq // CONTROL SEQUENCE
 {
-	char *raw_input;
-	t_ctrl_op ctrl_op;
-	bool inside_braces;
-	int exit_status;
+	char		*raw_input;
+	t_ctrl_op	ctrl_op;
+	bool		inside_braces;
+	t_cmd_seq	*cmd_seq;
 
 }				t_ctrl_seq;
 
 typedef struct s_shell
 {
 	t_ctrl_seq	**ctrl_seq;
-	t_cmd_seq	*cmd_seq;
 	t_dict		*envp;
 }				t_shell;
 

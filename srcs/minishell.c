@@ -142,7 +142,6 @@ t_shell	*init_shell(char **envp)
 		return (NULL);
 	mini->envp = init_envp_dict(envp);
 	mini->ctrl_seq = NULL;
-	mini->cmd_seq = NULL;
 	return (mini);
 }
 
@@ -151,7 +150,6 @@ void	free_shell(t_shell *mini)
 	rl_clear_history();
 	free_dict(mini->envp);
 	free_ctrl_seq(mini->ctrl_seq);
-	free_cmd_seq(mini->cmd_seq);
 	free(mini);
 }
 

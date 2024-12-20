@@ -83,7 +83,7 @@ t_token	*secondary_tokenisation(t_arrlst *words, t_token *tokens)
 	return (tokens);
 }
 
-t_token *tokenise(t_shell *mini, t_arrlst *words)
+t_token *tokenise(t_arrlst *words)
 {
 	t_token	*tokens;
 	

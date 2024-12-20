@@ -6,7 +6,7 @@
 #    By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 14:01:35 by eamsalem          #+#    #+#              #
-#    Updated: 2024/12/19 16:25:21 by eamsalem         ###   ########.fr        #
+#    Updated: 2024/12/20 14:34:18 by eamsalem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ CFLAGS = -Wall -Werror -Wextra -g3
 OBJDIR = ./build
 OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
-LIBFTDIR = ./libft
+LIBFTDIR = ../libft
 LIBFT = $(LIBFTDIR)/libft.a
 LIBS = $(LIBFT) -lreadline
 
