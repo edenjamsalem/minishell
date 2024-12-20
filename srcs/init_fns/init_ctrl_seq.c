@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 10:32:59 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/20 16:54:56 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/20 18:57:50 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,23 +113,6 @@ char	*copy_text(char **input)
 		(*input)++;
 	}
 	return (ft_strcut(start, *input));
-}
-
-void	remove_braces(char *input)
-{
-	char	*start;
-	char	*end;
-
-	start = input;
-	end = input + ft_strlen(input) - 1;
-	while (*start && *start != '(')
-		start++;
-	while (end > input && *end != ')')
-		end--;
-	if (*end == ')')
-		del_char(end);
-	if (*start == '(')
-		del_char(start);
 }
 
 bool	check_braces(char *raw_input)

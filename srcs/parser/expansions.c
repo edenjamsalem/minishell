@@ -30,6 +30,46 @@ int	single_quotes_inside_double(char *input)
 	return (0);
 }
 
+static void	copy_quoted_text(char **input, char **expanded)
+{
+	char	*closing_quote;
+
+	if (!(*input) || !(*expanded))
+		return ;
+	closing_quote = (char *)ft_strchr(*input + 1, **input);
+	if (closing_quote)
+	{
+		ft_strlcpy(*expanded, *input, (closing_quote - *input + 2));
+		skip_quotes(input);
+		skip_quotes(expanded);
+	}
+	else
+		*(*expanded)++ = *(*input)++;
+}
+
+static void	copy_expanded_var(char **input, char **expanded, t_dict *envp)
+{
+	char	*key;
+	char	*value;
+
+	if (**input == '?')
+	{
+		value = get_dict_value("?", envp);
+		(*input)++;
+	}
+	else
+	{
+		key = ft_strcut(*input, skip_while(input, ft_isalnum));
+		value = get_dict_value(key, envp);
+		free(key);
+	}
+	if (value)
+	{
+		ft_strlcpy(*expanded, value, ft_strlen(value) + 1);	
+		skip_len(expanded, ft_strlen(value));
+	}
+}
+
 char	*expand_vars(char *input, t_dict *envp, bool inc_double, bool inc_single)
 {
 	char	expanded[2048];

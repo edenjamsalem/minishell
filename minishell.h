@@ -126,6 +126,8 @@ bool			contains(char *word, char *set);
 
 void			remove_quotes(char *text);
 
+void			remove_braces(char *input);
+
 void			del_char(char *text);
 
 char			*skip_while(char **text, int (*condition)(char));
@@ -143,14 +145,6 @@ void 			skip_braces(char **input);
 char			*expand_vars(char *input, t_dict *envp, bool ign_double, bool ign_single);
 
 void			expand_vars_in_double_quotes(void **input, t_dict *envp_dict);
-
-void			copy_expanded_var(char **input, char **expanded, t_dict *envp_dict);
-
-void			copy_quoted_text(char **input, char **expanded);
-
-void			copy_quoted_text(char **input, char **expanded);
-
-void			copy_expanded_var(char **input, char **expanded, t_dict *envp_dict);
 
 void			expand_wildcard(t_arrlst *words, const char *pattern);
 
