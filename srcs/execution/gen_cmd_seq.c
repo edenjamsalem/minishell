@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 14:52:24 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/20 15:26:59 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/20 15:29:40 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,6 @@ void	gen_cmd_seq(t_ctrl_seq *ctrl_seq, t_dict *envp)
 {
 	t_cmd_seq *cmd_seq;
 
-	ctrl_seq->cmd_seq = NULL;
 	cmd_seq = malloc(sizeof(t_cmd_seq));
 	if (!cmd_seq)
 		return ;

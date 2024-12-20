@@ -6,7 +6,7 @@
 #    By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 14:01:35 by eamsalem          #+#    #+#              #
-#    Updated: 2024/12/20 14:54:17 by eamsalem         ###   ########.fr        #
+#    Updated: 2024/12/20 16:23:13 by eamsalem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,8 @@ SRCS =	$(SRCDIR)/minishell.c \
 		$(PARSEDIR)/wildcard.c \
 		$(PARSEDIR)/word_split.c \
 \
-		$(EXECDIR)/execute.c \
+		$(EXECDIR)/exec_ctrl_seq.c \
+		$(EXECDIR)/exec_cmd_seq.c \
 		$(EXECDIR)/exec_utils.c \
 		$(EXECDIR)/gen_ctrl_seq.c \
 		$(EXECDIR)/gen_cmd_seq.c \

@@ -6,16 +6,28 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:52:01 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/20 14:52:55 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/20 16:46:22 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+void	close_open_fds(int *open_fds, int fd_count)
+{
+	int	i;
+	
+	i = 0;
+	while (i < fd_count)
+	{
+		close((open_fds[i]));	
+		i++;
+	}
+}
+
 void	free_cmd_seq(t_cmd_seq *cmd_seq)
 {
-	int		i;
 	char	**cmds;
+	int		i;
 
 	if (!cmd_seq)
 		return ;
@@ -29,6 +41,8 @@ void	free_cmd_seq(t_cmd_seq *cmd_seq)
 	free(cmd_seq->cmds);
 	free_2darr((void **)cmd_seq->pipe_fd, ft_2darr_len((void**)cmd_seq->pipe_fd));
 	free_arrlst(cmd_seq->words, free);
+	close_open_fds(cmd_seq->open_fds, cmd_seq->open_fd_count);
+	free(cmd_seq->open_fds);
 	free(cmd_seq->tokens);
 	free(cmd_seq);
 }

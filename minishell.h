@@ -63,6 +63,8 @@ typedef struct s_cmd_seq
 	char		***cmds;
 	int			**pipe_fd;
 	int			pipe_count;
+	int			*open_fds;
+	int			open_fd_count;
 	int			infile;
 	int			outfile;
 }				t_cmd_seq;
@@ -158,6 +160,8 @@ void			gen_ctrl_seq(t_shell *mini, char *input);
 
 void			gen_cmd_seq(t_ctrl_seq *ctrl_seq, t_dict *envp);
 
+void			assign_redirections(t_cmd_seq *cmd_seq, t_dict *envp);
+
 // TOKENISER
 
 int				find_next_token(t_token *tokens, enum e_token ref);
@@ -196,7 +200,9 @@ int				skip_redirect(t_token *tokens, int index);
 
 // EXECUTION
 
-int				execute(t_shell *mini);
+int				exec_ctrl_seq(t_shell *mini);
+
+int				exec_cmd_seq(t_cmd_seq *cmd_seq, t_shell *mini, bool in_main);
 
 void			exec_infile_to_pipe(t_shell *mini, int pipe_fd[2], char **cmd);
 
