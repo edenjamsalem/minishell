@@ -6,28 +6,28 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 16:22:13 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/20 16:48:17 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/20 18:55:03 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-void	execute_cmds(t_shell *mini, t_cmd_seq* command)
+void	execute_cmds(t_shell *mini, t_cmd_seq* cmd_seq)
 {
 	int	i;
 
-	if (command->pipe_count == 0)
-		ft_exec(mini, (char **)command->cmds[0]); // function takes different args
+	if (cmd_seq->pipe_count == 0)
+		ft_exec(mini, (char **)cmd_seq->cmds[0]); // function takes different args
 	else
 	{
-		exec_infile_to_pipe(mini, command->pipe_fd[0], command->cmds[0]);
+		exec_infile_to_pipe(mini, cmd_seq->pipe_fd[0], cmd_seq->cmds[0]);
 		i = 1;
-		while (i < command->pipe_count)
+		while (i < cmd_seq->pipe_count)
 		{
-			exec_pipe_to_pipe(mini, command->pipe_fd[i - 1], command->pipe_fd[i], command->cmds[i]);
+			exec_pipe_to_pipe(mini, cmd_seq->pipe_fd[i - 1], cmd_seq->pipe_fd[i], cmd_seq->cmds[i]);
 			i++;
 		}
-		exec_pipe_to_outfile(mini, command->pipe_fd[i - 1], command->cmds[i]);
+		exec_pipe_to_outfile(mini, cmd_seq->pipe_fd[i - 1], cmd_seq->cmds[i]);
 	}
 }
 

@@ -216,7 +216,7 @@ int				exec_builtin(t_shell *mini, char **cmd, bool inside_main_process);
 
 int				is_builtin(char *cmd);
 
-void			assign_redirections(t_cmd_seq *command, t_dict *envp);
+void			assign_redirections(t_cmd_seq *cmd_seq, t_dict *envp);
 
 pid_t			pipe_fork(int pipe_fd[2]);
 
@@ -224,11 +224,11 @@ pid_t			ft_fork(void);
 
 void			ft_exec(t_shell *mini, char **cmd);
 
-void			setup_pipes(t_cmd_seq *command);
+void			setup_pipe_fd(t_cmd_seq *cmd_seq);
 
-void			assign_pipe_count(t_cmd_seq *command);
+void			assign_pipe_count(t_cmd_seq *cmd_seq);
 
-void			assign_cmds(t_cmd_seq *command);
+void			assign_cmds(t_cmd_seq *cmd_seq);
 
 
 // CLEANUP

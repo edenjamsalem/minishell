@@ -15,30 +15,6 @@
 // if words succeeding redirection symbols are more than 1 word long post-expansion
 // -> we report an error
 
-void	setup_pipes(t_cmd_seq *cmd_seq)
-{
-	int	i;
-
-	cmd_seq->pipe_fd = NULL;
-	if (cmd_seq->pipe_count == 0)
-		return ;
-	cmd_seq->pipe_fd = malloc(sizeof(int *) * (cmd_seq->pipe_count + 1));
-	if (!cmd_seq->pipe_fd)
-		return ;
-	i = 0;
-	while (i < cmd_seq->pipe_count)
-	{
-		cmd_seq->pipe_fd[i] = malloc(sizeof(int) * 2);
-		if (!cmd_seq->pipe_fd[i])
-		{
-			free_2darr((void *)cmd_seq->pipe_fd, i - 1);
-			return ;
-		}
-		i++;
-	}
-	cmd_seq->pipe_fd[i] = NULL;
-}
-
 static bool	is_eof(char *input, char *eof)
 {
 	if (ft_strncmp(input, eof, ft_strlen(eof)) == 0)

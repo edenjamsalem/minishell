@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 14:52:24 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/20 16:53:36 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/20 18:56:36 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	init_cmd_seq(t_ctrl_seq *ctrl_seq, t_dict *envp)
 	quote_removal(cmd_seq->words);
 	assign_redirections(cmd_seq, envp);
 	assign_pipe_count(cmd_seq);
-	setup_pipes(cmd_seq);
+	setup_pipe_fd(cmd_seq);
 	assign_cmds(cmd_seq);
 	ctrl_seq->cmd_seq = cmd_seq;
 }
