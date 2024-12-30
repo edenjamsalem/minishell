@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:52:01 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/20 19:09:54 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/30 16:10:12 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	free_ctrl_seq(t_ctrl_seq **ctrl_seq)
 void	free_shell(t_shell *mini)
 {
 	rl_clear_history();
-	free_dict(mini->envp);
+	dict_clear(&mini->envp);
 	free_ctrl_seq(mini->ctrl_seq);
 	free(mini);
 }

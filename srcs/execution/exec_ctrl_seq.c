@@ -40,9 +40,11 @@ int	handle_braces(t_shell *mini, t_ctrl_seq *ctrl_seq, t_dict *envp)
 		{
 			init_cmd_seq(ctrl_seq, envp);
 			if (!ctrl_seq->cmd_seq)
-				exit(2);
-			exit_status = exec_cmd_seq(ctrl_seq->cmd_seq, mini, false);
+				exit_status = 2;
+			else
+				exit_status = exec_cmd_seq(ctrl_seq->cmd_seq, mini, false);
 		}
+		free_shell(mini);
 		exit(exit_status);
 	}
 	wait(&status);
@@ -78,7 +80,6 @@ int	exec_ctrl_seq(t_shell *mini)
 		set_dict_value("?", ft_itoa(exit_status), mini->envp);
 		i++;
 	}
-	free_ctrl_seq(mini->ctrl_seq);
 	return (exit_status);
 }
 

@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 10:32:59 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/30 15:22:28 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/30 16:41:20y eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,22 @@ int	get_seq_count(char *input)
 {
 	int	count;
 
+	if (!input || !(*input))
+		return (0);
 	count = 1;
-	while (*(input + 1))
+	while (*input)
 	{
 		if (chrsetcmp(*input, QUOTES))
 			skip_quotes(&input);
 		else if (*input == '(')
 			skip_braces(&input);
 		else if (chrsetcmp(*input, "&|") && *input == *(input + 1))
+		{
 			count++;
-		input++; 
+			input++;
+		}
+		else
+			input++; 
 	}
 	return (count);
 }
@@ -52,6 +58,8 @@ char	*copy_text(char **input)
 {
 	char	*start;
 
+	if (!input || !(*input))
+		return (NULL);
 	skip_set(input, IFS);
 	start = *input;
 	while (**input)
@@ -62,7 +70,8 @@ char	*copy_text(char **input)
 			skip_braces(input);
 		else if (chrsetcmp(**input, "&|") && **input == *(*input + 1))
 			break ;
-		(*input)++;
+		else
+			(*input)++;
 	}
 	return (ft_strcut(start, *input));
 }

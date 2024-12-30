@@ -223,7 +223,8 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		setup_sig_handler(SIGINT);
-		input = read_input();
+	//	input = read_input();
+		input = "((echo 123) && echo 456) && exit";
 		if (!input)
 			continue ;
 		if (ends_with_ctrl_op(input))
@@ -231,9 +232,9 @@ int	main(int argc, char **argv, char **envp)
 		if (ctrl_syntax_okay(input))
 		{
 			init_ctrl_seq(mini, input);
+		//	free(input);
 			exec_ctrl_seq(mini);
 		}
-		free(input);
+		free_ctrl_seq(mini->ctrl_seq);
 	}
-	free_shell(mini);
 }
