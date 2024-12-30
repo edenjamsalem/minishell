@@ -45,6 +45,38 @@ char	*read_input(void)
 	return (input);
 }
 
+int ends_with_ctrl_op(char *input)
+{
+	int	end;
+
+	if (!input)
+		return (0);
+	end = ft_strlen(input) - 1;
+	while (end > 2 && chrsetcmp(input[end], IFS))
+		end--;
+	if (input[end] == '|' || (input[end] == '&' && input[end - 1] == '&'))
+		return (1);
+	return (0);
+}
+
+char	*complete_input(char *input)
+{
+	char	buf[4096];
+	char	line[1024];
+	int		bytes_read;
+	
+	ft_strlcpy(buf, input, 4096);
+	while (ends_with_ctrl_op(buf))
+	{
+		write(1, "> ", 2);
+		bytes_read = read(STDIN_FILENO, line, 1024);
+		line[bytes_read - 1] = '\0';
+		ft_strlcat(buf, line, 4096);
+	}
+	free(input);
+	return (ft_strdup(buf));
+}
+
 int	brace_count_same(char *input)
 {
 	int		open_brace_count;
@@ -71,7 +103,7 @@ int	brace_count_same(char *input)
 	return (0);
 }
 
-int	braces_next_to_ctrl_ops(char *input)
+int	ctrl_op_after_close_brace(char *input)
 {
 	char *next_word;
 
@@ -94,6 +126,31 @@ int	braces_next_to_ctrl_ops(char *input)
 			input++;
 	}
 	return (1);
+}
+
+int	ctrl_op_after_open_brace(char *input)
+{
+	char *next_word;
+
+	while (*input)
+	{
+		if (chrsetcmp(*input, QUOTES))
+			skip_quotes(&input);
+		else if (*input == '(' && *(++input) && *input != '(')
+		{
+			skip_set(&input, IFS);
+			if (chrsetcmp(*input, "<>&|"))
+			{
+				next_word = ft_strcut(input, skip_to(&input, IFS));
+				ft_perror(SYNTAX, next_word);
+				free(next_word);
+				return (1);
+			}
+		}
+		else
+			input++;
+	}
+	return (0);
 }
 
 int	ctrl_ops_okay(char *input)
@@ -121,11 +178,26 @@ int	ctrl_ops_okay(char *input)
 	return (1);
 }
 
+int	first_word_ctrl_op(char *input)
+{
+	skip_set(&input, IFS);
+	if (chrsetcmp(*input, "&|"))
+	{
+
+		return (1);
+	}
+	return (0);
+}
+
 int	ctrl_syntax_okay(char *input)
 {
+	if (first_word_ctrl_op(input))
+		return (0);
 	if (!brace_count_same(input))
 		return (0);
-	if (!braces_next_to_ctrl_ops(input))
+	if (!ctrl_op_after_close_brace(input))
+		return (0);
+	if (ctrl_op_after_open_brace(input))
 		return (0);
 	if (!ctrl_ops_okay(input))
 		return (0);
@@ -148,6 +220,8 @@ int	main(int argc, char **argv, char **envp)
 		input = read_input();
 		if (!input)
 			continue ;
+		if (ends_with_ctrl_op(input))
+			input = complete_input(input);
 		if (ctrl_syntax_okay(input))
 		{
 			init_ctrl_seq(mini, input);

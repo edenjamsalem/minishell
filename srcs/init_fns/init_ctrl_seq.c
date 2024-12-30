@@ -6,35 +6,11 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 10:32:59 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/20 18:57:50 by eamsalem         ###   ########.fr       */
+/*   Updated: 2024/12/30 15:22:28 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-int ends_with_ctrl_op(char *input)
-{
-	int	end;
-
-	if (!input)
-		return (0);
-	end = ft_strlen(input) - 1;
-	while (end > 2 && chrsetcmp(input[end], IFS))
-		end--;
-	if (input[end] == '|' || (input[end] == '&' && input[end - 1] == '&'))
-		return (1);
-	return (0);
-}
-
-int	syntax_error(char *text)
-{
-	while (chrsetcmp(*text, IFS))
-		text++;
-	if (chrsetcmp(*text, "&|"))
-		return (1);
-	// check fully, this only checks first char
-	return(0);
-}
 
 int	get_seq_count(char *input)
 {
@@ -52,30 +28,6 @@ int	get_seq_count(char *input)
 		input++; 
 	}
 	return (count);
-}
-
-char	*complete_input(char *input)
-{
-	char	buf[4096];
-	char	line[1024];
-	int		bytes_read;
-	
-	ft_strlcpy(buf, input, 4096);
-	while (ends_with_ctrl_op(buf))
-	{
-		write(1, "> ", 2);
-		bytes_read = read(STDIN_FILENO, line, 1024);
-		line[bytes_read - 1] = '\0';
-		if (syntax_error(line))
-		{
-			ft_perror(SYNTAX, line); // need to cut just token not whole str
-			free(input);
-			exit(2);
-		}
-		ft_strlcat(buf, line, 4096);
-	}
-	free(input);
-	return (ft_strdup(buf));
 }
 
 t_ctrl_op assign_ctrl_op(char **input)
@@ -130,8 +82,6 @@ void	init_ctrl_seq(t_shell *mini, char *input)
 	int			seq_count;
 	int			i;
 
-	if (ends_with_ctrl_op(input))
-		input = complete_input(input);
 	seq_count = get_seq_count(input);
 	mini->ctrl_seq = malloc(sizeof(t_ctrl_seq *) * (seq_count + 1));
 	i = 0;
