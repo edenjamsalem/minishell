@@ -111,8 +111,9 @@ int	ctrl_op_after_close_brace(char *input)
 	{
 		if (chrsetcmp(*input, QUOTES))
 			skip_quotes(&input);
-		else if (*input == ')' && *(++input) && *input != ')')
+		else if (*input == ')' && *(input + 1) && *(input + 1) != ')')
 		{
+			input++;
 			skip_set(&input, IFS);
 			if (!chrsetcmp(*input, "<>&|"))
 			{
@@ -154,7 +155,7 @@ int	ctrl_op_after_open_brace(char *input)
 	return (0);
 }
 
-int	ctrl_ops_okay(char *input)
+int	ctrl_ops_adjacent(char *input)
 {
 	char *next_word;
 
@@ -166,17 +167,17 @@ int	ctrl_ops_okay(char *input)
 		{
 			input += 2;
 			skip_set(&input, IFS);
-			if (chrsetcmp(*input, "|&"))
+			if (chrsetcmp(*input, "|&)"))
 			{
 				next_word = ft_strcut(input, skip_to(&input, IFS));
 				ft_perror(SYNTAX, next_word);
 				free(next_word);
-				return (0);
+				return (1);
 			}	
 		}
 		input++;
 	}
-	return (1);
+	return (0);
 }
 
 int	first_word_ctrl_op(char *input)
@@ -204,7 +205,7 @@ int	ctrl_syntax_okay(char *input)
 		return (0);
 	if (ctrl_op_after_open_brace(input))
 		return (0);
-	if (!ctrl_ops_okay(input))
+	if (ctrl_ops_adjacent(input))
 		return (0);
 	return (1);
 }
