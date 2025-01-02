@@ -82,7 +82,18 @@ typedef struct s_shell
 {
 	t_ctrl_seq	**ctrl_seq;
 	t_dict		*envp;
+	char		*input;
 }				t_shell;
+
+int				brace_count_same(char *input);
+
+int				ctrl_op_after_close_brace(char *input);
+
+int				ctrl_op_after_open_brace(char *input);
+
+int				ctrl_ops_adjacent(char *input);
+
+int				first_word_ctrl_op(char *input);
 
 // SIGNALS
 

@@ -12,7 +12,7 @@
 
 #include "../../minishell.h"
 
-int	ctrl_op_failure(t_ctrl_seq *seq, int exit_status)
+static int	ctrl_op_failure(t_ctrl_seq *seq, int exit_status)
 {
 	if (seq->ctrl_op == AND && exit_status != EXIT_SUCCESS)
 		return (1); 
@@ -21,7 +21,31 @@ int	ctrl_op_failure(t_ctrl_seq *seq, int exit_status)
 	return (0);	
 }
 
-int	handle_braces(t_shell *mini, t_ctrl_seq *ctrl_seq, t_dict *envp)
+static int	init_nested_ctrl_seq(t_shell *mini, t_ctrl_seq *ctrl_seq)
+{
+	int			exit_status;
+	char		buf[1024];
+
+	ft_strlcpy(buf, ctrl_seq->raw_input, 1024);
+	free_ctrl_seq(mini->ctrl_seq);
+	init_ctrl_seq(mini, buf);
+	exit_status = exec_ctrl_seq(mini);
+	return (exit_status);
+}
+
+static int	init_and_exec_cmd_seq(t_shell *mini, t_ctrl_seq *ctrl_seq)
+{
+	int	exit_status;
+	
+	init_cmd_seq(ctrl_seq, mini->envp);
+	if (!ctrl_seq->cmd_seq)
+		exit_status = 2;
+	else
+		exit_status = exec_cmd_seq(ctrl_seq->cmd_seq, mini, true);
+	return (exit_status);
+}
+
+static int	exec_braces(t_shell *mini, t_ctrl_seq *ctrl_seq)
 {
 	pid_t		pid;
 	int			status;
@@ -32,18 +56,9 @@ int	handle_braces(t_shell *mini, t_ctrl_seq *ctrl_seq, t_dict *envp)
 	if (CHILD_PROCESS)
 	{
 		if (contains(ctrl_seq->raw_input, "(<>|&"))
-		{
-			init_ctrl_seq(mini, ctrl_seq->raw_input);
-			exit_status = exec_ctrl_seq(mini);
-		}
+			init_nested_ctrl_seq(mini, ctrl_seq);	
 		else
-		{
-			init_cmd_seq(ctrl_seq, envp);
-			if (!ctrl_seq->cmd_seq)
-				exit_status = 2;
-			else
-				exit_status = exec_cmd_seq(ctrl_seq->cmd_seq, mini, false);
-		}
+			init_and_exec_cmd_seq(mini, ctrl_seq);
 		free_shell(mini);
 		exit(exit_status);
 	}
@@ -68,15 +83,9 @@ int	exec_ctrl_seq(t_shell *mini)
 			continue ;
 		}
 		if (mini->ctrl_seq[i]->inside_braces)
-			exit_status = handle_braces(mini, mini->ctrl_seq[i], mini->envp);
+			exit_status = exec_braces(mini, mini->ctrl_seq[i]);
 		else
-		{
-			init_cmd_seq(mini->ctrl_seq[i], mini->envp);
-			if (!mini->ctrl_seq[i]->cmd_seq)
-				exit_status = 2;
-			else
-				exit_status = exec_cmd_seq(mini->ctrl_seq[i]->cmd_seq, mini, true);
-		}
+			exit_status = init_and_exec_cmd_seq(mini, mini->ctrl_seq[i]);
 		set_dict_value("?", ft_itoa(exit_status), mini->envp);
 		i++;
 	}
