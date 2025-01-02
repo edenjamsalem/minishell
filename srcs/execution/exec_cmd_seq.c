@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 16:22:13 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/02 15:48:05 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/02 17:28:37 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,15 @@
 void	reset_stdin_out(int	*stdin_out)
 {
 	if (stdin_out[0] != STDIN_FILENO)
+	{
 		dup2(stdin_out[0], STDIN_FILENO);
+		close(stdin_out[0]);
+	}
 	if (stdin_out[1] != STDOUT_FILENO)
+	{
 		dup2(stdin_out[1], STDOUT_FILENO);
+		close(stdin_out[1]);
+	}
 }
 
 void	apply_redirections(t_cmd_seq *cmd_seq, int *stdin_out)

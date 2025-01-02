@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 00:43:42 by mganchev          #+#    #+#             */
-/*   Updated: 2025/01/02 16:24:21 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/02 17:15:10 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	match_pattern(const char *pattern, const char *str)
 	return (*pattern == '\0');
 }
 
-// expansion of wildcard ; not sure if we need to handle the ? wildcard
+// expansion of wildcard
 void	expand_wildcard(t_arrlst *words, const char *pattern)
 {
 	DIR				*dir;
