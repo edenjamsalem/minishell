@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/20 19:09:00 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/02 13:39:58 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ static char	*get_cmd_path(char *cmd, t_dict *envp)
 		}
 		i++;
 	}
-	ft_fprintf(2, "bash: %s: No such file or directory\n", cmd);
 	free_2darr((void **)file_paths, ft_2darr_len((void **)file_paths));
 	return (NULL);
 }
@@ -113,12 +112,17 @@ void	ft_exec(t_shell *mini, char **cmd)
 	}
 	cmd_path = get_cmd_path((char *)cmd[0], mini->envp);
 	if (!cmd_path)
+	{
+		ft_perror(DIRECT, cmd[0]);
+		free_shell(mini);
 		exit(2);
+	}
 	signal(SIGINT, handle_ctrl_c_child);
 	signal(SIGQUIT, handle_ctrl_c_child);
 	if (execve(cmd_path, cmd, dict_to_arr(mini->envp)) == -1)
 	{
-		ft_fprintf(2, "%s: command not found\n", cmd[0]);	
+		ft_perror(CMD_, cmd[0]);
+		free_shell(mini);
 		exit(127);
 	}
 }

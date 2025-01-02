@@ -105,7 +105,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		setup_sig_handler(SIGINT);
 	//	mini->input = read_input();
-		mini->input = ft_strdup("((echo 123 456 789) && echo $?) && exit");
+		mini->input = ft_strdup("echo $? && dwqdwq || echo $? && exit");
 		if (!mini->input)
 			continue ;
 		if (ends_with_ctrl_op(mini->input))
