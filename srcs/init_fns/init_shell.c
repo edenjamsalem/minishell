@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 19:02:54 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/02 12:53:29 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/02 15:56:00 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_dict	*init_envp_dict(char **envp)
 		dict_addback(&envp_dict, node);
 		i++;
 	}
-    node = str_to_dict("?=0");
+	node = str_to_dict("?=0");
 	dict_addback(&envp_dict, node);
 	return (envp_dict);
 }
@@ -36,7 +36,7 @@ t_shell	*init_shell(char **envp)
 {
 	t_shell	*mini;
 
-	setup_sig_handler(SIGINT); // initialise signal handlers first;
+	setup_sig_handler(SIGINT);
 	mini = malloc(sizeof(t_shell));
 	if (!mini)
 		return (NULL);

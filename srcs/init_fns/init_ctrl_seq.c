@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/13 10:32:59 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/30 16:41:20y eamsalem         ###   ########.fr       */
+/*   Created: 2025/01/02 15:56:16 by eamsalem          #+#    #+#             */
+/*   Updated: 2025/01/02 16:03:08 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@ int	get_seq_count(char *input)
 			input++;
 		}
 		else
-			input++; 
+			input++;
 	}
 	return (count);
 }
 
-t_ctrl_op assign_ctrl_op(char **input)
+t_ctrl_op	assign_ctrl_op(char **input)
 {
-	char ctrl_op[3];
+	char	ctrl_op[3];
 
 	if (!chrsetcmp(**input, "&|"))
 		return (NONE);
@@ -52,7 +52,6 @@ t_ctrl_op assign_ctrl_op(char **input)
 		return (OR);
 	return (NONE);
 }
-
 
 char	*copy_text(char **input)
 {
@@ -76,14 +75,15 @@ char	*copy_text(char **input)
 	return (ft_strcut(start, *input));
 }
 
-bool	check_braces(char *raw_input)
+void	assign_braces(char *raw_input, t_ctrl_seq *ctrl_seq)
 {
 	if (*raw_input == '(')
 	{
 		remove_braces(raw_input);
-		return (true);
+		ctrl_seq->inside_braces = true;
 	}
-	return (false);
+	else
+		ctrl_seq->inside_braces = false;
 }
 
 void	init_ctrl_seq(t_shell *mini, char *input)
@@ -101,7 +101,7 @@ void	init_ctrl_seq(t_shell *mini, char *input)
 			return ;
 		mini->ctrl_seq[i]->ctrl_op = assign_ctrl_op(&input);
 		mini->ctrl_seq[i]->raw_input = copy_text(&input);
-		mini->ctrl_seq[i]->inside_braces = check_braces(mini->ctrl_seq[i]->raw_input);
+		assign_braces(mini->ctrl_seq[i]->raw_input, mini->ctrl_seq[i]);
 		mini->ctrl_seq[i]->cmd_seq = NULL;
 		i++;
 	}

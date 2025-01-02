@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 14:52:24 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/20 18:56:36 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/02 16:09:07 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,7 @@ void	assign_pipe_count(t_cmd_seq *command)
 	command->pipe_count = count;
 }
 
-
-static int get_cmd_len(t_token *tokens)
+static int	get_cmd_len(t_token *tokens)
 {
 	int	i;
 	int	len;
@@ -45,40 +44,37 @@ static int get_cmd_len(t_token *tokens)
 	return (len);
 }
 
-void	assign_cmds(t_cmd_seq *cmd_seq)
+void	assign_cmds(t_cmd_seq *seq)
 {
 	int		i;
 	int		j;
 	int		k;
 
-	cmd_seq->cmds = malloc(sizeof(char **) * (cmd_seq->pipe_count + 2));
-	if (!cmd_seq->cmds)
-		return ;
 	i = 0;
 	k = 0;
-	while (i < cmd_seq->pipe_count + 1)
+	while (i < seq->pipe_count + 1)
 	{
-		cmd_seq->cmds[i] = malloc(sizeof(char *) * (get_cmd_len(cmd_seq->tokens) + 1));
-		if (!cmd_seq->cmds[i])
+		seq->cmds[i] = malloc(sizeof(char *) * (get_cmd_len(seq->tokens) + 1));
+		if (!seq->cmds[i])
 			return ;
 		j = 0;
-		while (cmd_seq->tokens[k] != END && cmd_seq->tokens[k] != PIPE)
+		while (seq->tokens[k] != END && seq->tokens[k] != PIPE)
 		{
-			if (cmd_seq->tokens[k] == CMD || cmd_seq->tokens[k] == TEXT)
-				cmd_seq->cmds[i][j++] = ft_strdup(cmd_seq->words->content[k]);
+			if (seq->tokens[k] == CMD || seq->tokens[k] == TEXT)
+				seq->cmds[i][j++] = ft_strdup(seq->words->content[k]);
 			k++;
 		}
-		cmd_seq->cmds[i][j] = NULL;
-		if (cmd_seq->tokens[k] == PIPE)
+		seq->cmds[i][j] = NULL;
+		if (seq->tokens[k] == PIPE)
 			k++;
 		i++;
 	}
-	cmd_seq->cmds[i] = NULL;
+	seq->cmds[i] = NULL;
 }
 
 void	init_cmd_seq(t_ctrl_seq *ctrl_seq, t_dict *envp)
 {
-	t_cmd_seq *cmd_seq;
+	t_cmd_seq	*cmd_seq;
 
 	cmd_seq = malloc(sizeof(t_cmd_seq));
 	if (!cmd_seq)
@@ -94,6 +90,9 @@ void	init_cmd_seq(t_ctrl_seq *ctrl_seq, t_dict *envp)
 	assign_redirections(cmd_seq, envp);
 	assign_pipe_count(cmd_seq);
 	setup_pipe_fd(cmd_seq);
+	cmd_seq->cmds = malloc(sizeof(char **) * (cmd_seq->pipe_count + 2));
+	if (!cmd_seq->cmds)
+		return ;
 	assign_cmds(cmd_seq);
 	ctrl_seq->cmd_seq = cmd_seq;
 }

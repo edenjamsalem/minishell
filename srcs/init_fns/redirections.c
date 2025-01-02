@@ -5,15 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/19 17:31:16 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/20 15:51:49by eamsalem         ###   ########.fr       */
+/*   Created: 2025/01/02 15:52:45 by eamsalem          #+#    #+#             */
+/*   Updated: 2025/01/02 15:53:39 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
-
-// if words succeeding redirection symbols are more than 1 word long post-expansion
-// -> we report an error
 
 static bool	is_eof(char *input, char *eof)
 {
@@ -27,16 +24,16 @@ static bool	is_eof(char *input, char *eof)
 
 static void	get_heredoc_input(char *eof, int *pipe_fd, t_dict *envp)
 {
-	int		bytes_read;
-	char	input[4096];
-	char	*expanded;
+	int			bytes_read;
+	char		input[4096];
+	char		*expanded;
 	static int	line_count;
-	
+
 	while (1)
 	{
 		write(1, "> ", 2);
 		bytes_read = read(STDIN_FILENO, input, 4096);
-		line_count++; 
+		line_count++;
 		if (bytes_read == -1)
 			exit(EXIT_FAILURE);
 		if (bytes_read == 0)
@@ -54,7 +51,7 @@ int	open_heredoc(char *eof, t_dict *envp)
 {
 	pid_t	pid;
 	int		pipe_fd[2];
-	
+
 	signal(SIGINT, SIG_IGN);
 	pid = pipe_fork(pipe_fd);
 	if (CHILD_PROCESS)
@@ -72,7 +69,7 @@ int	open_heredoc(char *eof, t_dict *envp)
 static int	open_file(char *file, char *op, t_cmd_seq *cmd_seq, t_dict *envp)
 {
 	int	fd;
-	
+
 	fd = -1;
 	if (ft_match(op, ">"))
 	{
