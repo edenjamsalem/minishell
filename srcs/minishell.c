@@ -104,8 +104,8 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		setup_sig_handler(SIGINT);
-	//	mini->input = read_input();
-		mini->input = ft_strdup("echo $? && dwqdwq || echo $? && exit");
+		mini->input = read_input();
+	//	mini->input = ft_strdup("echo *.c && exit");
 		if (!mini->input)
 			continue ;
 		if (ends_with_ctrl_op(mini->input))
@@ -117,6 +117,6 @@ int	main(int argc, char **argv, char **envp)
 			free_ctrl_seq(mini->ctrl_seq);
 		}
 		free(mini->input);
-		break ;
+	//	break ;
 	}
 }

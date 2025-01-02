@@ -29,29 +29,29 @@ static void append_redirection(t_arrlst *words, char **content)
 	}
 }
 
-static void	split_redirections(t_arrlst *words, char *content)
+static void	split_redirections(t_arrlst *list, char *word)
 {
-	//char	*op;
 	char	*text;
 	char	*file;
 	char	*ptr;
 
-	ptr = content;
-	if (!chrsetcmp(*content, "<>|"))
+	ptr = word;
+	if (!chrsetcmp(*word, "<>|"))
 	{
-		text = ft_strcut(content, skip_to(&content, "<>|"));
-		append_arrlst(words, text);
+		text = ft_strcut(word, skip_to(&word, "<>|"));
+		append_arrlst(list, text);
 	}
-	append_redirection(words, &content);
-	if (*content)
+	append_redirection(list, &word);
+	if (*word)
 	{
-		file = ft_strcut(content, skip_to(&content, IFS));
-		if (ft_strchrset(file, "<>|"))
+		file = ft_strcut(word, skip_to(&word, IFS));
+		if (contains(file, "<>|"))
 		{
-			split_redirections(words, file); // see if causes mem leak
+			split_redirections(list, file);
+			free(ptr);
 			return ;
 		}
-		append_arrlst(words, file);
+		append_arrlst(list, file);
 	}
 	free(ptr);
 }
@@ -83,7 +83,10 @@ t_arrlst	*word_split(char *input)
 	{
 		word = get_word(&input);
 		if (contains(word, "*"))
+		{
 			expand_wildcard(list, word);
+		//	free(word);
+		}
 		else if (contains(word, "<>|"))
 			split_redirections(list, word);
 		else

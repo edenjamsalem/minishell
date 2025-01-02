@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 11:01:33 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/30 16:04:22 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/02 15:38:07 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ static int	get_exit_status(char **cmd_argv, int len)
 		return (EXIT_SUCCESS);
 	return (ft_atoi(cmd_argv[1]));
 }
-
 
 void	ft_exit(t_shell *mini, char **cmd_argv, bool inside_main_process)
 {

@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:58:59 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/13 15:40:43 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/02 15:37:37 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_unset(char **cmd, t_dict *envp_vars)
 {
-	t_dict *start;
+	t_dict	*start;
 
 	start = envp_vars;
 	while (*cmd)

@@ -30,7 +30,7 @@ static void	get_heredoc_input(char *eof, int *pipe_fd, t_dict *envp)
 	int		bytes_read;
 	char	input[4096];
 	char	*expanded;
-	static int	line_count;  // to count lines of here_doc for bash error message
+	static int	line_count;
 	
 	while (1)
 	{
@@ -57,7 +57,7 @@ int	open_heredoc(char *eof, t_dict *envp)
 	
 	signal(SIGINT, SIG_IGN);
 	pid = pipe_fork(pipe_fd);
-	if (!pid)
+	if (CHILD_PROCESS)
 	{
 		signal(SIGINT, handle_ctrl_c_child);
 		close(pipe_fd[0]);
@@ -69,27 +69,27 @@ int	open_heredoc(char *eof, t_dict *envp)
 	return (pipe_fd[0]);
 }
 
-static int	open_file(char *file, char *operator, t_cmd_seq *cmd_seq, t_dict *envp)
+static int	open_file(char *file, char *op, t_cmd_seq *cmd_seq, t_dict *envp)
 {
 	int	fd;
 	
 	fd = -1;
-	if (ft_match(operator, ">"))
+	if (ft_match(op, ">"))
 	{
 		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0643);
 		cmd_seq->outfile = fd;
 	}
-	else if (ft_match(operator, ">>"))
+	else if (ft_match(op, ">>"))
 	{
 		fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0643);
 		cmd_seq->outfile = fd;
 	}
-	else if (ft_match(operator, "<"))
+	else if (ft_match(op, "<"))
 	{
 		fd = open(file, O_RDONLY);
 		cmd_seq->infile = fd;
 	}
-	else if (ft_match(operator, "<<"))
+	else if (ft_match(op, "<<"))
 	{
 		fd = open_heredoc(file, envp);
 		cmd_seq->infile = fd;

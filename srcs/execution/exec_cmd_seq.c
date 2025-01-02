@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 16:22:13 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/20 19:16:46 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/02 15:48:05 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	apply_redirections(t_cmd_seq *cmd_seq, int *stdin_out)
 	{
 		stdin_out[1] = dup(STDOUT_FILENO);
 		dup2(cmd_seq->outfile, STDOUT_FILENO);
-	}	
+	}
 }
 
 int	exec_builtin(t_shell *mini, char **cmd, bool in_main)
@@ -57,19 +57,19 @@ int	exec_builtin(t_shell *mini, char **cmd, bool in_main)
 	return (0);
 }
 
-void	execute_cmds(t_shell *mini, t_cmd_seq* cmd_seq)
+void	execute_cmds(t_shell *mini, t_cmd_seq *cmd_seq)
 {
 	int	i;
 
 	if (cmd_seq->pipe_count == 0)
-		ft_exec(mini, (char **)cmd_seq->cmds[0]); // function takes different args
+		ft_exec(mini, (char **)cmd_seq->cmds[0]);
 	else
 	{
 		exec_infile_to_pipe(mini, cmd_seq->pipe_fd[0], cmd_seq->cmds[0]);
 		i = 1;
 		while (i < cmd_seq->pipe_count)
 		{
-			exec_pipe_to_pipe(mini, cmd_seq->pipe_fd[i - 1], cmd_seq->pipe_fd[i], cmd_seq->cmds[i]);
+			exec_pipe_to_pipe(mini, cmd_seq->pipe_fd + i, cmd_seq->cmds[i]);
 			i++;
 		}
 		exec_pipe_to_outfile(mini, cmd_seq->pipe_fd[i - 1], cmd_seq->cmds[i]);

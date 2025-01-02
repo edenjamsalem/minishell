@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute.c                                          :+:      :+:    :+:   */
+/*   exec_ctrl_seq.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/19 14:13:34 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/09 17:44:29by eamsalem         ###   ########.fr       */
+/*   Created: 2025/01/02 15:50:34 by eamsalem          #+#    #+#             */
+/*   Updated: 2025/01/02 15:51:22 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 static int	ctrl_op_failure(t_ctrl_seq *seq, int exit_status)
 {
 	if (seq->ctrl_op == AND && exit_status != EXIT_SUCCESS)
-		return (1); 
+		return (1);
 	else if (seq->ctrl_op == OR && exit_status == EXIT_SUCCESS)
 		return (1);
-	return (0);	
+	return (0);
 }
 
 static int	init_nested_ctrl_seq(t_shell *mini, t_ctrl_seq *ctrl_seq)
@@ -36,7 +36,7 @@ static int	init_nested_ctrl_seq(t_shell *mini, t_ctrl_seq *ctrl_seq)
 static int	init_and_exec_cmd_seq(t_shell *mini, t_ctrl_seq *ctrl_seq)
 {
 	int	exit_status;
-	
+
 	init_cmd_seq(ctrl_seq, mini->envp);
 	if (!ctrl_seq->cmd_seq)
 		exit_status = 2;
@@ -56,7 +56,7 @@ static int	exec_braces(t_shell *mini, t_ctrl_seq *ctrl_seq)
 	if (CHILD_PROCESS)
 	{
 		if (contains(ctrl_seq->raw_input, "(<>|&"))
-			init_nested_ctrl_seq(mini, ctrl_seq);	
+			init_nested_ctrl_seq(mini, ctrl_seq);
 		else
 			init_and_exec_cmd_seq(mini, ctrl_seq);
 		free_shell(mini);

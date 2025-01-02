@@ -215,7 +215,7 @@ int				exec_cmd_seq(t_cmd_seq *cmd_seq, t_shell *mini, bool in_main);
 
 void			exec_infile_to_pipe(t_shell *mini, int pipe_fd[2], char **cmd);
 
-void			exec_pipe_to_pipe(t_shell *mini, int *prev_pipe_fd, int *pipe_fd, char **cmd);
+void			exec_pipe_to_pipe(t_shell *mini, int **pipe_fd, char **cmd);
 
 void			exec_pipe_to_outfile(t_shell *mini, int pipe_fd[2], char **cmd);
 

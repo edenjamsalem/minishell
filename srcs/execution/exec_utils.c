@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/02 13:39:58 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/02 15:50:08 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ pid_t	pipe_fork(int pipe_fd[2])
 		perror("fork");
 		exit(EXIT_FAILURE);
 	}
-	if (pid == 0) // reset signal handler for child process
+	if (pid == 0)
 		signal(SIGINT, SIG_DFL);
 	return (pid);
 }
 
-pid_t	ft_fork()
+pid_t	ft_fork(void)
 {
-	pid_t pid;
+	pid_t	pid;
 
 	signal(SIGINT, SIG_IGN);
 	pid = fork();
@@ -43,11 +43,11 @@ pid_t	ft_fork()
 		perror("fork");
 		exit(EXIT_FAILURE);
 	}
-	if (pid == 0) // reset signal handle for child process
+	if (pid == 0)
 	{
 		signal(SIGINT, handle_ctrl_c_child);
 		signal(SIGQUIT, handle_ctrl_c_child);
-	}	
+	}
 	return (pid);
 }
 
@@ -108,6 +108,7 @@ void	ft_exec(t_shell *mini, char **cmd)
 	if (is_builtin(cmd[0]))
 	{
 		exec_builtin(mini, cmd, false);
+		free_shell(mini);
 		exit(EXIT_SUCCESS);
 	}
 	cmd_path = get_cmd_path((char *)cmd[0], mini->envp);
