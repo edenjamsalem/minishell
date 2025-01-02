@@ -5,41 +5,41 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/20 14:52:01 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/02 12:53:45 by eamsalem         ###   ########.fr       */
+/*   Created: 2025/01/02 16:51:55 by eamsalem          #+#    #+#             */
+/*   Updated: 2025/01/02 16:53:31 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int    ft_perror(t_error type, char *error_msg)
+int	ft_perror(t_error type, char *error_msg)
 {
-    if (type == SYNTAX)
-    {
-        ft_fprintf(2, "syntax error near unexpected token '%s'\n", error_msg);
-        return (0);
-    }
-    else if (type == CMD_)
-    {
-        ft_fprintf(2, "'%s': command not found\n", error_msg);
-        return (0);
-    }
-    else if (type == DIRECT)
-    {
-        ft_fprintf(2, "'%s': No such file or directory\n", error_msg); 
-        return (0);
-    }
-    return (1);
+	if (type == SYNTAX)
+	{
+		ft_fprintf(2, "syntax error near unexpected token '%s'\n", error_msg);
+		return (0);
+	}
+	else if (type == CMD_)
+	{
+		ft_fprintf(2, "'%s': command not found\n", error_msg);
+		return (0);
+	}
+	else if (type == DIRECT)
+	{
+		ft_fprintf(2, "'%s': No such file or directory\n", error_msg);
+		return (0);
+	}
+	return (1);
 }
 
 void	close_open_fds(int *open_fds, int fd_count)
 {
 	int	i;
-	
+
 	i = 0;
 	while (i < fd_count)
 	{
-		close((open_fds[i]));	
+		close((open_fds[i]));
 		i++;
 	}
 }
@@ -59,7 +59,7 @@ void	free_cmd_seq(t_cmd_seq *cmd_seq)
 		i++;
 	}
 	free(cmd_seq->cmds);
-	free_2darr((void **)cmd_seq->pipe_fd, ft_2darr_len((void**)cmd_seq->pipe_fd));
+	free_2darr((void **)cmd_seq->pipe_fd, cmd_seq->pipe_count);
 	free_arrlst(cmd_seq->words, free);
 	close_open_fds(cmd_seq->open_fds, cmd_seq->open_fd_count);
 	free(cmd_seq->open_fds);

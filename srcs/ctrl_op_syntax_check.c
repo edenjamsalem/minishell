@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 12:46:26 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/02 12:46:29 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/02 16:56:52 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	brace_count_same(char *input)
 		if (chrsetcmp(*input, QUOTES))
 		{
 			skip_quotes(&input);
-			continue;
+			continue ;
 		}
 		else if (*input == '(')
 			open_brace_count++;
@@ -40,7 +40,7 @@ int	brace_count_same(char *input)
 
 int	ctrl_op_after_close_brace(char *input)
 {
-	char *next_word;
+	char	*next_word;
 
 	while (*input)
 	{
@@ -66,7 +66,7 @@ int	ctrl_op_after_close_brace(char *input)
 
 int	ctrl_op_after_open_brace(char *input)
 {
-	char *next_word;
+	char	*next_word;
 
 	while (*input)
 	{
@@ -92,7 +92,7 @@ int	ctrl_op_after_open_brace(char *input)
 
 int	ctrl_ops_adjacent(char *input)
 {
-	char *next_word;
+	char	*next_word;
 
 	while (*input)
 	{
@@ -108,7 +108,7 @@ int	ctrl_ops_adjacent(char *input)
 				ft_perror(SYNTAX, next_word);
 				free(next_word);
 				return (1);
-			}	
+			}
 		}
 		input++;
 	}
@@ -117,7 +117,7 @@ int	ctrl_ops_adjacent(char *input)
 
 int	first_word_ctrl_op(char *input)
 {
-	char *next_word;
+	char	*next_word;
 
 	skip_set(&input, IFS);
 	if (chrsetcmp(*input, "&|"))

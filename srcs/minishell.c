@@ -5,32 +5,23 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/02 16:06:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/06 12:22:47by eamsalem         ###   ########.fr       */
+/*   Created: 2025/01/02 16:53:57 by eamsalem          #+#    #+#             */
+/*   Updated: 2025/01/02 16:56:07 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// // initialise
-// // set up signal handlers
-// // parse input
-// tokenise parsed input > skip quotes when checking for PIPE, CTRL OP and REDIRECT
-// // quote removal
-// // set up control seq
-// // execute
-// free
-
 // read input, add history and handling signals
 char	*read_input(void)
 {
-	char *input;
-	char prompt[100];
+	char	*input;
+	char	prompt[100];
 
 	getcwd(prompt, sizeof(prompt));
 	ft_strlcat(prompt, " > ", 100);
 	input = readline(prompt);
-	if (!input) // handling EOF / ctrl + D
+	if (!input)
 	{
 		ft_printf("exit\n");
 		exit(0);
@@ -39,13 +30,13 @@ char	*read_input(void)
 		add_history(input);
 	else
 	{
-		free(input); // handles ENTER key press
+		free(input);
 		return (NULL);
 	}
 	return (input);
 }
 
-int ends_with_ctrl_op(char *input)
+int	ends_with_ctrl_op(char *input)
 {
 	int	end;
 
@@ -64,7 +55,7 @@ char	*complete_input(char *input)
 	char	buf[4096];
 	char	line[1024];
 	int		bytes_read;
-	
+
 	ft_strlcpy(buf, input, 4096);
 	while (ends_with_ctrl_op(buf))
 	{
@@ -105,7 +96,6 @@ int	main(int argc, char **argv, char **envp)
 	{
 		setup_sig_handler(SIGINT);
 		mini->input = read_input();
-	//	mini->input = ft_strdup("echo *.c && exit");
 		if (!mini->input)
 			continue ;
 		if (ends_with_ctrl_op(mini->input))
@@ -117,6 +107,5 @@ int	main(int argc, char **argv, char **envp)
 			free_ctrl_seq(mini->ctrl_seq);
 		}
 		free(mini->input);
-	//	break ;
 	}
 }

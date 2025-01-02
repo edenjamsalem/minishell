@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 19:00:09 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/18 23:34:34 by mganchev         ###   ########.fr       */
+/*   Updated: 2025/01/02 16:51:39 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	handle_ctrl_d(int bytes_read, int line_count, char *eof)
 	}
 }
 
-void	handle_ctrl_c()
+void	handle_ctrl_c(void)
 {
 	write(STDOUT_FILENO, "\n", 1);
 	rl_on_new_line();
@@ -31,11 +31,11 @@ void	handle_ctrl_c()
 	rl_redisplay();
 }
 
-void handle_ctrl_c_child(int signum)
+void	handle_ctrl_c_child(int signum)
 {
-    (void)signum;
+	(void)signum;
 	write(STDOUT_FILENO, "\n", 1);
-    exit(EXIT_FAILURE);
+	exit(EXIT_FAILURE);
 }
 
 void	handle_signal(int signum, siginfo_t *info, void *context)
@@ -43,7 +43,7 @@ void	handle_signal(int signum, siginfo_t *info, void *context)
 	(void)info;
 	(void)context;
 	if (signum == SIGINT)
-		handle_ctrl_c(); // execve handles cat special case
+		handle_ctrl_c();
 }
 
 void	setup_sig_handler(int signum)
