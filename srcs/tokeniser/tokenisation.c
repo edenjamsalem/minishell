@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/21 17:26:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/09 15:03:36eamsalem         ###   ########.fr       */
+/*   Created: 2025/01/02 16:44:03 by eamsalem          #+#    #+#             */
+/*   Updated: 2025/01/02 16:45:01 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 int	find_next_token(t_token *tokens, enum e_token ref)
 {
 	int	i;
-	
+
 	i = 0;
 	while (tokens[i] != END)
 	{
@@ -43,7 +43,7 @@ int	skip_redirect(t_token *tokens, int index)
 t_token	*primary_tokenisation(t_arrlst *words, t_token *tokens)
 {
 	int	i;
-	
+
 	i = 0;
 	while (i < words->count)
 	{
@@ -83,67 +83,15 @@ t_token	*secondary_tokenisation(t_arrlst *words, t_token *tokens)
 	return (tokens);
 }
 
-t_token *tokenise(t_arrlst *words)
+t_token	*tokenise(t_arrlst *words)
 {
 	t_token	*tokens;
-	
+
 	tokens = malloc(sizeof(t_token) * (words->count + 1));
 	if (!tokens)
 		return (NULL);
-	tokens[words->count] = END; // terminate tokenised input
+	tokens[words->count] = END;
 	tokens = primary_tokenisation(words, tokens);
 	tokens = secondary_tokenisation(words, tokens);
 	return (tokens);
 }
-/*
-char *token_to_string(t_token token)
-{    
-    switch (token)
-    {
-    case END:
-		return "END";
-	case REDIRECT:
-        return "REDIRECT";
-    case CTRL_OP:
-        return "CTRL_OP";
-    case PIPE:
-        return "PIPE";
-    case TEXT:
-        return "TEXT";
-    case CMD:
-        return "CMD";
-    case FILE_:
-        return "FILE_";
-    default:
-        return "UNKNOWN";
-    }
-}
-
-int main()
-{
-    t_arrlst *words;
-    t_token *tokens;
-    int i;
-
-    char *sample_input[] = {NULL};
-    words = malloc(sizeof(t_arrlst));
-    words->count = 0;
-	words->content = malloc(sizeof(void *) * words->count + 1);
-	for (i = 0; i < words->count; i++)
-		words->content[i] = (void *)ft_strdup(sample_input[i]);
-
-    tokens = tokenise(words);
-    if (!tokens)
-    {
-        fprintf(stderr, "Tokenisation failed\n");
-        return 1;
-    }
-	grammar_check(words, tokens);
-    for (i = 0; i <= words->count; i++)
-    {
-        printf("Token %d: %s\n", i, token_to_string(tokens[i]));
-    }
-    free(tokens);
-    return 0;
-}
-*/
