@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 00:43:42 by mganchev          #+#    #+#             */
-/*   Updated: 2024/12/18 15:54:53 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/02 16:24:21 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ int	match_pattern(const char *pattern, const char *str)
 		return (0);
 	if (!check_pattern(&pattern, str, &wildcard, &index))
 		return (0);
-    while (*pattern == '*')
+	while (*pattern == '*')
 	{
-        pattern++;
+		pattern++;
 	}
 	return (*pattern == '\0');
 }

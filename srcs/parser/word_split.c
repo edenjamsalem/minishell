@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   word_split.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/10 13:10:19 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/12 15:09:55by eamsalem         ###   ########.fr       */
+/*   Created: 2025/01/02 16:24:59 by eamsalem          #+#    #+#             */
+/*   Updated: 2025/01/02 16:25:34 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minishell.h"
 
-static void append_redirection(t_arrlst *words, char **content)
+static void	append_redirection(t_arrlst *words, char **content)
 {
 	while (chrsetcmp(**content, "<>|"))
 	{
@@ -21,7 +21,7 @@ static void append_redirection(t_arrlst *words, char **content)
 			append_arrlst(words, ft_strcut((*content), (*content + 2)));
 			*content += 2;
 		}
-		else 
+		else
 		{
 			append_arrlst(words, ft_strcut(*content, *content + 1));
 			(*content)++;
@@ -75,9 +75,10 @@ t_arrlst	*word_split(char *input)
 {
 	t_arrlst	*list;
 	char		*word;
-	
+
 	list = init_arrlst(8);
-		// handle malloc error
+	if (!list)
+		return (NULL);
 	skip_set(&input, IFS);
 	while (*input)
 	{
@@ -85,7 +86,7 @@ t_arrlst	*word_split(char *input)
 		if (contains(word, "*"))
 		{
 			expand_wildcard(list, word);
-		//	free(word);
+			free(word);
 		}
 		else if (contains(word, "<>|"))
 			split_redirections(list, word);

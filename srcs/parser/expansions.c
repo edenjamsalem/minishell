@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/13 18:43:34 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/11/15 14:55:24by eamsalem         ###   ########.fr       */
+/*   Created: 2025/01/02 16:26:17 by eamsalem          #+#    #+#             */
+/*   Updated: 2025/01/02 16:27:43 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,24 +65,24 @@ static void	copy_expanded_var(char **input, char **expanded, t_dict *envp)
 	}
 	if (value)
 	{
-		ft_strlcpy(*expanded, value, ft_strlen(value) + 1);	
+		ft_strlcpy(*expanded, value, ft_strlen(value) + 1);
 		skip_len(expanded, ft_strlen(value));
 	}
 }
 
-char	*expand_vars(char *input, t_dict *envp, bool inc_double, bool inc_single)
+char	*expand_vars(char *input, t_dict *envp, bool in_double, bool in_single)
 {
 	char	expanded[2048];
 	char	*ptr;
 
 	if (single_quotes_inside_double(input))
-		inc_single = true;
+		in_single = true;
 	ptr = expanded;
 	while (*input)
 	{
-		if (*input == '\'' && !inc_single)
+		if (*input == '\'' && !in_single)
 			copy_quoted_text(&input, &ptr);
-		else if (*input == '\"' && !inc_double)
+		else if (*input == '\"' && !in_double)
 			copy_quoted_text(&input, &ptr);
 		else if (*input == '$' && *(++input) && !chrsetcmp(*input, IFS))
 			copy_expanded_var(&input, &ptr, envp);
@@ -110,11 +110,3 @@ void	expand_vars_in_double_quotes(void **input, t_dict *envp_dict)
 		i++;
 	}
 }
-/*
-int main(int argc, char **argv, char **envp)
-{
-	t_dict *envp_dict = init_envp_dict(envp);	
-
-	printf("%s\n", expand_vars(" This is my \"$PATH\" what>>\'isyours?", envp_dict, true));
-}
-*/

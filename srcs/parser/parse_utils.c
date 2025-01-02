@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/15 11:56:09 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/20 19:06:00 by eamsalem         ###   ########.fr       */
+/*   Created: 2025/01/02 16:40:08 by eamsalem          #+#    #+#             */
+/*   Updated: 2025/01/02 16:40:10 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	del_char(char *text)
 {
 	int	i;
-		
+
 	i = 0;
 	while (text[i + 1])
 	{
@@ -49,7 +49,7 @@ void	remove_quotes(char *text)
 
 	while (*text)
 	{
-		open_quote = ft_strchrset(text, QUOTES);		
+		open_quote = ft_strchrset(text, QUOTES);
 		if (!open_quote)
 			break ;
 		quote_to_del = *(open_quote);
@@ -92,7 +92,7 @@ bool	contains(char *word, char *set)
 	if (!first_quote)
 		return (true);
 	second_quote = ft_strchrset(first_quote + 1, QUOTES);
-	if(!second_quote)
+	if (!second_quote)
 		return (true);
 	if (set > first_quote && set < second_quote)
 		return (false);
