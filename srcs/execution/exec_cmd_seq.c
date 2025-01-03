@@ -33,14 +33,12 @@ void	apply_redirections(t_cmd_seq *cmd_seq, int *stdin_out)
 	if (cmd_seq->infile != STDIN_FILENO)
 	{
 		stdin_out[0] = dup(STDIN_FILENO);
-		ioctl(stdin_out[0], FIOCLEX);
 		dup2(cmd_seq->infile, STDIN_FILENO);
 		close(cmd_seq->infile);
 	}
 	if (cmd_seq->outfile != STDOUT_FILENO)
 	{
 		stdin_out[1] = dup(STDOUT_FILENO);
-		ioctl(stdin_out[1], FIOCLEX);
 		dup2(cmd_seq->outfile, STDOUT_FILENO);
 		close(cmd_seq->outfile);
 	}
