@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:51:55 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/02 17:35:14 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/03 14:10:25 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,5 +90,6 @@ void	free_shell(t_shell *mini)
 	dict_clear(&mini->envp);
 	free_ctrl_seq(mini->ctrl_seq);
 	free(mini->input);
+	reset_stdin_out(mini->stdin_out);
 	free(mini);
 }

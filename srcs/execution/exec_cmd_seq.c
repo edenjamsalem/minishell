@@ -33,12 +33,14 @@ void	apply_redirections(t_cmd_seq *cmd_seq, int *stdin_out)
 	if (cmd_seq->infile != STDIN_FILENO)
 	{
 		stdin_out[0] = dup(STDIN_FILENO);
+		ioctl(stdin_out[0], FIOCLEX);
 		dup2(cmd_seq->infile, STDIN_FILENO);
 		close(cmd_seq->infile);
 	}
 	if (cmd_seq->outfile != STDOUT_FILENO)
 	{
 		stdin_out[1] = dup(STDOUT_FILENO);
+		ioctl(stdin_out[1], FIOCLEX);
 		dup2(cmd_seq->outfile, STDOUT_FILENO);
 		close(cmd_seq->outfile);
 	}
@@ -92,6 +94,7 @@ int	exec_cmd_seq(t_cmd_seq *cmd_seq, t_shell *mini, bool in_main)
 	pid_t		pid;
 
 	exit_status = EXIT_SUCCESS;
+	mini->stdin_out = stdin_out;
 	apply_redirections(cmd_seq, stdin_out);
 	if (cmd_seq->pipe_count == 0 && is_builtin(cmd_seq->cmds[0][0]))
 		exit_status = exec_builtin(mini, cmd_seq->cmds[0], in_main);

@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:52:45 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/02 15:53:39 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/03 13:39:19 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,10 @@ static void	get_heredoc_input(char *eof, int *pipe_fd, t_dict *envp)
 			handle_ctrl_d(bytes_read, line_count, eof);
 		input[bytes_read] = '\0';
 		if (is_eof(input, eof))
+		{
+			close(pipe_fd[1]);
 			exit(EXIT_SUCCESS);
+		}
 		expanded = expand_vars(input, envp, true, true);
 		write(pipe_fd[1], expanded, ft_strlen(expanded));
 		free(expanded);
