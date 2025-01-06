@@ -6,11 +6,11 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:52:45 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/03 13:39:19 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:29:36 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../includes/minishell.h"
 
 static bool	is_eof(char *input, char *eof)
 {
@@ -57,7 +57,7 @@ int	open_heredoc(char *eof, t_dict *envp)
 
 	signal(SIGINT, SIG_IGN);
 	pid = pipe_fork(pipe_fd);
-	if (CHILD_PROCESS)
+	if (pid == 0)
 	{
 		signal(SIGINT, handle_ctrl_c_child);
 		close(pipe_fd[0]);

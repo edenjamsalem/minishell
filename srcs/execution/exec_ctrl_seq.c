@@ -6,11 +6,11 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:50:34 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/02 15:59:30 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:29:35 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../includes/minishell.h"
 
 static int	ctrl_op_failure(t_ctrl_seq *seq, int exit_status)
 {
@@ -53,7 +53,7 @@ static int	exec_braces(t_shell *mini, t_ctrl_seq *ctrl_seq)
 
 	exit_status = EXIT_SUCCESS;
 	pid = ft_fork();
-	if (CHILD_PROCESS)
+	if (pid == 0)
 	{
 		if (contains(ctrl_seq->raw_input, "(<>|&"))
 			init_nested_ctrl_seq(mini, ctrl_seq);

@@ -6,11 +6,11 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:56:16 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/02 16:03:08 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:25:56 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../includes/minishell.h"
 
 int	get_seq_count(char *input)
 {

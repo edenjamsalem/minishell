@@ -6,11 +6,11 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 09:09:42 by mganchev          #+#    #+#             */
-/*   Updated: 2025/01/02 16:46:23 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:25:59 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../includes/minishell.h"
 
 // returns previous token in array, mainly for code readability
 t_token	get_prev_token(t_token *tokens, int index)

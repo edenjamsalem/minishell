@@ -6,11 +6,11 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 12:46:26 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/02 16:56:52 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:25:51 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 int	brace_count_same(char *input)
 {

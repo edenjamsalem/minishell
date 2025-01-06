@@ -6,11 +6,11 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 11:01:33 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/02 15:38:07 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:25:53 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../includes/minishell.h"
 
 static int	get_exit_status(char **cmd_argv, int len)
 {

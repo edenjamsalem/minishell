@@ -6,11 +6,11 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:26:17 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/02 16:27:43 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:25:57 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../includes/minishell.h"
 
 int	single_quotes_inside_double(char *input)
 {

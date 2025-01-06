@@ -6,11 +6,11 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 10:40:21 by eamsalem          #+#    #+#             */
-/*   Updated: 2024/12/10 17:32:06 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:25:53 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../includes/minishell.h"
 
 int	ft_pwd(void)
 {

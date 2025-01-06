@@ -6,7 +6,11 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:57:13 by eamsalem          #+#    #+#             */
+<<<<<<< HEAD:minishell.h
 /*   Updated: 2025/01/06 14:04:16 by mganchev         ###   ########.fr       */
+=======
+/*   Updated: 2025/01/06 14:27:34 by eamsalem         ###   ########.fr       */
+>>>>>>> refs/remotes/origin/master:includes/minishell.h
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,8 +187,6 @@ bool		is_file(int index, t_token *tokens);
 
 bool		is_command(int index, t_token *tokens);
 
-bool		is_control(void *word);
-
 bool		is_pipe(void *word);
 
 int			grammar_check(t_arrlst *words, t_token *tokens);
@@ -238,7 +240,6 @@ void		free_cmd_seq(t_cmd_seq *cmd_seq);
 void		free_ctrl_seq(t_ctrl_seq **ctrl_seq);
 
 void		free_shell(t_shell *mini);
-
 
 void		reset_stdin_out(int	*stdin_out);
 

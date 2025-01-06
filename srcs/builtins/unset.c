@@ -6,11 +6,11 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/05 15:58:59 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/02 15:37:37 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:25:54 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../includes/minishell.h"
 
 int	ft_unset(char **cmd, t_dict *envp_vars)
 {

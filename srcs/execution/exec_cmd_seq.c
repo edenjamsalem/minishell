@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/20 16:22:13 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/03 12:39:02by eamsalem         ###   ########.fr       */
+/*   Created: 2025/01/06 13:54:57 by eamsalem          #+#    #+#             */
+/*   Updated: 2025/01/06 14:29:34 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../includes/minishell.h"
 
 void	reset_stdin_out(int	*stdin_out)
 {
@@ -99,7 +99,7 @@ int	exec_cmd_seq(t_cmd_seq *cmd_seq, t_shell *mini, bool in_main)
 	else
 	{
 		pid = ft_fork();
-		if (CHILD_PROCESS)
+		if (pid == 0)
 			execute_cmds(mini, cmd_seq);
 		wait(&status);
 		if (WIFEXITED(status))
