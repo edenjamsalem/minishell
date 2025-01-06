@@ -6,12 +6,11 @@
 #    By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 14:01:35 by eamsalem          #+#    #+#              #
-#    Updated: 2025/01/06 14:57:30 by eamsalem         ###   ########.fr        #
+#    Updated: 2025/01/06 15:03:41 by eamsalem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = $(MINIDIR)/minishell
-MINIDIR = $(HOME)/bin
+NAME = minishell
 
 CFLAGS = -Wall -Werror -Wextra -g3
 
@@ -79,9 +78,6 @@ $(NAME): $(OBJDIR) $(OBJS) $(LIBFT)
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
-
-$(MINIDIR):
-	mkdir -p $(MINIDIR)
 
 $(LIBFT):
 	make -C $(LIBFTDIR) all

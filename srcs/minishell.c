@@ -6,11 +6,19 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:53:57 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/06 14:25:10 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/06 15:22:04 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	only_spaces(char *input)
+{
+	skip_set(&input, IFS);
+	if (!(*input))
+		return (1);
+	return (0);
+}
 
 // read input, add history and handling signals
 char	*read_input(void)
@@ -26,7 +34,7 @@ char	*read_input(void)
 		ft_printf("exit\n");
 		exit(0);
 	}
-	if (*input)
+	if (*input && !(only_spaces(input)))
 		add_history(input);
 	else
 	{
