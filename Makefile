@@ -6,7 +6,7 @@
 #    By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/02 14:01:35 by eamsalem          #+#    #+#              #
-#    Updated: 2025/01/06 15:03:41 by eamsalem         ###   ########.fr        #
+#    Updated: 2025/01/06 15:41:28 by eamsalem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,8 @@ EXECDIR	= $(SRCDIR)/execution
 TOKENDIR = $(SRCDIR)/tokeniser
 BUILTINDIR = $(SRCDIR)/builtins
 
-SRCS =	$(SRCDIR)/minishell.c \
+SRCS =	$(SRCDIR)/main.c \
+		$(SRCDIR)/utils.c \
 		$(SRCDIR)/signals.c \
 		$(SRCDIR)/cleanup.c \
 		$(SRCDIR)/ctrl_op_syntax_check.c \

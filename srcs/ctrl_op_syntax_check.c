@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 12:46:26 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/06 14:25:51 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/06 15:37:28 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,10 @@ int	ctrl_ops_adjacent(char *input)
 	while (*input)
 	{
 		if (chrsetcmp(*input, QUOTES))
+		{
 			skip_quotes(&input);
+			continue ;
+		}
 		else if (chrsetcmp(*input, "&|") && *input == *(input + 1))
 		{
 			input += 2;

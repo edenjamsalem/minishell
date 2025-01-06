@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/02 16:53:57 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/06 15:22:04 by eamsalem         ###   ########.fr       */
+/*   Created: 2025/01/06 15:39:40 by eamsalem          #+#    #+#             */
+/*   Updated: 2025/01/06 15:39:58 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,31 +89,4 @@ int	ctrl_op_syntax_okay(char *input)
 	if (ctrl_ops_adjacent(input))
 		return (0);
 	return (1);
-}
-
-int	main(int argc, char **argv, char **envp)
-{
-	t_shell		*mini;
-
-	(void)argc;
-	(void)argv;
-	mini = init_shell(envp);
-	if (!mini)
-		exit(2);
-	while (1)
-	{
-		setup_sig_handler(SIGINT);
-		mini->input = read_input();
-		if (!mini->input)
-			continue ;
-		if (ends_with_ctrl_op(mini->input))
-			mini->input = complete_input(mini->input);
-		if (ctrl_op_syntax_okay(mini->input))
-		{
-			init_ctrl_seq(mini, mini->input);
-			exec_ctrl_seq(mini);
-			free_ctrl_seq(mini->ctrl_seq);
-		}
-		free(mini->input);
-	}
 }

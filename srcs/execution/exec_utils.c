@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/06 14:25:55 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/06 16:04:41 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void	ft_exec(t_shell *mini, char **cmd)
 	char	*cmd_path;
 
 	if (!cmd || !(*cmd))
-		exit(EXIT_SUCCESS);
+		return (free_shell(mini), exit(EXIT_SUCCESS));
 	if (is_builtin(cmd[0]))
 	{
 		exec_builtin(mini, cmd, false);

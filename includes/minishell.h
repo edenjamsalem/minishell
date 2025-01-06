@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:57:13 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/06 14:56:31 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/06 15:41:13 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,5 +238,17 @@ void		free_ctrl_seq(t_ctrl_seq **ctrl_seq);
 void		free_shell(t_shell *mini);
 
 void		reset_stdin_out(int	*stdin_out);
+
+// UTILS
+
+int			only_spaces(char *input);
+
+char		*read_input(void);
+
+int			ends_with_ctrl_op(char *input);
+
+char		*complete_input(char *input);
+
+int			ctrl_op_syntax_okay(char *input);
 
 #endif
