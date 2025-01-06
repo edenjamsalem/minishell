@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 00:43:42 by mganchev          #+#    #+#             */
-/*   Updated: 2025/01/06 14:25:58 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:47:00 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	expand_wildcard(t_arrlst *words, const char *pattern)
 {
 	DIR				*dir;
 	struct dirent	*entry;
+	char	*match;
 
 	dir = opendir(".");
 	if (!dir)
@@ -70,8 +71,11 @@ void	expand_wildcard(t_arrlst *words, const char *pattern)
 	entry = readdir(dir);
 	while (entry)
 	{
+		match = ft_strdup(entry->d_name);
 		if (match_pattern(pattern, entry->d_name))
-			append_arrlst(words, (void *)entry->d_name);
+			append_arrlst(words, (void *)match);
+		else
+			free(match);
 		entry = readdir(dir);
 	}
 	closedir(dir);

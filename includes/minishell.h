@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:57:13 by eamsalem          #+#    #+#             */
+<<<<<<< HEAD:minishell.h
+/*   Updated: 2025/01/06 14:04:16 by mganchev         ###   ########.fr       */
+=======
 /*   Updated: 2025/01/06 14:27:34 by eamsalem         ###   ########.fr       */
+>>>>>>> refs/remotes/origin/master:includes/minishell.h
 /*                                                                            */
 /* ************************************************************************** */
 
