@@ -6,11 +6,11 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:44:03 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/02 16:45:01 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:26:00 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../includes/minishell.h"
 
 // find the next token in input matching ref
 int	find_next_token(t_token *tokens, enum e_token ref)

@@ -6,11 +6,11 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 00:43:42 by mganchev          #+#    #+#             */
-/*   Updated: 2025/01/02 17:15:10 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:25:58 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../includes/minishell.h"
 
 // 1st half of pattern matching
 int	check_pattern(const char **pattern, const char *str, const char **wildcard,

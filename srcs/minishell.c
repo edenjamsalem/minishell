@@ -6,11 +6,11 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:53:57 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/02 16:56:07 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:25:10 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../includes/minishell.h"
 
 // read input, add history and handling signals
 char	*read_input(void)

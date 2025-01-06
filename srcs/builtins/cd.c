@@ -6,11 +6,11 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 13:19:18 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/02 13:40:44 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:25:52 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../includes/minishell.h"
 
 int	ft_cd(char **cmd)
 {

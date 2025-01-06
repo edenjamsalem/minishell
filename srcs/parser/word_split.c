@@ -6,11 +6,11 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:24:59 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/02 16:25:34 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:28:42 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../includes/minishell.h"
 
 static void	append_redirection(t_arrlst *words, char **content)
 {

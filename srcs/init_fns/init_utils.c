@@ -6,11 +6,11 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 18:21:03 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/02 15:52:33 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/06 14:25:56 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../includes/minishell.h"
 
 void	setup_pipe_fd(t_cmd_seq *cmd_seq)
 {

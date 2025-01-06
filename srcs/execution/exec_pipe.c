@@ -5,12 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/02 15:38:42 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/02 15:43:05eamsalem         ###   ########.fr       */
+/*   Created: 2025/01/06 13:55:07 by eamsalem          #+#    #+#             */
+/*   Updated: 2025/01/06 14:29:36 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../includes/minishell.h"
 
 void	exec_infile_to_pipe(t_shell *mini, int pipe_fd[2], char **cmd)
 {
@@ -18,7 +18,7 @@ void	exec_infile_to_pipe(t_shell *mini, int pipe_fd[2], char **cmd)
 	int		status;
 
 	pid = pipe_fork(pipe_fd);
-	if (CHILD_PROCESS)
+	if (pid == 0)
 	{
 		close(pipe_fd[0]);
 		dup2(pipe_fd[1], STDOUT_FILENO);
@@ -35,7 +35,7 @@ void	exec_pipe_to_pipe(t_shell *mini, int **pipe_fd, char **cmd)
 	int		status;
 
 	pid = pipe_fork(pipe_fd[0]);
-	if (CHILD_PROCESS)
+	if (pid == 0)
 	{
 		close(pipe_fd[0][0]);
 		dup2(pipe_fd[-1][0], STDIN_FILENO);

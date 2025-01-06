@@ -10,7 +10,7 @@
 /*																			*/
 /* ************************************************************************** */
 
-#include "../../minishell.h"
+#include "../../includes/minishell.h"
 
 // checks for every token that isn't supposed to repeat
 bool	is_repeat(t_token *tokens, int *index)
