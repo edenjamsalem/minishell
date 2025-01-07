@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 19:00:09 by mganchev          #+#    #+#             */
-/*   Updated: 2025/01/07 16:35:02 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/07 23:53:59 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	handle_ctrl_c_child(int signum)
 		close(mini->open_pipe_fd[0]);
 	if (mini->open_pipe_fd[1] != -1)
 		close(mini->open_pipe_fd[1]);
+	free_shell(mini);
 	exit(EXIT_FAILURE);
 }
 
