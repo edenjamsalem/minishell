@@ -37,7 +37,10 @@ static void	get_heredoc_input(char *eof, int *pipe_fd, t_dict *envp)
 		if (bytes_read == -1)
 			exit(EXIT_FAILURE);
 		if (bytes_read == 0)
+		{
+			close(pipe_fd[1]);
 			handle_ctrl_d(bytes_read, line_count, eof);
+		}
 		input[bytes_read] = '\0';
 		if (is_eof(input, eof))
 		{
