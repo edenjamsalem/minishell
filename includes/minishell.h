@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:57:13 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/07 15:26:00 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/07 15:57:17 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,13 +99,11 @@ int			first_word_ctrl_op(char *input);
 
 // SIGNALS
 
-void		handle_signal(int signum, siginfo_t *info, void *context);
-
 void		setup_sig_handler(int signum);
 
-void		handle_ctrl_d(int bytes_read, int line_count, char *eof);
+void		handle_ctrl_c(int signum, siginfo_t *info, void *context);
 
-void		handle_ctrl_c(void);
+void		handle_ctrl_d(int bytes_read, int line_count, char *eof);
 
 void		handle_ctrl_c_child(int signum);
 

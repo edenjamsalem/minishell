@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:50:34 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/07 15:23:25 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/07 15:55:04 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,9 @@ static int	exec_braces(t_shell *mini, t_ctrl_seq *ctrl_seq)
 	if (pid == 0)
 	{
 		if (contains(ctrl_seq->raw_input, "(<>|&"))
-			init_nested_ctrl_seq(mini, ctrl_seq);
+			exit_status = init_nested_ctrl_seq(mini, ctrl_seq);
 		else
-			init_and_exec_cmd_seq(mini, ctrl_seq);
+			exit_status = init_and_exec_cmd_seq(mini, ctrl_seq);
 		free_shell(mini);
 		exit(exit_status);
 	}

@@ -6,22 +6,12 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 19:00:09 by mganchev          #+#    #+#             */
-/*   Updated: 2025/01/07 15:32:51 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/07 15:56:33 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include <signal.h>
-
-t_shell	*get_mini(t_shell *mini)
-{
-	static t_shell	*ptr;
-
-	if (!mini)
-		return (ptr);
-	ptr = mini;
-	return (mini);
-}
 
 void	handle_ctrl_d(int bytes_read, int line_count, char *eof)
 {
@@ -33,8 +23,11 @@ void	handle_ctrl_d(int bytes_read, int line_count, char *eof)
 	}
 }
 
-void	handle_ctrl_c(void)
+void	handle_ctrl_c(int signum, siginfo_t *info, void *context)
 {
+	(void)signum;
+	(void)info;
+	(void)context;
 	write(STDOUT_FILENO, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
@@ -52,20 +45,12 @@ void	handle_ctrl_c_child(int signum)
 	exit(EXIT_FAILURE);
 }
 
-void	handle_signal(int signum, siginfo_t *info, void *context)
-{
-	(void)info;
-	(void)context;
-	if (signum == SIGINT)
-		handle_ctrl_c();
-}
-
 void	setup_sig_handler(int signum)
 {
 	struct sigaction	act;
 
 	act.sa_flags = SA_SIGINFO | SA_RESTART;
-	act.sa_sigaction = handle_signal;
+	act.sa_sigaction = handle_ctrl_c;
 	sigemptyset(&act.sa_mask);
 	signal(SIGQUIT, SIG_IGN);
 	if (sigaction(signum, &act, NULL) == -1)

@@ -6,11 +6,21 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 19:02:54 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/07 15:29:28 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/07 15:54:49 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+t_shell	*get_mini(t_shell *mini)
+{
+	static t_shell	*ptr;
+
+	if (!mini)
+		return (ptr);
+	ptr = mini;
+	return (mini);
+}
 
 // set up envp dictionary
 t_dict	*init_envp_dict(char **envp)
