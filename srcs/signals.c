@@ -6,12 +6,22 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 19:00:09 by mganchev          #+#    #+#             */
-/*   Updated: 2025/01/06 16:10:05 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/07 15:32:51 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 #include <signal.h>
+
+t_shell	*get_mini(t_shell *mini)
+{
+	static t_shell	*ptr;
+
+	if (!mini)
+		return (ptr);
+	ptr = mini;
+	return (mini);
+}
 
 void	handle_ctrl_d(int bytes_read, int line_count, char *eof)
 {
@@ -33,8 +43,12 @@ void	handle_ctrl_c(void)
 
 void	handle_ctrl_c_child(int signum)
 {
+	t_shell *mini;
+
+	mini = get_mini(NULL);
 	(void)signum;
 	write(STDOUT_FILENO, "\n", 1);
+	close(mini->open_pipe_fd);
 	exit(EXIT_FAILURE);
 }
 

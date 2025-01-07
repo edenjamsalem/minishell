@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:54:57 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/07 14:49:01 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/07 14:59:39 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ int	exec_cmd_seq(t_cmd_seq *cmd_seq, t_shell *mini, bool in_main)
 
 	if (!cmd_seq->cmds[0][0])
 		return (EXIT_SUCCESS);
-	exit_status = EXIT_SUCCESS;
 	apply_redirections(cmd_seq);
 	if (cmd_seq->pipe_count == 0 && is_builtin(cmd_seq->cmds[0][0]))
 		exit_status = exec_builtin(mini, cmd_seq->cmds[0], in_main);
@@ -104,6 +103,8 @@ int	exec_cmd_seq(t_cmd_seq *cmd_seq, t_shell *mini, bool in_main)
 		wait(&status);
 		if (WIFEXITED(status))
 			exit_status = WEXITSTATUS(status);
+		else
+			exit_status = EXIT_FAILURE;
 	}
 	reset_stdin_out(cmd_seq->stdin_out);
 	return (exit_status);

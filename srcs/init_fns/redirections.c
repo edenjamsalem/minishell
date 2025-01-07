@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:52:45 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/06 14:29:36 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/07 15:26:52by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	get_heredoc_input(char *eof, int *pipe_fd, t_dict *envp)
 	}
 }
 
-int	open_heredoc(char *eof, t_dict *envp)
+int	open_heredoc(char *eof, t_shell *mini)
 {
 	pid_t	pid;
 	int		pipe_fd[2];
@@ -59,9 +59,10 @@ int	open_heredoc(char *eof, t_dict *envp)
 	pid = pipe_fork(pipe_fd);
 	if (pid == 0)
 	{
+		mini->open_pipe_fd = pipe_fd[1];
 		signal(SIGINT, handle_ctrl_c_child);
 		close(pipe_fd[0]);
-		get_heredoc_input(eof, pipe_fd, envp);
+		get_heredoc_input(eof, pipe_fd, mini->envp);
 	}
 	close(pipe_fd[1]);
 	wait(0);
@@ -69,7 +70,7 @@ int	open_heredoc(char *eof, t_dict *envp)
 	return (pipe_fd[0]);
 }
 
-static int	open_file(char *file, char *op, t_cmd_seq *cmd_seq, t_dict *envp)
+static int	open_file(char *file, char *op, t_cmd_seq *cmd_seq, t_shell *mini)
 {
 	int	fd;
 
@@ -91,13 +92,13 @@ static int	open_file(char *file, char *op, t_cmd_seq *cmd_seq, t_dict *envp)
 	}
 	else if (ft_match(op, "<<"))
 	{
-		fd = open_heredoc(file, envp);
+		fd = open_heredoc(file, mini);
 		cmd_seq->infile = fd;
 	}
 	return (fd);
 }
 
-void	assign_redirections(t_cmd_seq *cmd_seq, t_dict *envp)
+void	assign_redirections(t_cmd_seq *cmd_seq, t_shell *mini)
 {
 	char	*operator;
 	char	*file;
@@ -115,7 +116,7 @@ void	assign_redirections(t_cmd_seq *cmd_seq, t_dict *envp)
 		{
 			operator = cmd_seq->words->content[i];
 			file = cmd_seq->words->content[i + 1];
-			open_fds[j] = open_file(file, operator, cmd_seq, envp);
+			open_fds[j] = open_file(file, operator, cmd_seq, mini);
 			j++;
 		}
 		i++;

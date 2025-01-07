@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:51:55 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/07 14:42:48 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/07 15:12:00 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,10 @@ void	free_ctrl_seq(t_ctrl_seq **ctrl_seq)
 	i = 0;
 	while (ctrl_seq[i])
 	{
-		free(ctrl_seq[i]->raw_input);
-		free_cmd_seq(ctrl_seq[i]->cmd_seq);
+		if (ctrl_seq[i]->raw_input)
+			free(ctrl_seq[i]->raw_input);
+		if (ctrl_seq[i]->cmd_seq)
+			free_cmd_seq(ctrl_seq[i]->cmd_seq);
 		free(ctrl_seq[i]);
 		i++;
 	}
@@ -90,7 +92,8 @@ void	free_shell(t_shell *mini)
 {
 	rl_clear_history();
 	dict_clear(&mini->envp);
-	free_ctrl_seq(mini->ctrl_seq);
 	free(mini->input);
+	if (mini->ctrl_seq)
+		free_ctrl_seq(mini->ctrl_seq);
 	free(mini);
 }

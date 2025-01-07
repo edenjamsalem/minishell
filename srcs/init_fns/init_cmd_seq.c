@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 14:52:24 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/07 14:47:59 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/07 15:22:36 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static int	get_cmd_len(t_token *tokens)
 	return (len);
 }
 
-void	assign_cmds(t_cmd_seq *seq)
+static void	assign_cmds(t_cmd_seq *seq)
 {
 	int		i;
 	int		j;
@@ -72,9 +72,8 @@ void	assign_cmds(t_cmd_seq *seq)
 	seq->cmds[i] = NULL;
 }
 
-void assign_stdin_out(t_cmd_seq *cmd_seq)
+static void	init_stdin_out(t_cmd_seq *cmd_seq)
 {
-
 	cmd_seq->stdin_out = malloc(sizeof(int) * 2);
 	if (!cmd_seq->stdin_out)
 		return ;
@@ -82,14 +81,14 @@ void assign_stdin_out(t_cmd_seq *cmd_seq)
 	cmd_seq->stdin_out[1] = STDOUT_FILENO;
 }
 
-void	init_cmd_seq(t_ctrl_seq *ctrl_seq, t_dict *envp)
+void	init_cmd_seq(t_ctrl_seq *ctrl_seq, t_shell *mini)
 {
 	t_cmd_seq	*cmd_seq;
 
 	cmd_seq = malloc(sizeof(t_cmd_seq));
 	if (!cmd_seq)
 		return ;
-	parse(ctrl_seq->raw_input, cmd_seq, envp);
+	parse(ctrl_seq->raw_input, cmd_seq, mini->envp);
 	if (!grammar_check(cmd_seq->words, cmd_seq->tokens))
 	{
 		free_arrlst(cmd_seq->words, free);
@@ -97,8 +96,8 @@ void	init_cmd_seq(t_ctrl_seq *ctrl_seq, t_dict *envp)
 		return ;
 	}
 	quote_removal(cmd_seq->words);
-	assign_redirections(cmd_seq, envp);
-	assign_stdin_out(cmd_seq);
+	init_stdin_out(cmd_seq);
+	assign_redirections(cmd_seq, mini);
 	assign_pipe_count(cmd_seq);
 	setup_pipe_fd(cmd_seq);
 	cmd_seq->cmds = malloc(sizeof(char **) * (cmd_seq->pipe_count + 2));

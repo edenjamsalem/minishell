@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:50:34 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/06 14:29:35 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/07 15:23:25 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	init_and_exec_cmd_seq(t_shell *mini, t_ctrl_seq *ctrl_seq)
 {
 	int	exit_status;
 
-	init_cmd_seq(ctrl_seq, mini->envp);
+	init_cmd_seq(ctrl_seq, mini);
 	if (!ctrl_seq->cmd_seq)
 		exit_status = 2;
 	else

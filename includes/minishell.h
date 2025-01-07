@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:57:13 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/07 14:34:35 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/07 15:26:00 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ typedef struct s_shell
 	t_ctrl_seq	**ctrl_seq;
 	t_dict		*envp;
 	char		*input;
+	int			open_pipe_fd;
 }				t_shell;
 
 int			brace_count_same(char *input);
@@ -107,6 +108,8 @@ void		handle_ctrl_d(int bytes_read, int line_count, char *eof);
 void		handle_ctrl_c(void);
 
 void		handle_ctrl_c_child(int signum);
+
+t_shell		*get_mini(t_shell *mini);
 
 // BUILTINS
 
@@ -159,11 +162,11 @@ t_dict		*init_envp_dict(char **envp);
 
 void		init_ctrl_seq(t_shell *mini, char *input);
 
-void		init_cmd_seq(t_ctrl_seq *ctrl_seq, t_dict *envp);
+void		init_cmd_seq(t_ctrl_seq *ctrl_seq, t_shell *mini);
 
 t_shell		*init_shell(char **envp);
 
-void		assign_redirections(t_cmd_seq *cmd_seq, t_dict *envp);
+void		assign_redirections(t_cmd_seq *cmd_seq, t_shell *mini);
 
 // TOKENISER
 
@@ -215,8 +218,6 @@ int			exec_builtin(t_shell *mini, char **cmd, bool inside_main_process);
 
 int			is_builtin(char *cmd);
 
-void		assign_redirections(t_cmd_seq *cmd_seq, t_dict *envp);
-
 pid_t		pipe_fork(int pipe_fd[2]);
 
 pid_t		ft_fork(void);
@@ -226,8 +227,6 @@ void		ft_exec(t_shell *mini, char **cmd);
 void		setup_pipe_fd(t_cmd_seq *cmd_seq);
 
 void		assign_pipe_count(t_cmd_seq *cmd_seq);
-
-void		assign_cmds(t_cmd_seq *cmd_seq);
 
 // CLEANUP
 
