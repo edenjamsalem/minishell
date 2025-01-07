@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:26:17 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/06 14:25:57 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/07 16:45:52 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,9 @@ char	*expand_vars(char *input, t_dict *envp, bool in_double, bool in_single)
 			copy_quoted_text(&input, &ptr);
 		else if (*input == '\"' && !in_double)
 			copy_quoted_text(&input, &ptr);
-		else if (*input == '$' && *(++input) && !chrsetcmp(*input, IFS))
+		else if (*input == '$' && *(input + 1) && !chrsetcmp(*(input + 1), IFS))
 			copy_expanded_var(&input, &ptr, envp);
-		else
-			*ptr++ = *input++;
+		*ptr++ = *input++;
 	}
 	*ptr = '\0';
 	return (ft_strdup(expanded));
