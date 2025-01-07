@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:55:07 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/06 14:29:36 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/07 16:34:26 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void	exec_infile_to_pipe(t_shell *mini, int pipe_fd[2], char **cmd)
 	int		status;
 
 	pid = pipe_fork(pipe_fd);
+	mini->open_pipe_fd[0] = pipe_fd[0];
+	mini->open_pipe_fd[1] = pipe_fd[1];
 	if (pid == 0)
 	{
 		close(pipe_fd[0]);
@@ -35,6 +37,8 @@ void	exec_pipe_to_pipe(t_shell *mini, int **pipe_fd, char **cmd)
 	int		status;
 
 	pid = pipe_fork(pipe_fd[0]);
+	mini->open_pipe_fd[0] = pipe_fd[0][0];
+	mini->open_pipe_fd[1] = pipe_fd[0][1];
 	if (pid == 0)
 	{
 		close(pipe_fd[0][0]);
@@ -50,6 +54,8 @@ void	exec_pipe_to_pipe(t_shell *mini, int **pipe_fd, char **cmd)
 
 void	exec_pipe_to_outfile(t_shell *mini, int pipe_fd[2], char **cmd)
 {
+	mini->open_pipe_fd[0] = pipe_fd[0];
+	mini->open_pipe_fd[1] = pipe_fd[1];
 	dup2(pipe_fd[0], STDIN_FILENO);
 	close(pipe_fd[0]);
 	ft_exec(mini, cmd);

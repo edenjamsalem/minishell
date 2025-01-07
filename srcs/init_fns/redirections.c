@@ -62,7 +62,7 @@ int	open_heredoc(char *eof, t_shell *mini)
 	pid = pipe_fork(pipe_fd);
 	if (pid == 0)
 	{
-		mini->open_pipe_fd = pipe_fd[1];
+		mini->open_pipe_fd[1] = pipe_fd[1];
 		signal(SIGINT, handle_ctrl_c_child);
 		close(pipe_fd[0]);
 		get_heredoc_input(eof, pipe_fd, mini->envp);

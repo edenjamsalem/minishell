@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 19:00:09 by mganchev          #+#    #+#             */
-/*   Updated: 2025/01/07 15:56:33 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/07 16:35:02 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,13 @@ void	handle_ctrl_c_child(int signum)
 {
 	t_shell *mini;
 
-	mini = get_mini(NULL);
 	(void)signum;
+	mini = get_mini(NULL);
 	write(STDOUT_FILENO, "\n", 1);
-	close(mini->open_pipe_fd);
+	if (mini->open_pipe_fd[0] != -1)
+		close(mini->open_pipe_fd[0]);
+	if (mini->open_pipe_fd[1] != -1)
+		close(mini->open_pipe_fd[1]);
 	exit(EXIT_FAILURE);
 }
 

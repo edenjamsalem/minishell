@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:57:13 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/07 15:57:17 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/07 16:32:27 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ typedef struct s_shell
 	t_ctrl_seq	**ctrl_seq;
 	t_dict		*envp;
 	char		*input;
-	int			open_pipe_fd;
+	int			open_pipe_fd[2];
 }				t_shell;
 
 int			brace_count_same(char *input);

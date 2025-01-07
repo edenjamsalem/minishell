@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/06 16:04:41 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/07 16:25:58 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ pid_t	pipe_fork(int pipe_fd[2])
 		exit(EXIT_FAILURE);
 	}
 	if (pid == 0)
-		signal(SIGINT, SIG_DFL);
+	{
+		signal(SIGINT, handle_ctrl_c_child);
+		signal(SIGQUIT, handle_ctrl_c_child);
+	}
 	return (pid);
 }
 
