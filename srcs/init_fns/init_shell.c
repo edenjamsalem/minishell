@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 19:02:54 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/06 14:25:56 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/07 14:49:20 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,5 @@ t_shell	*init_shell(char **envp)
 	mini->envp = init_envp_dict(envp);
 	mini->ctrl_seq = NULL;
 	mini->input = NULL;
-	mini->stdin_out = NULL;
 	return (mini);
 }

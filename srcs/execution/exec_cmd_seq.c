@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:54:57 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/06 15:59:21 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/07 14:49:01 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	reset_stdin_out(int	*stdin_out)
 {
+	if (!stdin_out)
+		return ;
 	if (stdin_out[0] != STDIN_FILENO)
 	{
 		dup2(stdin_out[0], STDIN_FILENO);
@@ -26,19 +28,17 @@ void	reset_stdin_out(int	*stdin_out)
 	}
 }
 
-void	apply_redirections(t_cmd_seq *cmd_seq, int *stdin_out)
+void	apply_redirections(t_cmd_seq *cmd_seq)
 {
-	stdin_out[0] = STDIN_FILENO;
-	stdin_out[1] = STDOUT_FILENO;
 	if (cmd_seq->infile != STDIN_FILENO)
 	{
-		stdin_out[0] = dup(STDIN_FILENO);
+		cmd_seq->stdin_out[0] = dup(STDIN_FILENO);
 		dup2(cmd_seq->infile, STDIN_FILENO);
 		close(cmd_seq->infile);
 	}
 	if (cmd_seq->outfile != STDOUT_FILENO)
 	{
-		stdin_out[1] = dup(STDOUT_FILENO);
+		cmd_seq->stdin_out[1] = dup(STDOUT_FILENO);
 		dup2(cmd_seq->outfile, STDOUT_FILENO);
 		close(cmd_seq->outfile);
 	}
@@ -86,14 +86,14 @@ void	execute_cmds(t_shell *mini, t_cmd_seq *cmd_seq)
 
 int	exec_cmd_seq(t_cmd_seq *cmd_seq, t_shell *mini, bool in_main)
 {
-	int			stdin_out[2];
 	int			status;
 	int			exit_status;
 	pid_t		pid;
 
+	if (!cmd_seq->cmds[0][0])
+		return (EXIT_SUCCESS);
 	exit_status = EXIT_SUCCESS;
-	mini->stdin_out = stdin_out;
-	apply_redirections(cmd_seq, stdin_out);
+	apply_redirections(cmd_seq);
 	if (cmd_seq->pipe_count == 0 && is_builtin(cmd_seq->cmds[0][0]))
 		exit_status = exec_builtin(mini, cmd_seq->cmds[0], in_main);
 	else
@@ -105,6 +105,6 @@ int	exec_cmd_seq(t_cmd_seq *cmd_seq, t_shell *mini, bool in_main)
 		if (WIFEXITED(status))
 			exit_status = WEXITSTATUS(status);
 	}
-	reset_stdin_out(stdin_out);
+	reset_stdin_out(cmd_seq->stdin_out);
 	return (exit_status);
 }

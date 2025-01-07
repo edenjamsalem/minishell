@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:57:13 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/06 15:41:13 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/07 14:34:35 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ typedef struct s_cmd_seq
 	int			open_fd_count;
 	int			infile;
 	int			outfile;
+	int			*stdin_out;
 }				t_cmd_seq;
 
 typedef struct s_ctrl_seq // CONTROL SEQUENCE
@@ -83,7 +84,6 @@ typedef struct s_shell
 	t_ctrl_seq	**ctrl_seq;
 	t_dict		*envp;
 	char		*input;
-	int			*stdin_out;
 }				t_shell;
 
 int			brace_count_same(char *input);

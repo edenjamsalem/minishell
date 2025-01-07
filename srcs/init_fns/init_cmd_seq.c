@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 14:52:24 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/06 14:25:55 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/07 14:47:59 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,16 @@ void	assign_cmds(t_cmd_seq *seq)
 	seq->cmds[i] = NULL;
 }
 
+void assign_stdin_out(t_cmd_seq *cmd_seq)
+{
+
+	cmd_seq->stdin_out = malloc(sizeof(int) * 2);
+	if (!cmd_seq->stdin_out)
+		return ;
+	cmd_seq->stdin_out[0] = STDIN_FILENO;
+	cmd_seq->stdin_out[1] = STDOUT_FILENO;
+}
+
 void	init_cmd_seq(t_ctrl_seq *ctrl_seq, t_dict *envp)
 {
 	t_cmd_seq	*cmd_seq;
@@ -88,6 +98,7 @@ void	init_cmd_seq(t_ctrl_seq *ctrl_seq, t_dict *envp)
 	}
 	quote_removal(cmd_seq->words);
 	assign_redirections(cmd_seq, envp);
+	assign_stdin_out(cmd_seq);
 	assign_pipe_count(cmd_seq);
 	setup_pipe_fd(cmd_seq);
 	cmd_seq->cmds = malloc(sizeof(char **) * (cmd_seq->pipe_count + 2));

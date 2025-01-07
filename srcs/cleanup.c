@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:51:55 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/06 14:25:50 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/07 14:42:48 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ void	free_cmd_seq(t_cmd_seq *cmd_seq)
 	free_2darr((void **)cmd_seq->pipe_fd, cmd_seq->pipe_count);
 	free_arrlst(cmd_seq->words, free);
 	close_open_fds(cmd_seq->open_fds, cmd_seq->open_fd_count);
+	reset_stdin_out(cmd_seq->stdin_out);
+	free(cmd_seq->stdin_out);
 	free(cmd_seq->open_fds);
 	free(cmd_seq->tokens);
 	free(cmd_seq);
@@ -71,7 +73,7 @@ void	free_ctrl_seq(t_ctrl_seq **ctrl_seq)
 {
 	int	i;
 
-	if (!ctrl_seq)
+	if (!ctrl_seq || !(*ctrl_seq))
 		return ;
 	i = 0;
 	while (ctrl_seq[i])
@@ -90,6 +92,5 @@ void	free_shell(t_shell *mini)
 	dict_clear(&mini->envp);
 	free_ctrl_seq(mini->ctrl_seq);
 	free(mini->input);
-	reset_stdin_out(mini->stdin_out);
 	free(mini);
 }
