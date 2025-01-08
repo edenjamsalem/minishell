@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_cmd_seq.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 14:52:24 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/08 17:49:14 by mganchev         ###   ########.fr       */
+/*   Updated: 2025/01/08 18:58:28 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ static void	assign_cmds(t_cmd_seq *seq)
 	k = 0;
 	while (i < seq->pipe_count + 1)
 	{
-		seq->cmds[i] = malloc(sizeof(char *) * (get_cmd_len(seq->tokens) + 1));
+		ft_printf("LEN = %d\n", get_cmd_len(seq->tokens));
+		seq->cmds[i] = malloc(sizeof(char *) * (get_cmd_len(seq->tokens) + 2));
 		if (!seq->cmds[i])
 			return ;
 		j = 0;
@@ -64,6 +65,7 @@ static void	assign_cmds(t_cmd_seq *seq)
 				seq->cmds[i][j++] = ft_strdup(seq->words->content[k]);
 			k++;
 		}
+		ft_printf("J = %d\n", j);
 		seq->cmds[i][j] = NULL;
 		if (seq->tokens[k] == PIPE)
 			k++;

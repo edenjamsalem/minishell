@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:55:07 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/07 16:34:26 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/08 18:52:48 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	exec_infile_to_pipe(t_shell *mini, int pipe_fd[2], char **cmd)
 {
 	pid_t	pid;
-	int		status;
 
 	pid = pipe_fork(pipe_fd);
 	mini->open_pipe_fd[0] = pipe_fd[0];
@@ -27,14 +26,13 @@ void	exec_infile_to_pipe(t_shell *mini, int pipe_fd[2], char **cmd)
 		close(pipe_fd[1]);
 		ft_exec(mini, cmd);
 	}
-	waitpid(pid, &status, 0);
+	wait(0);
 	close(pipe_fd[1]);
 }
 
 void	exec_pipe_to_pipe(t_shell *mini, int **pipe_fd, char **cmd)
 {
 	pid_t	pid;
-	int		status;
 
 	pid = pipe_fork(pipe_fd[0]);
 	mini->open_pipe_fd[0] = pipe_fd[0][0];
@@ -48,7 +46,7 @@ void	exec_pipe_to_pipe(t_shell *mini, int **pipe_fd, char **cmd)
 		close(pipe_fd[0][1]);
 		ft_exec(mini, cmd);
 	}
-	waitpid(pid, &status, 0);
+	wait(0);
 	close(pipe_fd[0][1]);
 }
 
