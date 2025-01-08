@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_cmd_seq.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 14:52:24 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/07 15:22:36 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/08 15:12:33 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ void	init_cmd_seq(t_ctrl_seq *ctrl_seq, t_shell *mini)
 	{
 		free_arrlst(cmd_seq->words, free);
 		free(cmd_seq->tokens);
+		free(cmd_seq);
 		return ;
 	}
 	quote_removal(cmd_seq->words);

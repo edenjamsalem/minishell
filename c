@@ -1,0 +1,11 @@
+a
+b
+build
+c
+file1
+file2
+includes
+Makefile
+minishell
+srcs
+t.txt

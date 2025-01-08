@@ -20,18 +20,15 @@ bool	is_repeat(t_token *tokens, int *index)
 	i = 0;
 	while (tokens[i] != END)
 	{
-		if (tokens[i] == PIPE)
+		if (tokens[i] == PIPE || tokens[i] == REDIRECT)
 		{
-			if (i == 0)
-			{
-				*index = 0;
+			*index = i;
+			if (i == 0 && tokens[i] == PIPE)
 				return (is_start(tokens, index));
-			}
 			else if (get_prev_token(tokens, i) == PIPE)
-			{
-				*index = i;
 				return (true);
-			}
+			else if (tokens[i + 1] == REDIRECT)
+				return (true);
 		}
 		i++;
 	}
