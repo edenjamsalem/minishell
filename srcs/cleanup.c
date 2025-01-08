@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:51:55 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/08 17:25:14 by mganchev         ###   ########.fr       */
+/*   Updated: 2025/01/08 20:37:53 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,8 @@ void	free_shell(t_shell *mini)
 {
 	rl_clear_history();
 	dict_clear(&mini->envp);
-	free(mini->input);
+	if (mini->input)
+		free(mini->input);
 	if (mini->ctrl_seq)
 		free_ctrl_seq(mini->ctrl_seq);
 	free(mini);

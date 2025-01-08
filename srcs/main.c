@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:53:57 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/08 20:14:01 by mganchev         ###   ########.fr       */
+/*   Updated: 2025/01/08 20:38:50 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,11 @@ int	main(int argc, char **argv, char **envp)
 			init_ctrl_seq(mini, mini->input);
 			exec_ctrl_seq(mini);
 			free_ctrl_seq(mini->ctrl_seq);
+			mini->ctrl_seq = NULL;
 		}
 		else
 			set_dict_value("?", ft_strdup("2"), mini->envp);
 		free(mini->input);
+		mini->input = NULL;
 	}
 }

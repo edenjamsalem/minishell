@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 15:39:40 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/06 15:39:58 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/08 20:35:57 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ char	*read_input(void)
 	if (!input)
 	{
 		ft_printf("exit\n");
+		free_shell(get_mini(NULL));
 		exit(0);
 	}
 	if (*input && !(only_spaces(input)))
