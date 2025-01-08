@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 12:46:26 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/06 15:37:28 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/08 18:40:29 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	ctrl_op_after_close_brace(char *input)
 		{
 			input++;
 			skip_set(&input, IFS);
-			if (!chrsetcmp(*input, "<>&|"))
+			if (*input && !chrsetcmp(*input, "<>&|"))
 			{
 				next_word = ft_strcut(input, skip_to(&input, IFS));
 				ft_perror(SYNTAX, next_word);
