@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 14:52:24 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/08 18:58:28 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/08 19:02:44 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ static void	assign_cmds(t_cmd_seq *seq)
 	k = 0;
 	while (i < seq->pipe_count + 1)
 	{
-		ft_printf("LEN = %d\n", get_cmd_len(seq->tokens));
 		seq->cmds[i] = malloc(sizeof(char *) * (get_cmd_len(seq->tokens) + 2));
 		if (!seq->cmds[i])
 			return ;
@@ -65,7 +64,6 @@ static void	assign_cmds(t_cmd_seq *seq)
 				seq->cmds[i][j++] = ft_strdup(seq->words->content[k]);
 			k++;
 		}
-		ft_printf("J = %d\n", j);
 		seq->cmds[i][j] = NULL;
 		if (seq->tokens[k] == PIPE)
 			k++;
