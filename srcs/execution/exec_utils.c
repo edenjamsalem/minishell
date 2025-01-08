@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/08 18:51:37 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/08 20:29:37 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ pid_t	ft_fork(void)
 	pid_t	pid;
 
 	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
 	pid = fork();
 	if (pid < 0)
 	{

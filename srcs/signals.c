@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 19:00:09 by mganchev          #+#    #+#             */
-/*   Updated: 2025/01/08 18:35:03 by mganchev         ###   ########.fr       */
+/*   Updated: 2025/01/08 20:19:33 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ void	handle_ctrl_c(int signum, siginfo_t *info, void *context)
 
 void	handle_ctrl_c_child(int signum, siginfo_t *info, void *context)
 {
-	t_shell *mini;
+	t_shell	*mini;
 
 	(void)info;
 	(void)context;
 	if (signum == SIGINT)
-	{	
+	{
 		mini = get_mini(NULL);
 		write(STDOUT_FILENO, "\n", 1);
 		if (mini->open_pipe_fd[0] != -1)
@@ -54,11 +54,21 @@ void	handle_ctrl_c_child(int signum, siginfo_t *info, void *context)
 void	setup_child_handler(int signum)
 {
 	struct sigaction	act;
+	struct termios		term;
 
 	if (signum == SIGQUIT)
+	{
 		act.sa_handler = SIG_IGN;
-	act.sa_flags = SA_SIGINFO | SA_RESTART;
-	act.sa_sigaction = handle_ctrl_c_child;
+		act.sa_flags = 0;
+		tcgetattr(STDIN_FILENO, &term);
+		term.c_lflag &= ~ECHOCTL;
+		tcsetattr(STDIN_FILENO, TCSANOW, &term);
+	}
+	else if (signum == SIGINT)
+	{
+		act.sa_flags = SA_SIGINFO | SA_RESTART;
+		act.sa_sigaction = handle_ctrl_c_child;
+	}
 	sigemptyset(&act.sa_mask);
 	if (sigaction(signum, &act, NULL) == -1)
 	{

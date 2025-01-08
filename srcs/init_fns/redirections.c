@@ -32,7 +32,6 @@ static void	get_heredoc_input(char *eof, int *pipe_fd, t_dict *envp, t_shell *mi
 	while (1)
 	{
 		setup_child_handler(SIGINT);
-		setup_child_handler(SIGQUIT);
 		write(1, "> ", 2);
 		bytes_read = read(STDIN_FILENO, input, 4096);
 		line_count++;
@@ -68,7 +67,7 @@ int	open_heredoc(char *eof, t_shell *mini)
 	{
 		mini->open_pipe_fd[1] = pipe_fd[1];
 		setup_child_handler(SIGINT);
-		setup_child_handler(SIGQUIT);
+		//setup_child_handler(SIGQUIT);
 		close(pipe_fd[0]);
 		get_heredoc_input(eof, pipe_fd, mini->envp, mini);
 	}
