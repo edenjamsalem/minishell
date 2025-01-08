@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd_seq.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:54:57 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/08 16:49:54 by mganchev         ###   ########.fr       */
+/*   Updated: 2025/01/08 19:26:49 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	exec_builtin(t_shell *mini, char **cmd, bool in_main)
 	if (!cmd || !(*cmd))
 		return (0);
 	else if (ft_match(cmd[0], "env"))
-		return (ft_env(mini->envp));
+		return (ft_env(cmd, mini->envp));
 	else if (ft_match(cmd[0], "cd"))
 		return (ft_cd(cmd));
 	else if (ft_match(cmd[0], "echo"))

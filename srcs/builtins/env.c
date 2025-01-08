@@ -6,14 +6,19 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 12:45:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/06 14:25:52 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/08 19:29:52 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	ft_env(t_dict *envp_vars)
+int	ft_env(char **cmd, t_dict *envp_vars)
 {
+	if (ft_2darr_len((void **)cmd) > 1)
+	{
+		ft_perror(DIRECT, cmd[1]);
+		return (127);
+	}
 	print_dict(envp_vars);
 	return (EXIT_SUCCESS);
 }

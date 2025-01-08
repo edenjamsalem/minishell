@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:57:13 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/08 18:14:51 by mganchev         ###   ########.fr       */
+/*   Updated: 2025/01/08 19:29:13 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ t_shell			*get_mini(t_shell *mini);
 
 // BUILTINS
 
-int				ft_env(t_dict *envp_vars);
+int				ft_env(char **cmd, t_dict *envp_vars);
 
 int				ft_pwd(void);
 
