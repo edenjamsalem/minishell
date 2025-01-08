@@ -6,7 +6,7 @@
 /*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 14:52:24 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/08 15:12:33 by mganchev         ###   ########.fr       */
+/*   Updated: 2025/01/08 17:49:14 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,27 +83,27 @@ static void	init_stdin_out(t_cmd_seq *cmd_seq)
 
 void	init_cmd_seq(t_ctrl_seq *ctrl_seq, t_shell *mini)
 {
-	t_cmd_seq	*cmd_seq;
-
-	cmd_seq = malloc(sizeof(t_cmd_seq));
-	if (!cmd_seq)
+	ctrl_seq->cmd_seq = malloc(sizeof(t_cmd_seq));
+	if (!ctrl_seq->cmd_seq)
 		return ;
-	parse(ctrl_seq->raw_input, cmd_seq, mini->envp);
-	if (!grammar_check(cmd_seq->words, cmd_seq->tokens))
+	parse(ctrl_seq->raw_input, ctrl_seq->cmd_seq, mini->envp);
+	if (!grammar_check(ctrl_seq->cmd_seq->words, ctrl_seq->cmd_seq->tokens))
 	{
-		free_arrlst(cmd_seq->words, free);
-		free(cmd_seq->tokens);
-		free(cmd_seq);
+		free_arrlst(ctrl_seq->cmd_seq->words, free);
+		free(ctrl_seq->cmd_seq->tokens);
+		free(ctrl_seq->cmd_seq);
+		ctrl_seq->cmd_seq = NULL;
 		return ;
 	}
-	quote_removal(cmd_seq->words);
-	init_stdin_out(cmd_seq);
-	assign_redirections(cmd_seq, mini);
-	assign_pipe_count(cmd_seq);
-	setup_pipe_fd(cmd_seq);
-	cmd_seq->cmds = malloc(sizeof(char **) * (cmd_seq->pipe_count + 2));
-	if (!cmd_seq->cmds)
+	quote_removal(ctrl_seq->cmd_seq->words);
+	init_stdin_out(ctrl_seq->cmd_seq);
+	assign_pipe_count(ctrl_seq->cmd_seq);
+	setup_pipe_fd(ctrl_seq->cmd_seq);
+	ctrl_seq->cmd_seq->cmds = malloc(sizeof(char **) * (ctrl_seq->cmd_seq->pipe_count + 2));
+	if (!ctrl_seq->cmd_seq->cmds)
 		return ;
-	assign_cmds(cmd_seq);
-	ctrl_seq->cmd_seq = cmd_seq;
+	assign_cmds(ctrl_seq->cmd_seq);
+	ctrl_seq->cmd_seq->open_fds = NULL;
+	ctrl_seq->cmd_seq->open_fd_count = 0;
+	assign_redirections(ctrl_seq->cmd_seq, mini);
 }

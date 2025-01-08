@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/07 16:25:58 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/08 18:30:08 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ pid_t	pipe_fork(int pipe_fd[2])
 	}
 	if (pid == 0)
 	{
-		signal(SIGINT, handle_ctrl_c_child);
-		signal(SIGQUIT, handle_ctrl_c_child);
+		setup_child_handler(SIGINT);
+		setup_child_handler(SIGQUIT);
 	}
 	return (pid);
 }
@@ -40,6 +40,7 @@ pid_t	ft_fork(void)
 	pid_t	pid;
 
 	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	pid = fork();
 	if (pid < 0)
 	{
@@ -48,8 +49,8 @@ pid_t	ft_fork(void)
 	}
 	if (pid == 0)
 	{
-		signal(SIGINT, handle_ctrl_c_child);
-		signal(SIGQUIT, handle_ctrl_c_child);
+		setup_child_handler(SIGINT);
+		setup_child_handler(SIGQUIT);
 	}
 	return (pid);
 }
@@ -121,8 +122,8 @@ void	ft_exec(t_shell *mini, char **cmd)
 		free_shell(mini);
 		exit(2);
 	}
-	signal(SIGINT, handle_ctrl_c_child);
-	signal(SIGQUIT, handle_ctrl_c_child);
+	setup_child_handler(SIGINT);
+	setup_child_handler(SIGQUIT);
 	if (execve(cmd_path, cmd, dict_to_arr(mini->envp)) == -1)
 	{
 		ft_perror(CMD_, cmd[0]);

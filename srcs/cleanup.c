@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:51:55 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/07 15:12:00 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/08 17:25:14 by mganchev         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,11 @@ void	free_ctrl_seq(t_ctrl_seq **ctrl_seq)
 	{
 		if (ctrl_seq[i]->raw_input)
 			free(ctrl_seq[i]->raw_input);
+		//ft_printf("POINTER = %p\n", ctrl_seq[i]->cmd_seq);
 		if (ctrl_seq[i]->cmd_seq)
+		{
 			free_cmd_seq(ctrl_seq[i]->cmd_seq);
+		}
 		free(ctrl_seq[i]);
 		i++;
 	}

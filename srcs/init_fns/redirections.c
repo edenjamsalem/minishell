@@ -22,7 +22,7 @@ static bool	is_eof(char *input, char *eof)
 	return (false);
 }
 
-static void	get_heredoc_input(char *eof, int *pipe_fd, t_dict *envp)
+static void	get_heredoc_input(char *eof, int *pipe_fd, t_dict *envp, t_shell *mini)
 {
 	int			bytes_read;
 	char		input[4096];
@@ -31,6 +31,8 @@ static void	get_heredoc_input(char *eof, int *pipe_fd, t_dict *envp)
 
 	while (1)
 	{
+		setup_child_handler(SIGINT);
+		setup_child_handler(SIGQUIT);
 		write(1, "> ", 2);
 		bytes_read = read(STDIN_FILENO, input, 4096);
 		line_count++;
@@ -39,12 +41,13 @@ static void	get_heredoc_input(char *eof, int *pipe_fd, t_dict *envp)
 		if (bytes_read == 0)
 		{
 			close(pipe_fd[1]);
-			handle_ctrl_d(bytes_read, line_count, eof);
+			handle_ctrl_d(line_count, eof);
 		}
 		input[bytes_read] = '\0';
 		if (is_eof(input, eof))
 		{
 			close(pipe_fd[1]);
+			free_shell(mini);
 			exit(EXIT_SUCCESS);
 		}
 		expanded = expand_vars(input, envp, true, true);
@@ -59,13 +62,15 @@ int	open_heredoc(char *eof, t_shell *mini)
 	int		pipe_fd[2];
 
 	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	pid = pipe_fork(pipe_fd);
 	if (pid == 0)
 	{
 		mini->open_pipe_fd[1] = pipe_fd[1];
-		signal(SIGINT, handle_ctrl_c_child);
+		setup_child_handler(SIGINT);
+		setup_child_handler(SIGQUIT);
 		close(pipe_fd[0]);
-		get_heredoc_input(eof, pipe_fd, mini->envp);
+		get_heredoc_input(eof, pipe_fd, mini->envp, mini);
 	}
 	close(pipe_fd[1]);
 	wait(0);
