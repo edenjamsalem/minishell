@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mganchev <mganchev@student.42london.com    +#+  +:+       +#+        */
+/*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/08 20:29:37 by mganchev         ###   ########.fr       */
+/*   Updated: 2025/01/08 20:50:44 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ pid_t	ft_fork(void)
 	if (pid == 0)
 	{
 		setup_child_handler(SIGINT);
-		setup_child_handler(SIGQUIT);
+		signal(SIGQUIT, SIG_IGN);
 	}
 	return (pid);
 }
@@ -122,7 +122,7 @@ void	ft_exec(t_shell *mini, char **cmd)
 		exit(2);
 	}
 	setup_child_handler(SIGINT);
-	setup_child_handler(SIGQUIT);
+	signal(SIGQUIT, SIG_DFL);
 	if (execve(cmd_path, cmd, dict_to_arr(mini->envp)) == -1)
 	{
 		ft_perror(CMD_, cmd[0]);

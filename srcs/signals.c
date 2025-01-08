@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 19:00:09 by mganchev          #+#    #+#             */
-/*   Updated: 2025/01/08 20:34:20 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/08 20:49:08 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	handle_ctrl_c_child(int signum, siginfo_t *info, void *context)
 
 void	setup_child_handler(int signum)
 {
-	struct sigaction	act;
+	struct sigaction	act = {0};
 	struct termios		term;
 
 	if (signum == SIGQUIT)
