@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:37:13 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/09 13:39:27 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/09 14:32:26 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	export_new_entry(char *cmd, t_dict *envp)
 {
 	t_dict	*new_entry;
 	t_dict	*entry_exists;
-	
+
 	new_entry = str_to_dict(cmd);
 	entry_exists = get_dict_entry(new_entry->key, envp);
 	if (!new_entry->value)

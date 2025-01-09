@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:54:57 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/09 14:21:39 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/09 14:35:45 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,31 +44,10 @@ void	apply_redirections(t_cmd_seq *cmd_seq)
 	}
 }
 
-int	exec_builtin(t_shell *mini, char **cmd, bool in_main)
-{
-	if (!cmd || !(*cmd))
-		return (0);
-	else if (ft_match(cmd[0], "env"))
-		return (ft_env(cmd, mini->envp));
-	else if (ft_match(cmd[0], "cd"))
-		return (ft_cd(cmd));
-	else if (ft_match(cmd[0], "echo"))
-		return (ft_echo(cmd));
-	else if (ft_match(cmd[0], "export"))
-		return (ft_export(cmd, mini->envp));
-	else if (ft_match(cmd[0], "pwd"))
-		return (ft_pwd());
-	else if (ft_match(cmd[0], "unset"))
-		return (ft_unset(cmd, mini->envp));
-	else if (ft_match(cmd[0], "exit"))
-		ft_exit(mini, cmd, in_main);
-	return (0);
-}
-
 static void	wait_for_pids(t_shell *mini)
 {
 	int		i;
-	
+
 	i = 0;
 	while (mini->open_pids[i])
 		wait(mini->open_pids + i++);
@@ -86,7 +65,7 @@ void	execute_cmds(t_shell *mini, t_cmd_seq *cmd_seq)
 		{
 			free_shell(mini);
 			exit(EXIT_FAILURE);
-		}	
+		}
 		exec_pipes(mini, cmd_seq, cmd_seq->pipe_fd, cmd_seq->cmds);
 		wait_for_pids(mini);
 		exit(EXIT_SUCCESS);

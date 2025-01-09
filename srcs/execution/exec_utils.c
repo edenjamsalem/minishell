@@ -6,34 +6,11 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 15:34:48 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/08 20:50:44 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/09 14:34:57 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-pid_t	pipe_fork(int pipe_fd[2])
-{
-	pid_t	pid;
-
-	if (pipe(pipe_fd) == -1)
-	{
-		perror("pipe");
-		exit(EXIT_FAILURE);
-	}
-	pid = fork();
-	if (pid < 0)
-	{
-		perror("fork");
-		exit(EXIT_FAILURE);
-	}
-	if (pid == 0)
-	{
-		setup_child_handler(SIGINT);
-		setup_child_handler(SIGQUIT);
-	}
-	return (pid);
-}
 
 pid_t	ft_fork(void)
 {
@@ -99,6 +76,27 @@ int	is_builtin(char *cmd)
 		return (1);
 	else if (ft_match(cmd, "exit"))
 		return (1);
+	return (0);
+}
+
+int	exec_builtin(t_shell *mini, char **cmd, bool in_main)
+{
+	if (!cmd || !(*cmd))
+		return (0);
+	else if (ft_match(cmd[0], "env"))
+		return (ft_env(cmd, mini->envp));
+	else if (ft_match(cmd[0], "cd"))
+		return (ft_cd(cmd));
+	else if (ft_match(cmd[0], "echo"))
+		return (ft_echo(cmd));
+	else if (ft_match(cmd[0], "export"))
+		return (ft_export(cmd, mini->envp));
+	else if (ft_match(cmd[0], "pwd"))
+		return (ft_pwd());
+	else if (ft_match(cmd[0], "unset"))
+		return (ft_unset(cmd, mini->envp));
+	else if (ft_match(cmd[0], "exit"))
+		ft_exit(mini, cmd, in_main);
 	return (0);
 }
 

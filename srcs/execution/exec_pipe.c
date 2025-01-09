@@ -6,11 +6,34 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:55:07 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/09 14:23:17 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/09 14:34:17 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+pid_t	pipe_fork(int pipe_fd[2])
+{
+	pid_t	pid;
+
+	if (pipe(pipe_fd) == -1)
+	{
+		perror("pipe");
+		exit(EXIT_FAILURE);
+	}
+	pid = fork();
+	if (pid < 0)
+	{
+		perror("fork");
+		exit(EXIT_FAILURE);
+	}
+	if (pid == 0)
+	{
+		setup_child_handler(SIGINT);
+		setup_child_handler(SIGQUIT);
+	}
+	return (pid);
+}
 
 pid_t	exec_infile_to_pipe(t_shell *mini, int pipe_fd[2], char **cmd)
 {
@@ -68,7 +91,8 @@ pid_t	exec_pipe_to_outfile(t_shell *mini, int pipe_fd[2], char **cmd)
 	return (pid);
 }
 
-void	exec_pipes(t_shell *mini, t_cmd_seq *cmd_seq, int **pipe_fd, char ***cmds)
+void	exec_pipes(t_shell *mini, t_cmd_seq *cmd_seq, int **pipe_fd, \
+															char ***cmds)
 {
 	int	i;
 

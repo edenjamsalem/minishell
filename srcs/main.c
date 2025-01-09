@@ -6,11 +6,25 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:53:57 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/08 20:38:50 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/09 14:29:03 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	run_shell(t_shell *mini)
+{
+	if (ends_with_ctrl_op(mini->input))
+		mini->input = complete_input(mini->input);
+	if (ctrl_op_syntax_okay(mini->input))
+	{
+		init_ctrl_seq(mini, mini->input);
+		exec_ctrl_seq(mini);
+		free_ctrl_seq(mini->ctrl_seq);
+	}
+	else
+		set_dict_value("?", ft_strdup("2"), mini->envp);
+}
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -27,17 +41,7 @@ int	main(int argc, char **argv, char **envp)
 		mini->input = read_input();
 		if (!mini->input)
 			continue ;
-		if (ends_with_ctrl_op(mini->input))
-			mini->input = complete_input(mini->input);
-		if (ctrl_op_syntax_okay(mini->input))
-		{
-			init_ctrl_seq(mini, mini->input);
-			exec_ctrl_seq(mini);
-			free_ctrl_seq(mini->ctrl_seq);
-			mini->ctrl_seq = NULL;
-		}
-		else
-			set_dict_value("?", ft_strdup("2"), mini->envp);
+		run_shell(mini);
 		free(mini->input);
 		mini->input = NULL;
 	}

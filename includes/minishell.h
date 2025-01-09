@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:57:13 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/09 14:21:51 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/09 14:48:52 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,12 @@ typedef struct s_cmd_seq
 	int			*stdin_out;
 }				t_cmd_seq;
 
-typedef struct s_ctrl_seq // CONTROL SEQUENCE
+typedef struct s_ctrl_seq
 {
-	char *raw_input;
-	t_ctrl_op ctrl_op;
-	bool inside_braces;
-	t_cmd_seq *cmd_seq;
+	char		*raw_input;
+	t_ctrl_op	ctrl_op;
+	bool		inside_braces;
+	t_cmd_seq	*cmd_seq;
 }				t_ctrl_seq;
 
 typedef struct s_shell
@@ -111,7 +111,7 @@ void		handle_ctrl_d(int line_count, char *eof);
 
 void		handle_ctrl_c_child(int signum, siginfo_t *info, void *context);
 
-t_shell	*get_mini(t_shell *mini);
+t_shell		*get_mini(t_shell *mini);
 
 // BUILTINS
 
@@ -151,106 +151,109 @@ int			skip_quotes(char **text);
 
 // PARAM EXPANSION
 
-char			*expand_vars(char *input, t_dict *envp, bool in_double, bool in_single);
+char		*expand_vars(char *input, t_dict *envp, bool in_double, \
+															bool in_single);
 
-void			expand_vars_in_double_quotes(void **input, t_dict *envp_dict);
+void		expand_vars_in_double_quotes(void **input, t_dict *envp_dict);
 
-void			expand_wildcard(t_arrlst *words, const char *pattern);
+void		expand_wildcard(t_arrlst *words, const char *pattern);
 
 // INIT FNS
 
-t_dict			*init_envp_dict(char **envp);
+t_dict		*init_envp_dict(char **envp);
 
-void			init_ctrl_seq(t_shell *mini, char *input);
+void		init_ctrl_seq(t_shell *mini, char *input);
 
-void			init_cmd_seq(t_ctrl_seq *ctrl_seq, t_shell *mini);
+void		init_cmd_seq(t_ctrl_seq *ctrl_seq, t_cmd_seq **cmd_seq, \
+															t_shell *mini);
 
 t_shell		*init_shell(char **envp);
 
-void			assign_redirections(t_cmd_seq *cmd_seq, t_shell *mini);
+void		assign_redirections(t_cmd_seq *cmd_seq, t_shell *mini);
 
 // TOKENISER
 
-int				find_next_token(t_token *tokens, enum e_token ref);
+int			find_next_token(t_token *tokens, enum e_token ref);
 
 t_token		get_prev_token(t_token *tokens, int index);
 
-t_token			*primary_tokenisation(t_arrlst *words, t_token *tokens);
+t_token		*primary_tokenisation(t_arrlst *words, t_token *tokens);
 
-t_token			*secondary_tokenisation(t_arrlst *words, t_token *tokens);
+t_token		*secondary_tokenisation(t_arrlst *words, t_token *tokens);
 
-t_token			*tokenise(t_arrlst *words);
+t_token		*tokenise(t_arrlst *words);
 
-bool			is_redirect(void *word);
+bool		is_redirect(void *word);
 
-bool			is_file(int index, t_token *tokens);
+bool		is_file(int index, t_token *tokens);
 
-bool			is_command(int index, t_token *tokens);
+bool		is_command(int index, t_token *tokens);
 
-bool			is_pipe(void *word);
+bool		is_pipe(void *word);
 
-int				grammar_check(t_arrlst *words, t_token *tokens);
+int			grammar_check(t_arrlst *words, t_token *tokens);
 
-bool			is_repeat(t_token *tokens, int *index);
+bool		is_repeat(t_token *tokens, int *index);
 
-bool			is_file_name(t_arrlst *words, t_token *tokens, int *index);
+bool		is_file_name(t_arrlst *words, t_token *tokens, int *index);
 
-bool			is_start(t_token *tokens, int *index);
+bool		is_start(t_token *tokens, int *index);
 
-bool			is_redirect_correct(t_token *tokens, int *index);
+bool		is_redirect_correct(t_token *tokens, int *index);
 
-int				ft_perror(t_error type, char *error_msg);
+int			ft_perror(t_error type, char *error_msg);
 
-int				skip_redirect(t_token *tokens, int index);
+int			skip_redirect(t_token *tokens, int index);
 
 // EXECUTION
 
-int				exec_ctrl_seq(t_shell *mini);
+int			exec_ctrl_seq(t_shell *mini);
 
-int				exec_cmd_seq(t_cmd_seq *cmd_seq, t_shell *mini, bool in_main);
+int			exec_cmd_seq(t_cmd_seq *cmd_seq, t_shell *mini, bool in_main);
 
-pid_t			exec_infile_to_pipe(t_shell *mini, int pipe_fd[2], char **cmd);
+pid_t		exec_infile_to_pipe(t_shell *mini, int pipe_fd[2], char **cmd);
 
-pid_t			exec_pipe_to_pipe(t_shell *mini, int **pipe_fd, char **cmd);
+pid_t		exec_pipe_to_pipe(t_shell *mini, int **pipe_fd, char **cmd);
 
-pid_t			exec_pipe_to_outfile(t_shell *mini, int pipe_fd[2], char **cmd);
+pid_t		exec_pipe_to_outfile(t_shell *mini, int pipe_fd[2], char **cmd);
 
-void		exec_pipes(t_shell *mini, t_cmd_seq *cmd_seq, int **pipe_fd, char ***cmds);
+void		exec_pipes(t_shell *mini, t_cmd_seq *cmd_seq, int **pipe_fd, \
+																char ***cmds);
 
-int				exec_builtin(t_shell *mini, char **cmd, bool inside_main_process);
+int			exec_builtin(t_shell *mini, char **cmd, bool inside_main_process);
 
-int				is_builtin(char *cmd);
+int			is_builtin(char *cmd);
 
-pid_t			pipe_fork(int pipe_fd[2]);
+pid_t		pipe_fork(int pipe_fd[2]);
 
-pid_t			ft_fork(void);
+pid_t		ft_fork(void);
 
-void			ft_exec(t_shell *mini, char **cmd);
+void		ft_exec(t_shell *mini, char **cmd);
 
-void			setup_pipe_fd(t_cmd_seq *cmd_seq);
+void		setup_pipe_fd(t_cmd_seq *cmd_seq);
 
-void			assign_pipe_count(t_cmd_seq *cmd_seq);
+void		assign_pipe_count(t_cmd_seq *cmd_seq);
 
 // CLEANUP
 
-void			free_cmd_seq(t_cmd_seq *cmd_seq);
+void		free_cmd_seq(t_cmd_seq *cmd_seq);
 
-void			free_ctrl_seq(t_ctrl_seq **ctrl_seq);
+void		free_ctrl_seq(t_ctrl_seq **ctrl_seq);
 
-void			free_shell(t_shell *mini);
+void		free_shell(t_shell *mini);
 
-void			reset_stdin_out(int *stdin_out);
+void		reset_stdin_out(int *stdin_out);
 
 // UTILS
 
-int				only_spaces(char *input);
+int			only_spaces(char *input);
 
-char			*read_input(void);
+char		*read_input(void);
 
-int				ends_with_ctrl_op(char *input);
+int			ends_with_ctrl_op(char *input);
 
-char			*complete_input(char *input);
+char		*complete_input(char *input);
 
-int				ctrl_op_syntax_okay(char *input);
+int			ctrl_op_syntax_okay(char *input);
 
 #endif

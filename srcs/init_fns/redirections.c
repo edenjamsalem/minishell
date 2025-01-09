@@ -5,57 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/02 15:52:45 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/07 15:26:52by eamsalem         ###   ########.fr       */
+/*   Created: 2025/01/09 14:46:33 by eamsalem          #+#    #+#             */
+/*   Updated: 2025/01/09 14:47:20 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-/*
-static bool	is_eof(char *input, char *eof)
-{
-	if (ft_strncmp(input, eof, ft_strlen(eof)) == 0)
-	{
-		if (ft_strlen(input) - 1 == ft_strlen(eof))
-			return (true);
-	}
-	return (false);
-}
-static void	get_heredoc_input(char *eof, int *pipe_fd, t_dict *envp, t_shell *mini)
-{
-	int			bytes_read;
-	char		input[4096];
-	char		*expanded;
-	static int	line_count;
-
-	while (1)
-	{
-		write(1, "> ", 2);
-		bytes_read = read(STDIN_FILENO, input, 4096);
-		line_count++;
-		if (bytes_read == -1)
-			exit(EXIT_FAILURE);
-		if (bytes_read == 0)
-		{
-			close(pipe_fd[1]);
-			handle_ctrl_d(line_count, eof);
-		}
-		input[bytes_read] = '\0';
-		if (is_eof(input, eof))
-		{
-			close(pipe_fd[1]);
-			free_shell(mini);
-			exit(EXIT_SUCCESS);
-		}
-		expanded = expand_vars(input, envp, true, true);
-		write(pipe_fd[1], expanded, ft_strlen(expanded));
-		free(expanded);
-	}
-}
-*/
-
-static void	get_heredoc_input(char *eof, int *pipe_fd, t_dict *envp, t_shell *mini)
+static void	get_heredoc(char *eof, int *pipe_fd, t_dict *envp, t_shell *mini)
 {
 	char		*input;
 	char		*expanded;
@@ -97,7 +54,7 @@ int	open_heredoc(char *eof, t_shell *mini)
 		setup_child_handler(SIGINT);
 		setup_child_handler(SIGQUIT);
 		close(pipe_fd[0]);
-		get_heredoc_input(eof, pipe_fd, mini->envp, mini);
+		get_heredoc(eof, pipe_fd, mini->envp, mini);
 	}
 	close(pipe_fd[1]);
 	wait(0);
