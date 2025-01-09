@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 19:02:54 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/07 16:32:56 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/09 13:58:01 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ t_shell	*init_shell(char **envp)
 	mini->input = NULL;
 	mini->open_pipe_fd[0] = -1;
 	mini->open_pipe_fd[1] = -1;
+	mini->open_pids = 0;
 	get_mini(mini);
 	return (mini);
 }

@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:51:55 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/09 13:26:23 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/09 13:58:50 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,5 +103,7 @@ void	free_shell(t_shell *mini)
 		free(mini->input);
 	if (mini->ctrl_seq)
 		free_ctrl_seq(mini->ctrl_seq);
+	if (mini->open_pids)
+		free(mini->open_pids);
 	free(mini);
 }

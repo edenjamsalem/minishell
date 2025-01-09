@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:57:13 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/09 13:26:47 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/09 13:57:43 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ typedef struct s_shell
 	t_dict		*envp;
 	char		*input;
 	int			open_pipe_fd[2];
+	int			*open_pids;
 }				t_shell;
 
 int				brace_count_same(char *input);
@@ -209,14 +210,13 @@ int				exec_ctrl_seq(t_shell *mini);
 
 int				exec_cmd_seq(t_cmd_seq *cmd_seq, t_shell *mini, bool in_main);
 
-void			exec_infile_to_pipe(t_shell *mini, int pipe_fd[2], char **cmd);
+pid_t			exec_infile_to_pipe(t_shell *mini, int pipe_fd[2], char **cmd);
 
-void			exec_pipe_to_pipe(t_shell *mini, int **pipe_fd, char **cmd);
+pid_t			exec_pipe_to_pipe(t_shell *mini, int **pipe_fd, char **cmd);
 
-void			exec_pipe_to_outfile(t_shell *mini, int pipe_fd[2], char **cmd);
+pid_t			exec_pipe_to_outfile(t_shell *mini, int pipe_fd[2], char **cmd);
 
-int				exec_builtin(t_shell *mini, char **cmd,
-					bool inside_main_process);
+int				exec_builtin(t_shell *mini, char **cmd, bool inside_main_process);
 
 int				is_builtin(char *cmd);
 
