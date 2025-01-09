@@ -1,0 +1,59 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_putnbr_base_fd.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: user <user@student.42.fr>                  +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/25 18:12:59 by user              #+#    #+#             */
+/*   Updated: 2024/09/26 10:21:37 by user             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../libft.h"
+
+static int	check_base(char *base)
+{
+	int		i;
+
+	if (ft_strlen(base) < 2)
+		return (0);
+	i = 0;
+	while (base[i])
+	{
+		if (base[i] == '-' || base[i] == '+')
+			return (0);
+		if (chrsetcmp(base[i], &base[i + 1]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	ft_putnbr_base_fd(int fd, unsigned int nbr, char *base)
+{
+	int		base_len;
+	int		digit;
+	int		i;
+	char	str[32];
+
+	if (!check_base(base))
+		return (0);
+	if (nbr == 0)
+		return (ft_putchar_fd(fd, '0'));
+	else
+	{
+		base_len = ft_strlen(base);
+		i = 0;
+		while (nbr > 0)
+		{
+			digit = nbr % base_len;
+			str[i++] = base[digit];
+			nbr /= base_len;
+		}
+		str[i--] = '\0';
+		while (i >= 0)
+			write(fd, &str[i--], 1);
+	}
+	return (ft_strlen(str));
+}
