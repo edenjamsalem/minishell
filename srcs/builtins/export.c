@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:37:13 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/09 13:30:06 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/09 13:39:27 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,7 @@ int	valid_identifier(char *key)
 	while (*key && *key != '=')
 	{
 		if (!ft_isalnum(*key))
-		{
-			ft_perror(IDENTIFIER, key);
 			return (0);
-		}
 		key++;
 	}
 	return (1);
@@ -47,14 +44,21 @@ void	export_new_entry(char *cmd, t_dict *envp)
 
 int	ft_export(char **cmd, t_dict *envp)
 {
-	int		i;
+	int	i;
+	int	exit_status;
 
 	i = 1;
+	exit_status = EXIT_SUCCESS;
 	while (cmd[i])
 	{
-		if (valid_identifier(cmd[i]))
+		if (!valid_identifier(cmd[i]))
+		{
+			ft_perror(IDENTIFIER, cmd[i]);
+			exit_status = EXIT_FAILURE;
+		}
+		else
 			export_new_entry(cmd[i], envp);
 		i++;
 	}
-	return (EXIT_SUCCESS);
+	return (exit_status);
 }

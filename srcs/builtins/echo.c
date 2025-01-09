@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 10:07:28 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/06 14:25:52 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/09 13:36:13 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,16 @@ int	ft_echo(char **cmd)
 		ft_printf("\n");
 		return (EXIT_SUCCESS);
 	}
-	n_flag = false;
 	i = 1;
+	n_flag = false;
 	if (ft_match(cmd[1], "-n"))
 	{
 		n_flag = true;
 		i++;
 	}
-	while (cmd[i])
+	while (cmd[i + 1])
 		ft_printf("%s ", cmd[i++]);
+	ft_printf("%s", cmd[i]);
 	if (!n_flag)
 		ft_printf("\n");
 	return (EXIT_SUCCESS);
