@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:57:13 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/09 13:57:43 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/09 14:21:51 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,70 +89,69 @@ typedef struct s_shell
 	int			*open_pids;
 }				t_shell;
 
-int				brace_count_same(char *input);
+int			brace_count_same(char *input);
 
-int				ctrl_op_after_close_brace(char *input);
+int			ctrl_op_after_close_brace(char *input);
 
-int				ctrl_op_after_open_brace(char *input);
+int			ctrl_op_after_open_brace(char *input);
 
-int				ctrl_ops_adjacent(char *input);
+int			ctrl_ops_adjacent(char *input);
 
-int				first_word_ctrl_op(char *input);
+int			first_word_ctrl_op(char *input);
 
 // SIGNALS
 
-void			setup_sig_handler(int signum);
+void		setup_sig_handler(int signum);
 
-void			setup_child_handler(int signum);
+void		setup_child_handler(int signum);
 
-void			handle_ctrl_c(int signum, siginfo_t *info, void *context);
+void		handle_ctrl_c(int signum, siginfo_t *info, void *context);
 
-void			handle_ctrl_d(int line_count, char *eof);
+void		handle_ctrl_d(int line_count, char *eof);
 
-void			handle_ctrl_c_child(int signum, siginfo_t *info, void *context);
+void		handle_ctrl_c_child(int signum, siginfo_t *info, void *context);
 
-t_shell			*get_mini(t_shell *mini);
+t_shell	*get_mini(t_shell *mini);
 
 // BUILTINS
 
-int				ft_env(char **cmd, t_dict *envp_vars);
+int			ft_env(char **cmd, t_dict *envp_vars);
 
-int				ft_pwd(void);
+int			ft_pwd(void);
 
-int				ft_export(char **cmd, t_dict *envp_vars);
+int			ft_export(char **cmd, t_dict *envp_vars);
 
-int				ft_unset(char **cmd, t_dict *envp_vars);
+int			ft_unset(char **cmd, t_dict *envp_vars);
 
-int				ft_cd(char **cmd);
+int			ft_cd(char **cmd);
 
-int				ft_echo(char **cmd);
+int			ft_echo(char **cmd);
 
-void			ft_exit(t_shell *mini, char **cmd_argv, bool in_main);
+void		ft_exit(t_shell *mini, char **cmd_argv, bool in_main);
 
 // PARSE FNS
 
-t_arrlst		*word_split(char *input);
+t_arrlst	*word_split(char *input);
 
-void			parse(char *input, t_cmd_seq *command, t_dict *envp_dict);
+void		parse(char *input, t_cmd_seq *command, t_dict *envp_dict);
 
-void			quote_removal(t_arrlst *input);
+void		quote_removal(t_arrlst *input);
 
-bool			contains(char *word, char *set);
+bool		contains(char *word, char *set);
 
-void			remove_quotes(char *text);
+void		remove_quotes(char *text);
 
-void			remove_braces(char *input);
+void		remove_braces(char *input);
 
-void			del_char(char *text);
+void		del_char(char *text);
 
-void			skip_braces(char **input);
+void		skip_braces(char **input);
 
-int				skip_quotes(char **text);
+int			skip_quotes(char **text);
 
 // PARAM EXPANSION
 
-char			*expand_vars(char *input, t_dict *envp, bool in_double,
-					bool in_single);
+char			*expand_vars(char *input, t_dict *envp, bool in_double, bool in_single);
 
 void			expand_vars_in_double_quotes(void **input, t_dict *envp_dict);
 
@@ -166,7 +165,7 @@ void			init_ctrl_seq(t_shell *mini, char *input);
 
 void			init_cmd_seq(t_ctrl_seq *ctrl_seq, t_shell *mini);
 
-t_shell			*init_shell(char **envp);
+t_shell		*init_shell(char **envp);
 
 void			assign_redirections(t_cmd_seq *cmd_seq, t_shell *mini);
 
@@ -174,7 +173,7 @@ void			assign_redirections(t_cmd_seq *cmd_seq, t_shell *mini);
 
 int				find_next_token(t_token *tokens, enum e_token ref);
 
-t_token			get_prev_token(t_token *tokens, int index);
+t_token		get_prev_token(t_token *tokens, int index);
 
 t_token			*primary_tokenisation(t_arrlst *words, t_token *tokens);
 
@@ -215,6 +214,8 @@ pid_t			exec_infile_to_pipe(t_shell *mini, int pipe_fd[2], char **cmd);
 pid_t			exec_pipe_to_pipe(t_shell *mini, int **pipe_fd, char **cmd);
 
 pid_t			exec_pipe_to_outfile(t_shell *mini, int pipe_fd[2], char **cmd);
+
+void		exec_pipes(t_shell *mini, t_cmd_seq *cmd_seq, int **pipe_fd, char ***cmds);
 
 int				exec_builtin(t_shell *mini, char **cmd, bool inside_main_process);
 
