@@ -12,6 +12,7 @@
 
 #include "../../includes/minishell.h"
 
+/*
 static bool	is_eof(char *input, char *eof)
 {
 	if (ft_strncmp(input, eof, ft_strlen(eof)) == 0)
@@ -21,7 +22,6 @@ static bool	is_eof(char *input, char *eof)
 	}
 	return (false);
 }
-
 static void	get_heredoc_input(char *eof, int *pipe_fd, t_dict *envp, t_shell *mini)
 {
 	int			bytes_read;
@@ -31,7 +31,6 @@ static void	get_heredoc_input(char *eof, int *pipe_fd, t_dict *envp, t_shell *mi
 
 	while (1)
 	{
-		setup_child_handler(SIGINT);
 		write(1, "> ", 2);
 		bytes_read = read(STDIN_FILENO, input, 4096);
 		line_count++;
@@ -51,6 +50,35 @@ static void	get_heredoc_input(char *eof, int *pipe_fd, t_dict *envp, t_shell *mi
 		}
 		expanded = expand_vars(input, envp, true, true);
 		write(pipe_fd[1], expanded, ft_strlen(expanded));
+		free(expanded);
+	}
+}
+*/
+
+static void	get_heredoc_input(char *eof, int *pipe_fd, t_dict *envp, t_shell *mini)
+{
+	char		*input;
+	char		*expanded;
+	static int	line_count;
+
+	while (1)
+	{
+		input = readline("> ");
+		line_count++;
+		if (!input)
+		{
+			close(pipe_fd[1]);
+			handle_ctrl_d(line_count, eof);
+		}
+		if (ft_match(input, eof))
+		{
+			close(pipe_fd[1]);
+			free_shell(mini);
+			exit(EXIT_SUCCESS);
+		}
+		expanded = expand_vars(input, envp, true, true);
+		write(pipe_fd[1], expanded, ft_strlen(expanded));
+		write(pipe_fd[1], "\n", 1);
 		free(expanded);
 	}
 }

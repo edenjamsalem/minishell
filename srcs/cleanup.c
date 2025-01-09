@@ -6,27 +6,32 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:51:55 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/08 20:37:53 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/09 13:26:23 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	ft_perror(t_error type, char *error_msg)
+int	ft_perror(t_error type, char *err_msg)
 {
 	if (type == SYNTAX)
 	{
-		ft_fprintf(2, "syntax error near unexpected token '%s'\n", error_msg);
+		ft_fprintf(2, "syntax error near unexpected token '%s'\n", err_msg);
 		return (0);
 	}
 	else if (type == CMD_)
 	{
-		ft_fprintf(2, "'%s': command not found\n", error_msg);
+		ft_fprintf(2, "'%s': command not found\n", err_msg);
 		return (0);
 	}
 	else if (type == DIRECT)
 	{
-		ft_fprintf(2, "'%s': No such file or directory\n", error_msg);
+		ft_fprintf(2, "'%s': No such file or directory\n", err_msg);
+		return (0);
+	}
+	else if (type == IDENTIFIER)
+	{
+		ft_fprintf(2, "bash: export: '%s': not a valid identifier\n", err_msg);
 		return (0);
 	}
 	return (1);
@@ -80,7 +85,6 @@ void	free_ctrl_seq(t_ctrl_seq **ctrl_seq)
 	{
 		if (ctrl_seq[i]->raw_input)
 			free(ctrl_seq[i]->raw_input);
-		//ft_printf("POINTER = %p\n", ctrl_seq[i]->cmd_seq);
 		if (ctrl_seq[i]->cmd_seq)
 		{
 			free_cmd_seq(ctrl_seq[i]->cmd_seq);
