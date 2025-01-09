@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:53:57 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/09 14:29:03 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/09 15:06:38 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	run_shell(t_shell *mini)
 		init_ctrl_seq(mini, mini->input);
 		exec_ctrl_seq(mini);
 		free_ctrl_seq(mini->ctrl_seq);
+		mini->ctrl_seq = NULL;
 	}
 	else
 		set_dict_value("?", ft_strdup("2"), mini->envp);

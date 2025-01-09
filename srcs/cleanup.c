@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 16:51:55 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/09 14:24:56 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/09 15:06:23 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ void	free_ctrl_seq(t_ctrl_seq **ctrl_seq)
 		i++;
 	}
 	free(ctrl_seq);
-	ctrl_seq = NULL;
 }
 
 void	free_shell(t_shell *mini)

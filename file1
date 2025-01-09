@@ -1,1 +1,10 @@
-hello 
+total 120
+drwxr-xr-x  6 eamsalem 2024_london    105 Jan  9 14:57 .
+drwxr-xr-x 12 eamsalem 2024_london    182 Jan  7 14:26 ..
+drwxr-xr-x  7 eamsalem 2024_london    179 Jan  9 14:49 build
+-rw-r----x  1 eamsalem 2024_london      0 Jan  9 14:57 file1
+drwxr-xr-x  8 eamsalem 2024_london   4096 Jan  9 14:49 .git
+drwxr-xr-x  3 eamsalem 2024_london     71 Jan  8 20:32 includes
+-rw-r--r--  1 eamsalem 2024_london   2591 Jan  8 18:37 Makefile
+-rwxr-xr-x  1 eamsalem 2024_london 112872 Jan  9 14:49 minishell
+drwxr-xr-x  7 eamsalem 2024_london    179 Jan  8 20:32 srcs

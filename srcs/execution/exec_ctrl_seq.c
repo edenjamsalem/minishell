@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 15:50:34 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/09 14:43:12 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/09 15:22:01 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	init_nested_ctrl_seq(t_shell *mini, t_ctrl_seq *ctrl_seq)
 	return (exit_status);
 }
 
-static int	init_and_exec_cmd_seq(t_shell *mini, t_ctrl_seq *ctrl_seq)
+int	init_and_exec_cmd_seq(t_shell *mini, t_ctrl_seq *ctrl_seq, bool in_main)
 {
 	int	exit_status;
 
@@ -41,7 +41,7 @@ static int	init_and_exec_cmd_seq(t_shell *mini, t_ctrl_seq *ctrl_seq)
 	if (!ctrl_seq->cmd_seq)
 		exit_status = 2;
 	else
-		exit_status = exec_cmd_seq(ctrl_seq->cmd_seq, mini, true);
+		exit_status = exec_cmd_seq(ctrl_seq->cmd_seq, mini, in_main);
 	return (exit_status);
 }
 
@@ -58,7 +58,7 @@ static int	exec_braces(t_shell *mini, t_ctrl_seq *ctrl_seq)
 		if (contains(ctrl_seq->raw_input, "(<>|&"))
 			exit_status = init_nested_ctrl_seq(mini, ctrl_seq);
 		else
-			exit_status = init_and_exec_cmd_seq(mini, ctrl_seq);
+			exit_status = init_and_exec_cmd_seq(mini, ctrl_seq, false);
 		free_shell(mini);
 		exit(exit_status);
 	}
@@ -85,7 +85,7 @@ int	exec_ctrl_seq(t_shell *mini)
 		if (mini->ctrl_seq[i]->inside_braces)
 			exit_status = exec_braces(mini, mini->ctrl_seq[i]);
 		else
-			exit_status = init_and_exec_cmd_seq(mini, mini->ctrl_seq[i]);
+			exit_status = init_and_exec_cmd_seq(mini, mini->ctrl_seq[i], true);
 		set_dict_value("?", ft_itoa(exit_status), mini->envp);
 		i++;
 	}

@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 11:01:33 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/06 14:25:53 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/09 15:20:37 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,7 @@ void	ft_exit(t_shell *mini, char **cmd_argv, bool inside_main_process)
 		perror("bash: exit: too many arguments");
 	exit_status = get_exit_status(cmd_argv, len);
 	if (inside_main_process)
-	{
-		free_shell(mini);
 		ft_printf("exit\n");
-	}
+	free_shell(mini);
 	exit(exit_status);
 }

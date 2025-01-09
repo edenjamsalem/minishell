@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/11 19:00:09 by mganchev          #+#    #+#             */
-/*   Updated: 2025/01/09 14:32:11 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/09 15:01:19 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 void	handle_ctrl_d(int line_count, char *eof)
 {
-	ft_printf("\nbash: warning: here-document at line %d", line_count);
+	ft_printf("bash: warning: here-document at line %d", line_count);
 	ft_printf(" delimited by end-of-file (wanted `%s')\n", eof);
 	free_shell(get_mini(NULL));
 	exit(EXIT_SUCCESS);
