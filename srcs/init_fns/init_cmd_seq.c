@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 14:52:24 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/08 19:02:44 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/09 12:23:34 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void	assign_cmds(t_cmd_seq *seq)
 	k = 0;
 	while (i < seq->pipe_count + 1)
 	{
-		seq->cmds[i] = malloc(sizeof(char *) * (get_cmd_len(seq->tokens) + 2));
+		seq->cmds[i] = malloc(sizeof(char *) * (get_cmd_len(seq->tokens) + 3)); // FIX MEM ERROR HERE
 		if (!seq->cmds[i])
 			return ;
 		j = 0;
