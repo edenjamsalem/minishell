@@ -6,7 +6,7 @@
 /*   By: eamsalem <eamsalem@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/06 13:55:07 by eamsalem          #+#    #+#             */
-/*   Updated: 2025/01/08 18:52:48 by eamsalem         ###   ########.fr       */
+/*   Updated: 2025/01/09 12:56:02 by eamsalem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	exec_pipe_to_pipe(t_shell *mini, int **pipe_fd, char **cmd)
 	}
 	wait(0);
 	close(pipe_fd[0][1]);
+	close(pipe_fd[-1][0]);
 }
 
 void	exec_pipe_to_outfile(t_shell *mini, int pipe_fd[2], char **cmd)
