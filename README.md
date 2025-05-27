@@ -16,6 +16,7 @@ Then run :
 ./minishell
 ```
 
+
 ### Available options
 
 - Minishell runs executables from an absolute, relative or environment PATH (``/bin/ls`` or ``ls``), including arguments or options. 
@@ -31,6 +32,7 @@ Then run :
 A few of the functions are "built-in", meaning we don't call the executable, we re-coded them directly. Namely ``echo``, ``pwd``, ``cd``, ``env``, ``export``, ``unset`` and ``exit``.
 
 
+
 ### Algorithm overview
 
 The program parses user input (according to the POSIX standard) into a combination of static and dynamic arrays, which are then executed in a linear fashion. There are 2 levels to this: 
@@ -40,6 +42,7 @@ The program parses user input (according to the POSIX standard) into a combinati
 - within this we then create a CMD_SEQ, which further parses each node in the CTRL_SEQ into a sequence of commands separated by pipes ``|``.
 
 - parentheses ``()`` are handled in a recursive manner, as they produce branched logic which does not neatly fit into the linear nature of the CTRL_OP's array structure. When they are encountered in the initial parsing phase, they are included in the CTRL_OP sequence as raw input, to be recursively parsed during the execution phase.
+
 
 
 ### Potential Improvements
