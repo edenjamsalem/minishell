@@ -3,7 +3,7 @@
 
 > _The aim of this project is to code a lightweight version of the Bash shell, implementing much of its core functionality_
 
-For more detailed information, look at the [**subject of this project.**](https://github.com/edenjamsalem/minishell/subject.pdf)
+For more detailed information, look at the [**subject of this project.**](https://github.com/edenjamsalem/minishell/blob/master/subject.pdf)
 
 
 ### How to use it
