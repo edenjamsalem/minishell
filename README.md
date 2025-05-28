@@ -1,3 +1,5 @@
+#Minishell 🐚
+A lightweight implementation of a Bash-like shell
 
 ## 🗣️ About
 
@@ -6,49 +8,48 @@
 For more detailed information, look at the [**subject of this project.**](https://github.com/edenjamsalem/minishell/blob/master/subject.pdf)
 
 
-### How to use it
-
-Using ``make`` will create the ``minishell`` executable.
-
-Then run :
+## How to use it
 
 ```
+make
 ./minishell
 ```
 
 
-### Available options
+## Available options
 
-- Minishell runs executables from an absolute, relative or environment PATH (``/bin/ls`` or ``ls``), including arguments or options. 
-
-- Environment variables are handled, like ``$HOME``, including the exit status ``$?``.
+- Runs executables from an absolute, relative or environment PATH (``/bin/ls`` or ``ls``) 
 
 - ``'`` and ``"`` work the same as bash, except for multiline commands.
 
-- You can use redirections ``>`` ``>>`` ``<`` ``<<``, pipes ``|``, control operators ``&&`` ``||``, parentheses ``()``, and wildcards ``*``.
+- Supports redirections ``>`` ``>>`` ``<`` ``<<``, pipes ``|``, control operators ``&&`` ``||``, parentheses ``()``, and wildcards ``*``.
 
-- Finally, you can use ``Ctrl-C`` to interrupt, ``Ctrl-\`` to quit a program and ``Ctrl-D`` to throw an EOF.
+- Supports ``Ctrl-C`` (interrupt), ``Ctrl-\`` (quit) and ``Ctrl-D`` (EOF).
 
-A few of the functions are "built-in", meaning we don't call the executable, we re-coded them directly. Namely ``echo``, ``pwd``, ``cd``, ``env``, ``export``, ``unset`` and ``exit``.
-
-
-
-### Algorithm overview
-
-The program parses user input (according to the POSIX standard) into a combination of static and dynamic arrays, which are then executed in a linear fashion. There are 2 levels to this: 
-
-- the highest is the CTRL_SEQ, which parses the input into a sequence of commands separated by control operators ``&&`` ``||``. Like this, we can easily skip over non-executable nodes by comparing the current control operator with the previous exit status.
-
-- within this we then create a CMD_SEQ, which further parses each node in the CTRL_SEQ into a sequence of commands separated by pipes ``|``.
-
-- parentheses ``()`` are handled in a recursive manner, as they produce branched logic which does not neatly fit into the linear nature of the CTRL_OP's array structure. When they are encountered in the initial parsing phase, they are included in the CTRL_OP sequence as raw input, to be recursively parsed during the execution phase.
+Contains several "built-ins" (personal implementation over bash executable). Namely ``echo``, ``pwd``, ``cd``, ``env``, ``export``, ``unset`` and ``exit``.
 
 
+## Algorithm overview
 
-### Potential Improvements
+###Parsing
 
-In hindsight, this was a perfect oppurtunity to implement an Abstract Syntax Tree for the execution logic. It would have simplified the execution process by removing the need for a patchy recursive call for parentheses. 
+Split input into a CTRL_SEQ (commands separated by ``&&`` or ``||``).
 
-The current linear approach handles the branched nature of parentheses by simpling halting the main execution, recursively parsing and executing the commands inside the parentheses, and then feeding that back into the main execution sequence.
+Each CTRL_SEQ node is further split into a CMD_SEQ (commands separated by pipes ``|``).
+
+Parentheses () are handled recursively during execution.
+
+###Execution
+
+Linear execution of CTRL_SEQ nodes, skipping nodes based on exit status.
+
+Pipes and redirections are resolved per CMD_SEQ.
+
+
+## Potential Improvements
+
+In hindsight, this was a perfect oppurtunity to implement an Abstract Syntax Tree for the execution logic. It would have simplified the execution process by removing the need for a patchy recursive call to handle parentheses. 
+
+The current linear approach uses dynamic arrays for the CTRL_SEQ and CMD_SEQ. To handle the branched logica of parentheses, it simply halts the main execution, recursively parses and executes the commands inside parentheses, and then feeds that back into the main execution sequence.
 
 It works ...but it's definitely sub-optimal !
