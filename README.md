@@ -50,6 +50,6 @@ Pipes and redirections are resolved per CMD_SEQ.
 
 In hindsight, this was a perfect oppurtunity to implement an Abstract Syntax Tree for the execution logic. It would have simplified the execution process by removing the need for a patchy recursive call to handle parentheses. 
 
-The current linear approach uses dynamic arrays for the CTRL_SEQ and CMD_SEQ. To handle the branched logica of parentheses, it simply halts the main execution, recursively parses and executes the commands inside parentheses, and then feeds that back into the main execution sequence.
+The current linear approach uses dynamic arrays for the CTRL_SEQ and CMD_SEQ. To handle the branched logic of parentheses, it simply halts the main execution, recursively parses and executes the commands inside parentheses, and then feeds it back into the main execution sequence.
 
 It works ...but it's definitely sub-optimal !
