@@ -1,4 +1,4 @@
-#Minishell 🐚
+# Minishell 🐚
 A lightweight implementation of a Bash-like shell
 
 ## 🗣️ About
@@ -31,7 +31,7 @@ Contains several "built-ins" (personal implementation over bash executable). Nam
 
 ## Algorithm overview
 
-###Parsing
+### Parsing
 
 Split input into a CTRL_SEQ (commands separated by ``&&`` or ``||``).
 
@@ -39,7 +39,7 @@ Each CTRL_SEQ node is further split into a CMD_SEQ (commands separated by pipes 
 
 Parentheses () are handled recursively during execution.
 
-###Execution
+### Execution
 
 Linear execution of CTRL_SEQ nodes, skipping nodes based on exit status.
 
