@@ -52,4 +52,4 @@ In hindsight, this was a perfect oppurtunity to implement an Abstract Syntax Tre
 
 The current linear approach uses dynamic arrays for the CTRL_SEQ and CMD_SEQ. To handle the branched logic of parentheses, it simply halts the main execution, recursively parses and executes the commands inside parentheses, and then feeds it back into the main execution sequence.
 
-It works ...but it's definitely sub-optimal !
+It works ... but it's definitely sub-optimal !
